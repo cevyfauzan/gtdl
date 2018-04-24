@@ -65,7 +65,7 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script ID :</label>
+							<label>Phone ID :</label>
 						</div>
 					</div>
 					<div class="col-sm-3">
@@ -75,7 +75,7 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script Name :</label>
+							<label>Phone Name :</label>
 						</div>
 					</div>
 					<div class="col-sm-5">
