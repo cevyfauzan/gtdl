@@ -54,7 +54,7 @@
 
 <!--======================================================================================================================-->
 <!-- Modal Add -->
-<div id="add-script" class="modal fade" role="dialog">
+<div id="add-phones" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -137,7 +137,7 @@
 </div>
 
 <!-- Modal Edit -->
-<div id="edit-script" class="modal fade" role="dialog">
+<div id="edit-phones" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
 			<div class="modal-header">
