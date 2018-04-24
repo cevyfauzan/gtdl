@@ -137,7 +137,7 @@
 </div>
 
 <!-- Modal Edit -->
-<div id="edit-phones" class="modal fade" role="dialog">
+<div id="edit-phonesssss" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
 			<div class="modal-header">
