@@ -63,7 +63,7 @@
                     </li>
                     <li class="" id="rec">
                         <a href="<?= base_url() ?>recordings">
-                            <i class="fa fa-microphone"></i> <span>Recording</span>
+                            <i class="fa fa-microphone"></i> <span>Recordings</span>
                         </a>
                     </li>
                     <li class="" id="rep">
