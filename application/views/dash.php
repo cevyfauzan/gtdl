@@ -43,6 +43,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Agents & Leads Status</h3>
                 <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#wall"><i class="fa fa-desktop"></i> Wallboard</button>
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                 </div>
@@ -122,7 +123,7 @@
     <div class="col-sm-8">
         <div class="box box-success">
             <div class="box-header with-border">
-                <h3 class="box-title">Sales / Hour (Today)</h3>
+                <h3 class="box-title">Sales Graph (Today)</h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -184,7 +185,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="box box-primary">
+        <div class="box box-primary collapsed-box">
             <div class="box-header with-border">
                 <h3 class="box-title">Server Statistics</h3>
                 <div class="box-tools pull-right">
@@ -345,6 +346,45 @@
             </div>
         </div>
     </div>
+</div>
+
+<!--======================================================================================================================-->
+<!-- Modal Wallboard -->
+<div id="wall" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="width:90%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">AGENT WALLBOARD</h4>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <?php for($i=1;$i<21;$i++) {?>
+                    <div class="col-lg-3 col-xs-6">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <h3>16</h3>
+                                <b>Agent<?= $i ?></b>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <a class="small-box-footer">
+                                <div class="pull-right" style="padding-right:4px;">
+                                    <b>CAMPAIGN1</b><br>
+                                    <b>54</b>
+                                </div>
+                                <i class="fa fa-circle text-green"></i> <b>Incall</b><br>
+                                <b>00:04:54</b>
+                            </a>
+                        </div>
+                    </div>
+                    <?php } ?>
+                </div>
+                <center><button class="btn btn-default btn-md" data-dismiss="modal">CLOSE</button></center>
+			</div>
+		</div>			
+	</div>
 </div>
 
 <script src="<?php echo base_url()?>assets/plugins/chartjs/Chart.min.js"></script>

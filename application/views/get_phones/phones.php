@@ -85,7 +85,7 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script Comments :</label>
+							<label>Exten :</label>
 						</div>
 					</div>
 					<div class="col-sm-5">
