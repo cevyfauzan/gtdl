@@ -101,7 +101,7 @@
                                 </li>
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="<?= base_url() ?>login" class="btn btn-default btn-flat">Logout</a>
+                                        <a href="<?= base_url() ?>login" class="btn btn-default">Logout</a>
                                     </div>
                                 </li>
                             </ul>
