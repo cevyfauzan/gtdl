@@ -15,7 +15,6 @@
     </head>
 
     <body class="hold-transition login-page">
-    <br><br>
         <div class="login-box">
             <div class="login-logo">
                 <img src="<?php echo base_url() ?>assets/dist/img/getdial.png" alt="" style="width:170px">
