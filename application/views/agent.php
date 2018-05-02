@@ -71,7 +71,7 @@
             <nav class="navbar navbar-static-top">
                 <div class="container">
                     <div class="navbar-header">
-                        <a href="" class="navbar-logo"><img src="<?php echo base_url() ?>assets/dist/img/getdial.png" alt="" style="width:101px; margin-top: 7px;"></a>
+                        <a href="" class="navbar-logo"><img src="<?php echo base_url() ?>assets/dist/img/getdial.png" alt="" style="width:120px; margin-top: 4px;"></a>
                     </div>
 
                     <div class="navbar-custom-menu">
@@ -127,11 +127,8 @@
                                         </p>
                                     </li>
                                     <li class="user-footer">
-                                        <div class="pull-left">
-                                            <a href="" class="btn btn-default btn-flat" data-toggle="modal" data-target="#myModal-6">Agent Performance</a>
-                                        </div>
                                         <div class="pull-right">
-                                            <a href="" class="btn btn-default btn-flat">Sign out</a>
+                                            <a href="<?= base_url() ?>agent/login" class="btn btn-default">Logout</a>
                                         </div>
                                     </li>
                                 </ul>
