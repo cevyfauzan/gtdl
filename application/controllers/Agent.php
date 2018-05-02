@@ -13,4 +13,9 @@ class Agent extends CI_Controller {
 	{
 		$this->load->view('agent');
 	}
+
+	public function login()
+	{
+		$this->load->view('login_agent');
+	}
 }

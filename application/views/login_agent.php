@@ -32,6 +32,19 @@
                     <input type="password" class="form-control" name="" id="" placeholder="Password" required>
                     <span class="glyphicon glyphicon-eye-close form-control-feedback"></span>
                 </div>
+                <div class="form-group has-feedback">
+                    <?php 
+						$attr = 'class="form-control"';
+						$drop_down = array('' => '-- Select Campiagn --','N' => 'CAMPAIGN1');
+					?>
+					<?= form_dropdown('', $drop_down, '', $attr) ?>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 pull-right">
+                        <button type="button" class="btn btn-info btn-block">Refresh</button>
+                    </div>
+                </div>
+                <br>
                 <div class="row">
                     <div class="col-xs-4">
                         <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -43,7 +56,7 @@
                 </form>
                 <div class="social-auth-links text-center">
                     <p>- OR -</p>
-                    <a href="<?php echo base_url() ?>agent/login" class="btn btn-block btn-primary"><i class="fa fa-user"></i>&ensp;Sign in using Agent</a>
+                    <a href="<?php echo base_url() ?>login" class="btn btn-block btn-primary"><i class="fa fa-user"></i>&ensp;Sign in using Admin</a>
                 </div>
                 <center><strong>&copy; 2018 <a href="http://getdial.tech" target="blank">getDIAL.tech</a></strong> v2.0.1</center>
             </div>
