@@ -23,7 +23,7 @@
             </div>
             <div class="login-box-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="<?php echo base_url() ?>dash/" method="post">
+                <form action="<?php echo base_url() ?>agent/" method="post">
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" name="" id="" placeholder="Username" autocomplete="off" autofocus required>
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
