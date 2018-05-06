@@ -11,7 +11,7 @@
 			<div class="box-header">
                 <h2 class="box-title"><b>Call Times</b></h2>
 				<div class="pull-right">
-                    <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-script" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Call Time</a>
+                    <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-call_time" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Call Time</a>
 				</div>
             </div>
             <div class="box-body">
@@ -33,7 +33,7 @@
                         <td>0</td>
                         <td>2400</td>
                         <td>
-                            <a href="" title="Edit" data-toggle="modal" data-target="#edit-script"><i class="fa fa-edit text-yellow"></i></a>&ensp;
+                            <a href="" title="Edit" data-toggle="modal" data-target="#edit-call_time"><i class="fa fa-edit text-yellow"></i></a>&ensp;
                             <a href="" title="Delete" onclick="return confirm('Are you sure you want to delete this data ?');"><i class="fa fa-remove text-red"></i></a>&ensp;
                             <a href="" title="Info"><i class="fa fa-info-circle text-info"></i></a>&ensp;
                         </td>
@@ -48,7 +48,7 @@
 
 <!--======================================================================================================================-->
 <!-- Modal Add -->
-<div id="add-script" class="modal fade" role="dialog">
+<div id="add-call_time" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -59,27 +59,27 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script ID :</label>
+							<label>Call Time ID :</label>
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" value="script001" readonly>
+						<input type="text" class="form-control" name="">
 					</div>
 				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script Name :</label>
+							<label>Call Time Name :</label>
 						</div>
 					</div>
-					<div class="col-sm-5">
-						<input type="text" class="form-control" name="" value="">
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="">
 					</div>
 				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script Comments :</label>
+							<label>Call Time Comments :</label>
 						</div>
 					</div>
 					<div class="col-sm-5">
@@ -89,38 +89,15 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Active :</label>
+							<label>Admin User Group :</label>
 						</div>
 					</div>
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down = array('Y' => 'All User Groups','N' => 'Administrators','M' => 'Agents');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Script Text :</label>
-						</div>
-					</div>
-					<div class="col-sm-4">
-                        <?php 
-							$attr = 'class="form-control" onChange="change(this);"';
-							$drop_down = array('P' => 'YES','Y' => 'NO');
-						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-					<div class="col-sm-4">
-                        <a href="" class="btn btn-primary btn-sm" ><i class="fa fa-plus"></i>&ensp;Insert</a>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4"></div>
-					<div class="col-sm-7">
-                       <textarea class="form-control" name="" rows="10"></textarea>
 					</div>
 				</div>
 				<br>
@@ -131,38 +108,38 @@
 </div>
 
 <!-- Modal Edit -->
-<div id="edit-script" class="modal fade" role="dialog">
+<div id="edit-call_time" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">ADD NEW SCRIPT</h4>
+				<h4 class="modal-title">MODIFY CALL TIME</h4>
 			</div>
 			<div class="modal-body">
-                <div class="row">
+				<div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script ID :</label>
+							<label>Call Time ID :</label>
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" value="script001" readonly>
+						<input type="text" class="form-control" name="" value="24 Hours">
 					</div>
 				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script Name :</label>
+							<label>Call Time Name :</label>
 						</div>
 					</div>
-					<div class="col-sm-5">
-						<input type="text" class="form-control" name="" value="">
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="">
 					</div>
 				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script Comments :</label>
+							<label>Call Time Comments :</label>
 						</div>
 					</div>
 					<div class="col-sm-5">
@@ -172,39 +149,15 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Active :</label>
+							<label>Admin User Group :</label>
 						</div>
 					</div>
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down = array('Y' => 'All User Groups','N' => 'Administrators','M' => 'Agents');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Script Text :</label>
-						</div>
-					</div>
-					<div class="col-sm-4">
-                        <?php 
-							$attr = 'class="form-control" onChange="change(this);"';
-							$drop_down = array('P' => 'YES','Y' => 'NO');
-						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-					<div class="col-sm-4">
-                        <a href="" class="btn btn-primary btn-sm" ><i class="fa fa-plus"></i>&ensp;Insert</a>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4"></div>
-					<div class="col-sm-7">
-                       <textarea class="form-control" name="" rows="10"></textarea>
-                       <a href="" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&ensp;Preview</a>
 					</div>
 				</div>
 				<br>
