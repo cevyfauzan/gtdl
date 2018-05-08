@@ -12,8 +12,23 @@ class Server extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'getDIAL.tech Server';
-		$data['main'] = 'get_server/server';
+		$data['main'] = 'get_servers/server';
 		$this->load->vars($data);
 		$this->load->view('template');
+	}
+
+	public function get_carrier()
+	{
+		$this->load->view('get_servers/carrier');
+	}
+
+	public function get_phone()
+	{
+		$this->load->view('get_servers/phone');
+	}
+
+	public function get_conference()
+	{
+		$this->load->view('get_servers/conference');
 	}
 }
