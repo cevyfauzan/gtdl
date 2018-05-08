@@ -1,5 +1,5 @@
 <div class="pull-right">
-    <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-recyc" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Status</a>
+    <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-recyc" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Lead Recycle</a>
 </div>
 <h4><b>Lead Recycling</b></h4>
 <br>
@@ -37,7 +37,7 @@
 <!--======================================================================================================================-->
 <!-- Modal Add -->
 <div id="add-recyc" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:60%;">
+	<div class="modal-dialog" style="width:50%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -108,7 +108,7 @@
 
 <!-- Modal Lead Recycle -->
 <div id="lead-recyc" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:70%;">
+	<div class="modal-dialog" style="width:50%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
