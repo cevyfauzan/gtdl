@@ -55,21 +55,25 @@
 <!--======================================================================================================================-->
 <!-- Modal Add -->
 <div id="add-phones" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:70%;">
+	<div class="modal-dialog" style="width:50%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">ADD NEW PHONES</h4>
 			</div>
 			<div class="modal-body">
-                <div class="row">
+				<div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Phone ID :</label>
+							<label>Client Protocol :</label>
 						</div>
 					</div>
-					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" value="script001" readonly>
+					<div class="col-sm-2">
+                        <?php 
+							$attr = 'class="form-control"';
+							$drop_down = array('Y' => 'SIP','N' => 'IAX');
+						?>
+						<?= form_dropdown('', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -78,30 +82,40 @@
 							<label>Phone Name :</label>
 						</div>
 					</div>
-					<div class="col-sm-5">
-						<input type="text" class="form-control" name="" value="">
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Exten :</label>
-						</div>
-					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-3">
 						<input type="text" class="form-control" name="" >
 					</div>
 				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Active :</label>
+							<label>Phone Extension :</label>
 						</div>
 					</div>
-					<div class="col-sm-2">
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="" >
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>Phone Password :</label>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="" >
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>User Group :</label>
+						</div>
+					</div>
+					<div class="col-sm-4">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down = array('Y' => 'All User Groups','N' => 'Administrators','M' => 'Agents');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
 					</div>
@@ -109,24 +123,15 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script Text :</label>
+							<label>Server :</label>
 						</div>
 					</div>
 					<div class="col-sm-4">
                         <?php 
-							$attr = 'class="form-control" onChange="change(this);"';
-							$drop_down = array('P' => 'YES','Y' => 'NO');
+							$attr = 'class="form-control"';
+							$drop_down = array('Y' => '192.168.1.1 - getdial server');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-					<div class="col-sm-4">
-                        <a href="" class="btn btn-primary btn-sm" ><i class="fa fa-plus"></i>&ensp;Insert</a>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4"></div>
-					<div class="col-sm-7">
-                       <textarea class="form-control" name="" rows="10"></textarea>
 					</div>
 				</div>
 				<br>
@@ -145,34 +150,76 @@
 				<h4 class="modal-title">MODIFY PHONES</h4>
 			</div>
 			<div class="modal-body">
+			<div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>Client Protocol :</label>
+						</div>
+					</div>
+					<div class="col-sm-2">
+                        <?php 
+							$attr = 'class="form-control"';
+							$drop_down = array('Y' => 'SIP','N' => 'IAX');
+						?>
+						<?= form_dropdown('', $drop_down, '', $attr) ?>
+					</div>
+				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Script ID :</label>
+							<label>Phone Name :</label>
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" value="script001" readonly>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Script Name :</label>
-						</div>
-					</div>
-					<div class="col-sm-5">
-						<input type="text" class="form-control" name="" value="">
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Script Comments :</label>
-						</div>
-					</div>
-					<div class="col-sm-5">
 						<input type="text" class="form-control" name="" >
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>Phone Extension :</label>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="" readonly>
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>Phone Password :</label>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="" >
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>User Group :</label>
+						</div>
+					</div>
+					<div class="col-sm-4">
+                        <?php 
+							$attr = 'class="form-control"';
+							$drop_down = array('Y' => 'All User Groups','N' => 'Administrators','M' => 'Agents');
+						?>
+						<?= form_dropdown('', $drop_down, '', $attr) ?>
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>Server :</label>
+						</div>
+					</div>
+					<div class="col-sm-4">
+                        <?php 
+							$attr = 'class="form-control"';
+							$drop_down = array('Y' => '192.168.1.1 - getdial server');
+						?>
+						<?= form_dropdown('', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -187,30 +234,6 @@
 							$drop_down = array('Y' => 'YES','N' => 'NO');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Script Text :</label>
-						</div>
-					</div>
-					<div class="col-sm-4">
-                        <?php 
-							$attr = 'class="form-control" onChange="change(this);"';
-							$drop_down = array('P' => 'YES','Y' => 'NO');
-						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-					<div class="col-sm-4">
-                        <a href="" class="btn btn-primary btn-sm" ><i class="fa fa-plus"></i>&ensp;Insert</a>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4"></div>
-					<div class="col-sm-7">
-                       <textarea class="form-control" name="" rows="10"></textarea>
-                       <a href="" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>&ensp;Preview</a>
 					</div>
 				</div>
 				<br>
