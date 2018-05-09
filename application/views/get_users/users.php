@@ -281,8 +281,8 @@
     });
 
 	function nav_active(){
-		document.getElementById("data").className = "active";
-		document.getElementById("data-user").className = "active";
+		document.getElementById("set").className = "active";
+		document.getElementById("set-user").className = "active";
 	}
 	$(document).ready(function() {
 		nav_active();
