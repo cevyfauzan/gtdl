@@ -12,7 +12,7 @@ class Recordings extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'getDIAL.tech Recordings';
-		$data['main'] = 'get_recordings/recordings';
+		$data['main'] = 'get_recordings/recording';
 		$this->load->vars($data);
 		$this->load->view('template');
 	}
