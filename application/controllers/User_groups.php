@@ -12,7 +12,7 @@ class User_groups extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'getDIAL.tech User Groups';
-		$data['main'] = 'get_sser_groups/sser_groups';
+		$data['main'] = 'get_user_groups/user_groups';
 		$this->load->vars($data);
 		$this->load->view('template');
 	}
