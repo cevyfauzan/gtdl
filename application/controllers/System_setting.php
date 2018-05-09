@@ -12,7 +12,7 @@ class System_setting extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'getDIAL.tech System Setings';
-		$data['main'] = 'get_system_setings/system_setings';
+		$data['main'] = 'get_setting/system_setting';
 		$this->load->vars($data);
 		$this->load->view('template');
 	}
