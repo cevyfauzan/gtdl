@@ -76,7 +76,7 @@
 							<label>Password :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="password" class="form-control" name="" value="">
 					</div>
 				</div>
@@ -86,7 +86,7 @@
 							<label>Fullname :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="text" class="form-control" name="" >
 					</div>
 				</div>
@@ -96,7 +96,7 @@
 							<label>Phone Login :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="text" class="form-control" name="" >
 					</div>
 				</div>
@@ -106,7 +106,7 @@
 							<label>Phone Pass :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="text" class="form-control" name="" >
 					</div>
 				</div>
@@ -116,7 +116,7 @@
 							<label>User Group :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'ADMINISTRATOR','N' => 'AGENTS');
@@ -168,7 +168,7 @@
 				<h4 class="modal-title">EDIT USER</h4>
 			</div>
 			<div class="modal-body">
-			<div class="row">
+				<div class="row">
 					<div class="col-sm-3" align="right">
 						<div class="form-group">
 							<label>User ID :</label>
@@ -184,7 +184,7 @@
 							<label>Password :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="password" class="form-control" name="" value="">
 					</div>
 				</div>
@@ -194,7 +194,7 @@
 							<label>Fullname :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="text" class="form-control" name="" >
 					</div>
 				</div>
@@ -204,7 +204,7 @@
 							<label>Phone Login :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="text" class="form-control" name="" >
 					</div>
 				</div>
@@ -214,7 +214,7 @@
 							<label>Phone Pass :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
 						<input type="text" class="form-control" name="" >
 					</div>
 				</div>
@@ -224,7 +224,7 @@
 							<label>User Group :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'ADMINISTRATOR','N' => 'AGENTS');
@@ -261,7 +261,7 @@
 					</div>
 				</div>
 				<br>
-                <center><a href="" class="btn btn-success btn-md">SUBMIT</a></center>
+                <center><a href="" class="btn btn-success btn-md">SAVE SETTING</a></center>
 			</div>
 		</div>			
 	</div>
