@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Phones extends CI_Controller {
+class Sales extends CI_Controller {
 
 	function __construct()
     {
@@ -11,8 +11,8 @@ class Phones extends CI_Controller {
 	
 	public function index()
 	{
-		$data['title'] = 'getDIAL.tech Phones';
-		$data['main'] = 'get_phones/phones';
+		$data['title'] = 'getDIAL.tech Sales';
+		$data['main'] = 'aft/get_sales/index';
 		$this->load->vars($data);
 		$this->load->view('template');
 	}
