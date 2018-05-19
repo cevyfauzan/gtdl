@@ -80,18 +80,18 @@
                         </a>
                     </li>
                     <li class="header">AFTER SALES</li>
-                    <li class="" id="aft">
-                        <a href="">
+                    <li class="" id="aft-s">
+                        <a href="<?= base_url() ?>as/sales">
                             <i class="fa fa-cart-arrow-down"></i> <span>Sales</span>
                         </a>
                     </li>
-                    <li class="" id="aft">
-                        <a href="">
+                    <li class="" id="aft-q">
+                        <a href="<?= base_url() ?>as/qc">
                             <i class="fa fa-file-audio-o"></i> <span>Quality Control</span>
                         </a>
                     </li>
-                    <li class="" id="aft">
-                        <a href="">
+                    <li class="" id="aft-r">
+                        <a href="<?= base_url() ?>as/report">
                             <i class="fa fa-file-excel-o"></i> <span>Report Sales</span>
                         </a>
                     </li>
