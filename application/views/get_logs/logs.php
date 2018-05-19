@@ -104,7 +104,6 @@
     $(function () {
 		$('#log').DataTable({
 			"ordering": false,
-			"searching": false,
 			"autoWidth": false
 		});
 		$(".date").datepicker();
