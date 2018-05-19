@@ -12,7 +12,7 @@ class Report extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'getDIAL.tech Report';
-		$data['main'] = 'get_report/report';
+		$data['main'] = 'get_reports/index';
 		$this->load->vars($data);
 		$this->load->view('template');
 	}
