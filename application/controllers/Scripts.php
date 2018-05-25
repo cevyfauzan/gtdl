@@ -15,7 +15,7 @@ class Scripts extends CI_Controller {
 	function __construct()
     {
 		parent::__construct();
-		//$this->load->model('agent_model');
+		$this->load->model('Get_scipts');
 	}
 	
 	public function index()
