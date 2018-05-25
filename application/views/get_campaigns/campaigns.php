@@ -1,3 +1,14 @@
+<?php
+############################################################################################
+####  Name:             	campaigns.php                                             	####
+####  Type:             	ci view - administrator                     				####	
+####  Version:          	2.0.0                                                       ####	   
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
+?>
 <div class="pull-right">
     <button class="btn btn-success btn-sm" onclick="add_camp()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Campaign</button>
     <a href="" class="btn btn-info btn-sm" onclick="reload_table()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
@@ -42,7 +53,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" id="camID" value="80247862" disabled="disabled">
+						<input type="text" class="form-control" name="camp_id" id="camID" value="80247862" disabled="disabled">
 					</div>
 					<div class="col-sm-5">
 						<input type="checkbox" id="camE">&ensp;<font color="red">Check to edit campaign id and name</font>
@@ -55,7 +66,7 @@
 						</div>
 					</div>
 					<div class="col-sm-5">
-						<input type="text" class="form-control" name="" id="camName" value="Outbound Campaign - 2018-04-10" disabled="disabled">
+						<input type="text" class="form-control" name="camp_name" id="camName" value="Outbound Campaign - 2018-04-10" disabled="disabled">
 					</div>
 				</div>
                 <div class="row">
@@ -65,7 +76,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" value="1030 >> ListID 1030" readonly>
+						<input type="text" class="form-control" name="list_id" value="1030 >> ListID 1030" readonly>
 					</div>
 				</div>
                 <div class="row">
@@ -75,7 +86,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" value="62 >> getdial" readonly>
+						<input type="text" class="form-control" name="country" value="62 >> getdial" readonly>
 					</div>
 				</div>
                 <div class="row">
@@ -89,7 +100,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'NO DUPLICATE CHECK','N' => 'DUPLICATE FOR THIS CAMPAIGN');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('check_dup', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -101,9 +112,9 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control" onChange="change(this);"';
-							$drop_down = array('P' => '-- SELECT --','Y' => 'MANUAL','N' => 'AUTO_DIAL','O' => 'PREDICTIVE');
+							$drop_down = array('P' => '-- SELECT --','MANUAL' => 'MANUAL','RATIO' => 'AUTO_DIAL','ADAPT_AVERAGE' => 'PREDICTIVE');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('dial_method', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row" id="autoDial" style="display:none">
@@ -115,9 +126,9 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'SLOW','N' => 'NORMAL','O' => 'HIGH');
+							$drop_down = array('0' => 'OFF','1.0' => 'SLOW','2.0' => 'NORMAL', '4.0' => 'HIGH','6.0' => 'MAX','ADVANCE' => 'ADVANCE');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('auto_dial_level', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -131,7 +142,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('N' => '2018 - 962 - getdial', 'y' => '2017 - 962 - getdial1');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('carrier', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -145,7 +156,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'NONE','N' => 'SCRIPT001','O' => 'SCRIPT002');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('script', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -157,9 +168,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'ON','N' => 'OFF');
+							$drop_down = array('ALLFORCE' => 'ON','NEVER' => 'OFF');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('camp_rec', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -171,9 +182,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'OFF','N' => 'ON');
+							$drop_down = array('8368' => 'OFF','8369' => 'ON');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('amd', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -226,7 +237,7 @@
 						</div>
 					</div>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" name="camp_name" value="CAMPAIGN 1">
+						<input type="text" class="form-control" name="camp_name">
 					</div>
 				</div>
                 <div class="row">
@@ -236,7 +247,7 @@
 						</div>
 					</div>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" name="" value="">
+						<input type="text" class="form-control" name="camp_desc">
 					</div>
 				</div>
                 <div class="row">
@@ -262,9 +273,9 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'MANUAL','N' => 'AUTO_DIAL','O' => 'PREDICTIVE');
+							$drop_down = array('MANUAL' => 'MANUAL','RATIO' => 'AUTO_DIAL','ADAPT_AVERAGE' => 'PREDICTIVE');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('dial_method', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -276,9 +287,9 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'SLOW','N' => 'NORMAL','O' => 'HIGH');
+							$drop_down = array('0' => 'OFF','1.0' => 'SLOW','2.0' => 'NORMAL', '4.0' => 'HIGH','6.0' => 'MAX','ADVANCE' => 'ADVANCE');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('auto_dial_level', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -292,7 +303,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('N' => '2018 - 962 - getdial', 'Y' => 'NONE');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('carrier', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -306,7 +317,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'NONE','N' => 'SCRIPT001','O' => 'SCRIPT002');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('script', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -316,7 +327,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="" value="4048915588">
+						<input type="text" class="form-control" name="camp_cid">
 					</div>
 				</div>
                 <div class="row">
@@ -328,9 +339,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'ON','N' => 'OFF');
+							$drop_down = array('ALLFORCE' => 'ON','NEVER' => 'OFF');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('camp_rec', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -342,9 +353,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'OFF','N' => 'ON');
+							$drop_down = array('8368' => 'OFF','8369' => 'ON');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('amd', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -423,18 +434,6 @@
                         </tr>
                     </thead>
                     <tbody>
-						<?php for($i=1;$i<1035;$i++){ ?>
-                        <tr>
-                            <td><?= $i ?></td>
-                            <td>61763</td>
-                            <td><?= $i ?></td>
-                            <td>087725601381</td>
-                            <td>CEVY FAUZAN</td>
-                            <td>NEW</td>
-                            <td>3</td>
-                            <td>N</td>
-                        </tr>
-						<?php } ?>
                     </tbody>
                 </table>
                 <div class="row">
@@ -472,12 +471,6 @@
 	var base_url = '<?php echo base_url();?>';
 
 	$(document).ready(function() {
-		table = $('#tblHopper').DataTable({
-			"ordering": false,
-			"searching": false,
-			"autoWidth": false
-		});
-
 		table = $('#camp').DataTable({ 
 			"ordering": false,
 			"processing": true,
@@ -485,6 +478,31 @@
 			"order": [],
 			"ajax": {
 				"url": "<?php echo site_url('campaigns/campaign_list')?>",
+				"type": "POST"
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+
+			],
+
+		});
+
+		table = $('#tblHopper').DataTable({ 
+			"ordering": false,
+			"searching": false,
+			"autoWidth": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('List/campaign_hopper')?>",
 				"type": "POST"
 			},
 			"columnDefs": [
@@ -550,7 +568,13 @@
 				$('label[for="camp_name"]').html(data.campaign_name);
 				$('[name="camp_id"]').val(data.campaign_id);
 				$('[name="camp_name"]').val(data.campaign_name);
+				$('[name="camp_desc"]').val(data.campaign_description);
 				$('[name="active"]').val(data.active);
+				$('[name="dial_method"]').val(data.dial_method);
+				$('[name="auto_dial_level"]').val(data.auto_dial_level);
+				$('[name="camp_cid"]').val(data.campaign_cid);
+				$('[name="camp_rec"]').val(data.campaign_recording);
+				$('[name="amd"]').val(data.campaign_vdad_exten);
 				$('#edit-camp').modal('show');
 				//$('.modal-title').text('Edit Person'); // Set title to Bootstrap modal title
 			},
@@ -681,7 +705,7 @@
 
 	function change(b){
 		var id = b.value;
-		if(id == 'Y' || id == 'P'){
+		if(id == 'Y' || id == 'MANUAL'){
 			$('#autoDial').hide();
 		}else{
 			$('#autoDial').show();

@@ -1,4 +1,13 @@
 <?php
+############################################################################################
+####  Name:             	Scripts.php                                             	####
+####  Type:             	ci controller - administrator                     			####	
+####  Version:          	2.0.0                                                       ####	   
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Scripts extends CI_Controller {

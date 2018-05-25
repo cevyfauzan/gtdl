@@ -1,4 +1,13 @@
 <?php
+############################################################################################
+####  Name:             	Campaigns.php                                             	####
+####  Type:             	ci controller - administrator                     			####	
+####  Version:          	2.0.0                                                       ####	   
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Campaigns extends CI_Controller {
@@ -43,11 +52,24 @@ class Campaigns extends CI_Controller {
 			$row = array();
 			$row[] = strtoupper($camp->campaign_id);
 			$row[] = strtoupper($camp->campaign_name);
-			$row[] = $camp->dial_method;
-			if($camp->active == 'N'){
+			switch($camp->dial_method){
+				case "MANUAL":
+				$row[] = 'MANUAL';
+				break;
+				case "RATIO":
+				$row[] = 'AUTO DIAL';
+				break;
+				case "ADAPT_AVERAGE":
+				$row[] = 'PREDICTIVE';
+				break;
+			}
+			switch($camp->active){
+				case "N":
 				$row[] = '<font color="red">INACTIVE<font>';
-			}elseif($camp->active == 'Y'){
+				break;
+				case "Y":
 				$row[] = '<font color="green">ACTIVE<font>';
+				break;
 			}
 
 			$row[] = '<a href="javascript:void(0)" title="Edit" onclick="edit_camp('."'".$camp->campaign_id."'".')"><i class="fa fa-edit text-yellow"></i></a>&ensp;

@@ -1,4 +1,13 @@
 <?php
+############################################################################################
+####  Name:             	Get_campaign.php                                            ####
+####  Type:             	ci model - administrator                     				####
+####  Version:          	2.0.0                                                       ####
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
 class Get_campaign extends CI_Model
 {
     public function __construct()
