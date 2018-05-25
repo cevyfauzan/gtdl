@@ -1,5 +1,7 @@
 <div class="pull-right">
-    <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-camp" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Campaign</a>
+    <button class="btn btn-success btn-sm" onclick="add_camp()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Campaign</button>
+    <a href="" class="btn btn-info btn-sm" onclick="reload_table()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
+    <a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 </div>
 <h4><b>Campaign</b></h4>
 <br>
@@ -13,24 +15,10 @@
                     <th>Dial Method</th>
                     <th>Status</th>
                     <th width="10%">Action</th>
-                    <th width="5%"><input type="checkbox" class="minimal"></th>
+                    <th width="5%"><input type="checkbox" id="check-all"></th>
                 </tr>
             </thead>
             <tbody>
-                <?php for($i=1;$i<15;$i++){ ?>
-                <tr>
-                    <td>CAMPAIGN<?= $i ?></td>
-                    <td>Campaign <?= $i ?></td>
-                    <td>Auto Dial</td>
-                    <td style="color:green">ACTIVE</td>
-                    <td>
-                        <a href="" title="Edit" data-toggle="modal" data-target="#edit-camp"><i class="fa fa-edit text-yellow"></i></a>&ensp;
-                        <a href="" title="Delete" onclick="return confirm('Are you sure you want to delete this data ?');"><i class="fa fa-remove text-red"></i></a>&ensp;
-                        <a href="" title="Info"><i class="fa fa-info-circle text-info"></i></a>&ensp;
-                    </td>
-                    <td><input type="checkbox" class="minimal"></td>
-                </tr>
-                <?php } ?>
             </tbody>
         </table>
     </div>
@@ -46,6 +34,7 @@
 				<h4 class="modal-title">ADD NEW CAMPAIGN</h4>
 			</div>
 			<div class="modal-body">
+				<form action="#" id="form-add">
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
@@ -203,6 +192,7 @@
                 </div>
 				<br>
                 <center><a href="" class="btn btn-success btn-md">SUBMIT</a></center>
+				</form>
 			</div>
 		</div>			
 	</div>
@@ -212,19 +202,21 @@
 <div id="edit-camp" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
+			<form action="#" id="form-edit">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">MODIFY CAMPAIGN : CAMPAIGN1 - CAMPAIGN 1</h4>
+				<h4 class="modal-title">MODIFY CAMPAIGN : <label for="camp_id"></label> - <label for="camp_name"></label></h4>
 			</div>
 			<div class="modal-body">
+				
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
 							<label>Campaign ID :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
-						CAMPAIGN1
+					<div class="col-sm-4">
+						<input type="text" class="form-control" name="camp_id" value="CAMPAIGN 1" readonly>
 					</div>
 				</div>
                 <div class="row">
@@ -233,8 +225,8 @@
 							<label>Campaign Name :</label>
 						</div>
 					</div>
-					<div class="col-sm-6">
-						<input type="text" class="form-control" name="" value="CAMPAIGN 1">
+					<div class="col-sm-4">
+						<input type="text" class="form-control" name="camp_name" value="CAMPAIGN 1">
 					</div>
 				</div>
                 <div class="row">
@@ -258,7 +250,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'Y','N' => 'N');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('active', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -403,6 +395,7 @@
                 <center>This campaign has 1034 leads in the queue (dial hopper)</center>
                 <center><a href="" title="Edit" data-toggle="modal" data-target="#hopper">View leads in the hopper for this campaign</a></center>
 			</div>
+			</form>
 		</div>			
 	</div>
 </div>
@@ -474,6 +467,218 @@
 
 <!--======================================================================================================================-->
 <script>
+	var save_method;
+	var table;
+	var base_url = '<?php echo base_url();?>';
+
+	$(document).ready(function() {
+		table = $('#tblHopper').DataTable({
+			"ordering": false,
+			"searching": false,
+			"autoWidth": false
+		});
+
+		table = $('#camp').DataTable({ 
+			"ordering": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('campaigns/campaign_list')?>",
+				"type": "POST"
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+
+			],
+
+		});
+
+		//set input/textarea/select event when change value, remove class error and remove text help block 
+		$("input").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+		$("textarea").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+		$("select").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+
+		//check all
+		$("#check-all").click(function () {
+			$(".data-check").prop('checked', $(this).prop('checked'));
+		});
+
+	});
+
+	function add_camp()
+	{
+		save_method = 'add';
+		$('#form-add')[0].reset(); // reset form on modals
+		$('.form-group').removeClass('has-error'); // clear error class
+		$('.help-block').empty(); // clear error string
+		$('#add-camp').modal('show'); // show bootstrap modal
+		//$('.modal-title').text('Add Person'); // Set Title to Bootstrap modal title
+	}
+
+	function edit_camp(campaign_id)
+	{
+		save_method = 'update';
+		$('#form-edit')[0].reset(); // reset form on modals
+		$('.form-group').removeClass('has-error'); // clear error class
+		$('.help-block').empty(); // clear error string
+
+		//Ajax Load data from ajax
+		$.ajax({
+			url : "<?php echo site_url('campaigns/campaign_edit')?>/" + campaign_id,
+			type: "GET",
+			dataType: "JSON",
+			success: function(data)
+			{
+				$('label[for="camp_id"]').html(data.campaign_id);
+				$('label[for="camp_name"]').html(data.campaign_name);
+				$('[name="camp_id"]').val(data.campaign_id);
+				$('[name="camp_name"]').val(data.campaign_name);
+				$('[name="active"]').val(data.active);
+				$('#edit-camp').modal('show');
+				//$('.modal-title').text('Edit Person'); // Set title to Bootstrap modal title
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+				alert('Error get data from ajax');
+			}
+		});
+	}
+
+	function reload_table()
+	{
+		table.ajax.reload(null,false); //reload datatable ajax 
+	}
+
+	function save()
+	{
+		$('#btnSave').text('saving...'); //change button text
+		$('#btnSave').attr('disabled',true); //set button disable 
+		var url;
+
+		if(save_method == 'add') {
+			url = "<?php echo site_url('person/ajax_add')?>";
+		} else {
+			url = "<?php echo site_url('person/ajax_update')?>";
+		}
+
+		// ajax adding data to database
+		var formData = new FormData($('#form')[0]);
+		$.ajax({
+			url : url,
+			type: "POST",
+			data: formData,
+			contentType: false,
+			processData: false,
+			dataType: "JSON",
+			success: function(data)
+			{
+				if(data.status) //if success close modal and reload ajax table
+				{
+					$('#modal_form').modal('hide');
+					reload_table();
+				}
+				else
+				{
+					for (var i = 0; i < data.inputerror.length; i++) 
+					{
+						$('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error'); //select parent twice to select div form-group class and add has-error class
+						$('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
+					}
+				}
+				$('#btnSave').text('save'); //change button text
+				$('#btnSave').attr('disabled',false); //set button enable 
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+				alert('Error adding / update data');
+				$('#btnSave').text('save'); //change button text
+				$('#btnSave').attr('disabled',false); //set button enable 
+
+			}
+		});
+	}
+
+	function delete_person(id)
+	{
+		if(confirm('Are you sure delete this data?'))
+		{
+			// ajax delete data to database
+			$.ajax({
+				url : "<?php echo site_url('person/ajax_delete')?>/"+id,
+				type: "POST",
+				dataType: "JSON",
+				success: function(data)
+				{
+					//if success reload ajax table
+					$('#modal_form').modal('hide');
+					reload_table();
+				},
+				error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert('Error deleting data');
+				}
+			});
+
+		}
+	}
+
+	function bulk_delete()
+	{
+		var list_id = [];
+		$(".data-check:checked").each(function() {
+				list_id.push(this.value);
+		});
+		if(list_id.length > 0)
+		{
+			if(confirm('Are you sure delete this '+list_id.length+' data?'))
+			{
+				$.ajax({
+					type: "POST",
+					data: {id:list_id},
+					url: "<?php echo site_url('person/ajax_bulk_delete')?>",
+					dataType: "JSON",
+					success: function(data)
+					{
+						if(data.status)
+						{
+							reload_table();
+						}
+						else
+						{
+							alert('Failed.');
+						}
+						
+					},
+					error: function (jqXHR, textStatus, errorThrown)
+					{
+						alert('Error deleting data');
+					}
+				});
+			}
+		}
+		else
+		{
+			alert('No data selected');
+		}
+	}
+
 	function change(b){
 		var id = b.value;
 		if(id == 'Y' || id == 'P'){
@@ -482,17 +687,6 @@
 			$('#autoDial').show();
 		}
 	}
-    $(function () {
-		$('#camp').DataTable({
-			"ordering": false,
-			"autoWidth": false
-		});
-		$('#tblHopper').DataTable({
-			"ordering": false,
-			"searching": false,
-			"autoWidth": false
-		});
-	});
 
     $('input[type="checkbox"].minimal').iCheck({
       checkboxClass: 'icheckbox_minimal-blue'
