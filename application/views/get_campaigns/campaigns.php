@@ -142,7 +142,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('N' => '2018 - 962 - getdial', 'y' => '2017 - 962 - getdial1');
 						?>
-						<?= form_dropdown('carrier', $drop_down, '', $attr) ?>
+						<?= form_dropdown('camp_carrier', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -154,9 +154,8 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'NONE','N' => 'SCRIPT001','O' => 'SCRIPT002');
 						?>
-						<?= form_dropdown('script', $drop_down, '', $attr) ?>
+						<?= form_dropdown('camp_script', $list_script, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -193,12 +192,11 @@
 							<label>Local Call Time :</label>
 						</div>
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-4">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '24 Hours - Default 24 Hours Calling','N' => 'N');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('call_time', $list_call_time, '', $attr) ?>
 					</div>
                 </div>
 				<br>
@@ -303,7 +301,7 @@
 							$attr = 'class="form-control"';
 							$drop_down = array('N' => '2018 - 962 - getdial', 'Y' => 'NONE');
 						?>
-						<?= form_dropdown('carrier', $drop_down, '', $attr) ?>
+						<?= form_dropdown('camp_carrier', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -315,9 +313,8 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'NONE','N' => 'SCRIPT001','O' => 'SCRIPT002');
 						?>
-						<?= form_dropdown('script', $drop_down, '', $attr) ?>
+						<?= form_dropdown('camp_script', $list_script, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -364,12 +361,11 @@
 							<label>Local Call Time :</label>
 						</div>
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-4">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '24 Hours - Default 24 Hours Calling','N' => 'N');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('call_time', $list_call_time, '', $attr) ?>
 					</div>
                 </div>
                 <center><a href="" class="btn btn-success btn-md">SAVE SETTINGS</a></center>
@@ -575,6 +571,8 @@
 				$('[name="camp_cid"]').val(data.campaign_cid);
 				$('[name="camp_rec"]').val(data.campaign_recording);
 				$('[name="amd"]').val(data.campaign_vdad_exten);
+				$('[name="camp_script"]').val(data.campaign_script);
+				$('[name="call_time"]').val(data.local_call_time);
 				$('#edit-camp').modal('show');
 				//$('.modal-title').text('Edit Person'); // Set title to Bootstrap modal title
 			},

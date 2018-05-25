@@ -8,7 +8,7 @@
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
-class Get_campaign extends CI_Model
+class Get_script extends CI_Model
 {
     public function __construct()
     {
@@ -110,7 +110,7 @@ class Get_campaign extends CI_Model
 		$this->db->select('*');
 		$this->db->order_by('script_id', 'ASC');
 		$q = $this->db->get($this->table);
-		  $data[''] = '-- Select --';
+		  $data['NONE'] = 'NONE';
 		  if($q->num_rows() > 0)
 		  {
 			foreach ($q->result_array() as $row)

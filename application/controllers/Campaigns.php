@@ -16,6 +16,8 @@ class Campaigns extends CI_Controller {
     {
 		parent::__construct();
 		$this->load->model('Get_campaign');
+		$this->load->model('Get_script');
+		$this->load->model('Get_call_time');
 	}
 	
 	public function index()
@@ -28,7 +30,9 @@ class Campaigns extends CI_Controller {
 
 	public function get_campaigns()
 	{
-		$data['title'] = 'getDIAL.tech Campaigns';
+		$data['list_script'] = $this->Get_script->listScript();
+		$data['list_call_time'] = $this->Get_call_time->listCalltime();
+		$this->load->vars($data);
 		$this->load->view('get_campaigns/campaigns');
 	}
 

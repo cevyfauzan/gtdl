@@ -1,6 +1,6 @@
 <?php
 ############################################################################################
-####  Name:             	Get_campaign.php                                            ####
+####  Name:             	Get_call_time.php                                           ####
 ####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
@@ -8,7 +8,7 @@
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
-class Get_campaign extends CI_Model
+class Get_call_time extends CI_Model
 {
     public function __construct()
     {
@@ -16,10 +16,9 @@ class Get_campaign extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_campaigns';
+    var $table = 'vicidial_call_times';
 	var $column_order = array(null,'campaign_id','campaign_name','dial_method','active',null);
 	var $column_search = array('campaign_id','campaign_name','dial_method','active');
-	var $order = array('campaign_id' => 'ASC');
     
     private function _getCampaignQuery()
 	{
@@ -104,5 +103,21 @@ class Get_campaign extends CI_Model
 		$this->db->where('id', $id);
 		$this->db->delete($this->table);
 	}
-}
+
+	function listCalltime()
+	{
+		$data = array();
+		$this->db->select('*');
+		$this->db->order_by('call_time_id', 'ASC');
+		$q = $this->db->get($this->table);
+		  if($q->num_rows() > 0)
+		  {
+			foreach ($q->result_array() as $row)
+			{
+				$data[$row['call_time_id']] = $row['call_time_id'].' - '.$row['call_time_name'];
+			}
+		  }
+		$q->free_result();
+		return $data;
+	}}
 ?>
