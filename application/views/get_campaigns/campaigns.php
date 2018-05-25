@@ -192,7 +192,7 @@
 							<label>Local Call Time :</label>
 						</div>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
                         <?php 
 							$attr = 'class="form-control"';
 						?>
@@ -361,7 +361,7 @@
 							<label>Local Call Time :</label>
 						</div>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
                         <?php 
 							$attr = 'class="form-control"';
 						?>
