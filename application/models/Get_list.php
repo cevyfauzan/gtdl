@@ -1,6 +1,6 @@
 <?php
 ############################################################################################
-####  Name:             	Get_call_time.php                                           ####
+####  Name:             	Get_list.php                                            	####
 ####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
@@ -8,7 +8,7 @@
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
-class Get_call_time extends CI_Model
+class Get_list extends CI_Model
 {
     public function __construct()
     {
@@ -16,64 +16,39 @@ class Get_call_time extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_call_times';
-	var $column_order = array(null,'campaign_id','campaign_name','dial_method','active',null);
-	var $column_search = array('campaign_id','campaign_name','dial_method','active');
+    var $table = 'vicidial_list';
     
-    private function _getCampaignQuery()
+    private function _getListCampQuery()
 	{
+		//$camp = 'testcamp';
+		//$this->db->where('vicidial_lists.campaign_id', $camp_id);
+		$this->db->select('*');
 		$this->db->from($this->table);
-		$i = 0;
-		foreach ($this->column_search as $item)
-		{
-			if($_POST['search']['value'])
-			{
-				if($i===0)
-				{
-					$this->db->group_start();
-					$this->db->like($item, $_POST['search']['value']);
-				}
-				else
-				{
-					$this->db->or_like($item, $_POST['search']['value']);
-				}
-
-				if(count($this->column_search) - 1 == $i)
-					$this->db->group_end();
-			}
-			$i++;
-		}
-		
-		if(isset($_POST['order']))
-		{
-			$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-		} 
-		else if(isset($this->order))
-		{
-			$order = $this->order;
-			$this->db->order_by(key($order), $order[key($order)]);
-		}
+		$this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
 	}
 
-	function getCampaign()
+	function getListCamp($camp_id)
 	{
-		$this->_getCampaignQuery();
+		$this->db->where('vicidial_lists.campaign_id', $camp_id);
+		$this->db->select('*');
+		$this->db->from($this->table);
+		$this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function countFiltCamp()
+	function countFiltListCamp()
 	{
-		$this->_getCampaignQuery();
+		$this->_getListCampQuery();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function countAllCamp()
+	public function countAllListCamp()
 	{
-		$this->db->from($this->table);
+		$this->_getListCampQuery();
 		return $this->db->count_all_results();
 	}
 
@@ -104,16 +79,18 @@ class Get_call_time extends CI_Model
 		$this->db->delete($this->table);
 	}
 
-	function listCalltime()
+	function listScript()
 	{
 		$data = array();
 		$this->db->select('*');
+		$this->db->order_by('script_id', 'ASC');
 		$q = $this->db->get($this->table);
+		  $data['NONE'] = 'NONE';
 		  if($q->num_rows() > 0)
 		  {
 			foreach ($q->result_array() as $row)
 			{
-				$data[$row['call_time_id']] = $row['call_time_id'].' - '.$row['call_time_name'];
+				$data[$row['script_id']] = $row['script_id'].' - '.$row['script_name'];
 			}
 		  }
 		$q->free_result();

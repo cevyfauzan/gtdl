@@ -16,6 +16,7 @@ class Campaigns extends CI_Controller {
     {
 		parent::__construct();
 		$this->load->model('Get_campaign');
+		$this->load->model('Get_list');
 		$this->load->model('Get_script');
 		$this->load->model('Get_call_time');
 	}
@@ -88,6 +89,33 @@ class Campaigns extends CI_Controller {
 						"draw" => $_POST['draw'],
 						"recordsTotal" => $this->Get_campaign->countAllCamp(),
 						"recordsFiltered" => $this->Get_campaign->countFiltCamp(),
+						"data" => $data,
+				);
+		echo json_encode($output);
+	}
+
+	public function list_camp($camp_id=0)
+	{
+		$listCamp = $this->Get_list->getListCamp($camp_id);
+		$aa = $camp_id;
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($listCamp as $list) {
+			$no++;
+			$row = array();
+			$row[] = $no;
+			$row[] = strtoupper($list->lead_id);
+			$row[] = strtoupper($list->list_id);
+			$row[] = strtoupper($list->phone_number);
+			$row[] = strtoupper($list->first_name);
+			$row[] = strtoupper($aa);
+			$data[] = $row;
+		}
+
+		$output = array(
+						"draw" => $_POST['draw'],
+						"recordsTotal" => $this->Get_list->countAllListCamp(),
+						"recordsFiltered" => $this->Get_list->countFiltListCamp(),
 						"data" => $data,
 				);
 		echo json_encode($output);

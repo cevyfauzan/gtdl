@@ -112,7 +112,7 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control" onChange="change(this);"';
-							$drop_down = array('P' => '-- SELECT --','MANUAL' => 'MANUAL','RATIO' => 'AUTO_DIAL','ADAPT_AVERAGE' => 'PREDICTIVE');
+							$drop_down = array('MANUAL' => 'MANUAL','RATIO' => 'AUTO_DIAL','ADAPT_AVERAGE' => 'PREDICTIVE');
 						?>
 						<?= form_dropdown('dial_method', $drop_down, '', $attr) ?>
 					</div>
@@ -217,7 +217,6 @@
 				<h4 class="modal-title">MODIFY CAMPAIGN : <label for="camp_id"></label> - <label for="camp_name"></label></h4>
 			</div>
 			<div class="modal-body">
-				
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
@@ -225,7 +224,7 @@
 						</div>
 					</div>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" name="camp_id" value="CAMPAIGN 1" readonly>
+						<input type="text" class="form-control" name="camp_id" id="campID" readonly>
 					</div>
 				</div>
                 <div class="row">
@@ -425,8 +424,6 @@
                             <th width="20%">Phone Number</th>
                             <th>Name</th>
                             <th width="7%">Status</th>
-                            <th width="7%">Count</th>
-                            <th width="7%">Source</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -465,6 +462,7 @@
 	var save_method;
 	var table;
 	var base_url = '<?php echo base_url();?>';
+	var camp_id = document.getElementsBy("campID").value;
 
 	$(document).ready(function() {
 		table = $('#camp').DataTable({ 
@@ -498,7 +496,7 @@
 			"serverSide": true,
 			"order": [],
 			"ajax": {
-				"url": "<?php echo site_url('List/campaign_hopper')?>",
+				"url": "<?php echo site_url('campaigns/list_camp/')?>" + camp_id,
 				"type": "POST"
 			},
 			"columnDefs": [

@@ -1,6 +1,6 @@
 <?php
 ############################################################################################
-####  Name:             	Get_scipt.php                                            	####
+####  Name:             	Get_script.php                                            	####
 ####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
