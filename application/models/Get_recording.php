@@ -1,6 +1,6 @@
 <?php
 ############################################################################################
-####  Name:             	Get_call_time.php                                           ####
+####  Name:             	Get_recording.php                                           ####
 ####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
@@ -8,7 +8,7 @@
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
-class Get_call_time extends CI_Model
+class Get_recording extends CI_Model
 {
     public function __construct()
     {
@@ -16,12 +16,41 @@ class Get_call_time extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_call_times';
-	var $column_order = array(null,'call_time_id','call_time_name','ct_default_start','ct_default_stop','active',null);
-	var $column_search = array('call_time_id','call_time_name','ct_default_start','ct_default_stop','active');
+    var $table = 'goautodial_recordings_views';
+	var $column_order = array(null,'name','phone','call_date','duration','campaign_id','agent','disposition','filename',null);
+	var $column_search = array('name','phone','call_date','duration','agent','campaign_id','disposition','filename');
+	var $order = array('call_date' => 'desc');
     
-    private function _getCalltimeQuery()
+    private function _getRecQuery()
 	{
+		if($this->input->post('phone'))
+        {
+            $this->db->like('phone', $this->input->post('phone'));
+        }
+		if($this->input->post('fullname'))
+        {
+            $this->db->like('fullname', $this->input->post('fullname'));
+        }
+        if($this->input->post('dispo'))
+        {
+            $this->db->like('disposition', $this->input->post('dispo'));
+        }
+        if($this->input->post('agent'))
+        {
+            $this->db->like('agent', $this->input->post('agent'));
+        }
+        if($this->input->post('campaign'))
+        {
+            $this->db->like('campaign_id', $this->input->post('campaign'));
+        }
+		if($this->input->post('awal'))
+        {
+            $this->db->where('call_date >=', $this->input->post('awal').' 00:00:00');
+        }
+        if($this->input->post('akhir'))
+        {
+            $this->db->where('call_date <=', $this->input->post('akhir').' 23:59:59');
+        }
 		$this->db->from($this->table);
 		$i = 0;
 		foreach ($this->column_search as $item)
@@ -55,76 +84,32 @@ class Get_call_time extends CI_Model
 		}
 	}
 
-	function getCalltime()
+	function getRecording()
 	{
-		$this->_getCalltimeQuery();
+		$this->_getRecQuery();
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function countFiltCt()
+	function countFiltRec()
 	{
-		$this->_getCalltimeQuery();
+		$this->_getRecQuery();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function countAllCt()
+	public function countAllRec()
 	{
 		$this->db->from($this->table);
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($ct_id)
+	public function delete_by_id($recording_id)
 	{
-		$this->db->from($this->table);
-		$this->db->where('call_time_id',$ct_id);
-		$query = $this->db->get();
-
-		return $query->row();
-	}
-
-	public function get_dup_id($ct_id)
-	{
-		$this->db->from($this->table);
-		$this->db->where('call_time_id',$ct_id);
-		$query = $this->db->get();
-
-		return $query->num_rows();
-	}
-	public function save($data)
-	{
-		$this->db->insert($this->table, $data);
-		return $this->db->insert_id();
-	}
-
-	public function update($where, $data)
-	{
-		$this->db->update($this->table, $data, $where);
-		return $this->db->affected_rows();
-	}
-
-	public function delete_by_id($ct_id)
-	{
-		$this->db->where('call_time_id', $ct_id);
+		$this->db->where('recording_id', $recording_id);
 		$this->db->delete($this->table);
 	}
-
-	function listCalltime()
-	{
-		$data = array();
-		$this->db->select('*');
-		$q = $this->db->get($this->table);
-		  if($q->num_rows() > 0)
-		  {
-			foreach ($q->result_array() as $row)
-			{
-				$data[$row['call_time_id']] = $row['call_time_id'].' - '.$row['call_time_name'];
-			}
-		  }
-		$q->free_result();
-		return $data;
-	}}
+}
 ?>

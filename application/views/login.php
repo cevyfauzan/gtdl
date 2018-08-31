@@ -17,11 +17,11 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <img src="<?php echo base_url() ?>assets/dist/img/getdial.png" alt="" style="width:170px">
+                <img src="<?php echo base_url() ?>assets/dist/img/getdial.png" alt="" style="width:180px">
                 <p style="font-size:12px; color:#000;">The Next Generations Contact Centers</p>
             </div>
             <div class="login-box-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">System access</p>
                 <form action="<?php echo base_url() ?>dash/" method="post">
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" name="" id="" placeholder="Username" autocomplete="off" autofocus required>
@@ -35,7 +35,7 @@
                     <div class="col-xs-4">
                         <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                     </div>
-                    <div class="col-xs-8">
+                    <div class="col-xs-8" style="display:none">
                         <strong style="color:#2ada13;">Success!</strong> Sign In.
                     </div>
                 </div>
@@ -44,7 +44,8 @@
                     <p>- OR -</p>
                     <a href="<?php echo base_url() ?>agent/login" class="btn btn-block btn-primary"><i class="fa fa-user"></i>&ensp;Sign in using Agent</a>
                 </div>
-                <center><strong>&copy; 2018 <a href="http://getdial.tech" target="blank">getDIAL.tech</a></strong> v2.0.1</center>
+                <center><strong>&copy; 2018 <a href="http://getdial.tech" target="blank">getDIAL.id</a></strong> v2.0.0</center>
+                <center><strong>&copy; Powered by <a href="http://getdial.tech" target="blank">Cicalung-solutions</a></strong></center>
             </div>
         </div>
     </body>

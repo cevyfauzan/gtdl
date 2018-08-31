@@ -1,26 +1,17 @@
+<?php
+############################################################################################
+####  Name:             	index.php for campaigns                                     ####
+####  Type:             	ci views - administrator                     				####	
+####  Version:          	2.0.0                                                       ####	   
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
+?>
 <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/iCheck/all.css">
 <script src="<?php echo base_url()?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
-<script src="<?php echo base_url()?>assets/plugins/iCheck/icheck.min.js"></script>
-
-<!--======================================================================================================================-->
-<div class="row">
-    <div class="col-md-12">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs" id="camTabs">
-                <li class="active"><a href="#tab_1" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_campaigns">Campaigns</a></li>
-                <li><a href="#tab_2" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_dispositions">Dispositions&ensp;<small class="label pull-right bg-green">New</small></a></li>
-                <li><a href="#tab_3" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_lead_recycling">Lead Recycling</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab_1"></div>
-                <div class="tab-pane" id="tab_2"></div>
-                <div class="tab-pane" id="tab_3"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!--======================================================================================================================-->
 <script>
@@ -48,3 +39,21 @@
 		nav_active();
 	});
 </script>
+
+<!--======================================================================================================================-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs" id="camTabs">
+                <li class="active"><a href="#tab_1" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_campaigns">Campaigns</a></li>
+                <li><a href="#tab_2" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_dispositions">Dispositions&ensp;<small class="label pull-right bg-green">New</small></a></li>
+                <li><a href="#tab_3" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_lead_recycling">Lead Recycling</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1"></div>
+                <div class="tab-pane" id="tab_2"></div>
+                <div class="tab-pane" id="tab_3"></div>
+            </div>
+        </div>
+    </div>
+</div>

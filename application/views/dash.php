@@ -1,3 +1,68 @@
+<?php
+############################################################################################
+####  Name:             	dash.php                                                    ####
+####  Type:             	ci views - administrator                     				####	
+####  Version:          	2.0.0                                                       ####	   
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
+?>
+<script src="<?php echo base_url()?>assets/plugins/chartjs/Chart.min.js"></script>
+<script>
+  $(function () {
+    var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+    var areaChart = new Chart(areaChartCanvas);
+
+    var areaChartData = {
+        labels: ["00-03", "03-06", "06-09", "09-12", "12-15", "15-18", "18-21", "21-24"],
+        datasets: [
+            {
+            label: "Sales",
+            fillColor: "rgba(60,141,188,0.9)",
+            strokeColor: "rgba(60,141,188,0.8)",
+            pointColor: "#00a65a",
+            pointStrokeColor: "rgba(60,141,188,1)",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(60,141,188,1)",
+            data: [0, 0, 2, 13, 14, 6, 0, 0]
+            }
+        ]
+    };
+
+    var areaChartOptions = {
+        showScale: true,
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+        scaleGridLineWidth: 1,
+        scaleShowHorizontalLines: true,
+        scaleShowVerticalLines: true,
+        bezierCurve: false,
+        bezierCurveTension: 0.3,
+        pointDot: true,
+        pointDotRadius: 4,
+        pointDotStrokeWidth: 1,
+        pointHitDetectionRadius: 20,
+        datasetStroke: true,
+        datasetStrokeWidth: 2,
+        datasetFill: true,
+        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+        maintainAspectRatio: true,
+        responsive: true
+        };
+    areaChart.Line(areaChartData, areaChartOptions);
+    });
+
+	function nav_active(){
+		document.getElementById("dash").className = "active";
+	}
+	$(document).ready(function() {
+		nav_active();
+	});
+</script>
+
+<!--======================================================================================================================-->
 <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
@@ -105,13 +170,14 @@
                     <div class="col-sm-4">
                         <b>CAMPAIGNS RESOURCES</b>
                         <div class="callout">
-                            <?php for($i=1; $i<5; $i++){ ?>
+                            <?php for($i=1; $i<6; $i++){ ?>
                             <div class="row">
                                 <div class="col-sm-7"><h4><b>CAMPAIGN <?= $i ?></b></h4></div>
                                 <div class="col-sm-5">200 Leads</div>
                             </div>
                             <?php } ?>
                         </div>
+                        <b><a href="" class="small-box-footer">View More Campaigns <i class="fa fa-arrow-circle-right"></i></a></b>
                     </div>
                 </div>
             </div>
@@ -189,7 +255,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Server Statistics</h3>
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                 </div>
             </div>
@@ -386,56 +452,3 @@
 		</div>			
 	</div>
 </div>
-
-<script src="<?php echo base_url()?>assets/plugins/chartjs/Chart.min.js"></script>
-<script>
-  $(function () {
-    var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
-    var areaChart = new Chart(areaChartCanvas);
-
-    var areaChartData = {
-        labels: ["00-03", "03-06", "06-09", "09-12", "12-15", "15-18", "18-21", "21-24"],
-        datasets: [
-            {
-            label: "Sales",
-            fillColor: "rgba(60,141,188,0.9)",
-            strokeColor: "rgba(60,141,188,0.8)",
-            pointColor: "#00a65a",
-            pointStrokeColor: "rgba(60,141,188,1)",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(60,141,188,1)",
-            data: [0, 0, 2, 13, 14, 6, 0, 0]
-            }
-        ]
-    };
-
-    var areaChartOptions = {
-        showScale: true,
-        scaleShowGridLines: true,
-        scaleGridLineColor: "rgba(0,0,0,.05)",
-        scaleGridLineWidth: 1,
-        scaleShowHorizontalLines: true,
-        scaleShowVerticalLines: true,
-        bezierCurve: false,
-        bezierCurveTension: 0.3,
-        pointDot: true,
-        pointDotRadius: 4,
-        pointDotStrokeWidth: 1,
-        pointHitDetectionRadius: 20,
-        datasetStroke: true,
-        datasetStrokeWidth: 2,
-        datasetFill: true,
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-        maintainAspectRatio: true,
-        responsive: true
-        };
-    areaChart.Line(areaChartData, areaChartOptions);
-    });
-
-	function nav_active(){
-		document.getElementById("dash").className = "active";
-	}
-	$(document).ready(function() {
-		nav_active();
-	});
-</script>

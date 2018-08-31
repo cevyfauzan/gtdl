@@ -1,14 +1,14 @@
 <?php
 ############################################################################################
-####  Name:             	Get_call_time.php                                           ####
-####  Type:             	ci model - administrator                     				####
+####  Name:             	Get_user_group.php                                         	####
+####  Type:             	ci models - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
-class Get_call_time extends CI_Model
+class Get_user_group extends CI_Model
 {
     public function __construct()
     {
@@ -16,11 +16,12 @@ class Get_call_time extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_call_times';
-	var $column_order = array(null,'call_time_id','call_time_name','ct_default_start','ct_default_stop','active',null);
-	var $column_search = array('call_time_id','call_time_name','ct_default_start','ct_default_stop','active');
+    var $table = 'vicidial_user_groups';
+	var $column_order = array(null,'user_group','group_name','forced_timeclock_login',null);
+	var $column_search = array('user_group','group_name','forced_timeclock_login');
+	var $order = array('user_group' => 'ASC');
     
-    private function _getCalltimeQuery()
+    private function _getUserGroupQuery()
 	{
 		$this->db->from($this->table);
 		$i = 0;
@@ -55,76 +56,44 @@ class Get_call_time extends CI_Model
 		}
 	}
 
-	function getCalltime()
+	function getUserGroup()
 	{
-		$this->_getCalltimeQuery();
+		$this->_getUserGroupQuery();
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function countFiltCt()
+	function countFiltUserGroup()
 	{
-		$this->_getCalltimeQuery();
+		$this->_getUserGroupQuery();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function countAllCt()
+	public function countAllUserGroup()
 	{
 		$this->db->from($this->table);
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($ct_id)
-	{
-		$this->db->from($this->table);
-		$this->db->where('call_time_id',$ct_id);
-		$query = $this->db->get();
-
-		return $query->row();
-	}
-
-	public function get_dup_id($ct_id)
-	{
-		$this->db->from($this->table);
-		$this->db->where('call_time_id',$ct_id);
-		$query = $this->db->get();
-
-		return $query->num_rows();
-	}
-	public function save($data)
-	{
-		$this->db->insert($this->table, $data);
-		return $this->db->insert_id();
-	}
-
-	public function update($where, $data)
-	{
-		$this->db->update($this->table, $data, $where);
-		return $this->db->affected_rows();
-	}
-
-	public function delete_by_id($ct_id)
-	{
-		$this->db->where('call_time_id', $ct_id);
-		$this->db->delete($this->table);
-	}
-
-	function listCalltime()
+	function listUserGroup()
 	{
 		$data = array();
 		$this->db->select('*');
+		$this->db->order_by('user_group', 'ASC');
 		$q = $this->db->get($this->table);
+		  $data[''] = '-- Select --';
 		  if($q->num_rows() > 0)
 		  {
 			foreach ($q->result_array() as $row)
 			{
-				$data[$row['call_time_id']] = $row['call_time_id'].' - '.$row['call_time_name'];
+				$data[$row['user_group']] = $row['user_group'].' - '.$row['group_name'];
 			}
 		  }
 		$q->free_result();
 		return $data;
-	}}
+	}
+}
 ?>

@@ -17,10 +17,10 @@ class Get_script extends CI_Model
     }
 
     var $table = 'vicidial_scripts';
-	var $column_order = array(null,'campaign_id','campaign_name','dial_method','active',null);
-	var $column_search = array('campaign_id','campaign_name','dial_method','active');
+	var $column_order = array(null,'script_id','script_name','active',null);
+	var $column_search = array('script_id','script_name','active');
     
-    private function _getCampaignQuery()
+    private function _getScriptQuery()
 	{
 		$this->db->from($this->table);
 		$i = 0;
@@ -55,37 +55,45 @@ class Get_script extends CI_Model
 		}
 	}
 
-	function getCampaign()
+	function getScript()
 	{
-		$this->_getCampaignQuery();
+		$this->_getScriptQuery();
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function countFiltCamp()
+	function countFiltScript()
 	{
-		$this->_getCampaignQuery();
+		$this->_getScriptQuery();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function countAllCamp()
+	public function countAllScript()
 	{
 		$this->db->from($this->table);
 		return $this->db->count_all_results();
 	}
 
-	public function get_camp_id($campaign_id)
+	public function get_by_id($script_id)
 	{
 		$this->db->from($this->table);
-		$this->db->where('campaign_id',$campaign_id);
+		$this->db->where('script_id',$script_id);
 		$query = $this->db->get();
 
 		return $query->row();
 	}
 
+	public function get_dup_id($script_id)
+	{
+		$this->db->from($this->table);
+		$this->db->where('script_id',$script_id);
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
 	public function save($data)
 	{
 		$this->db->insert($this->table, $data);
@@ -98,9 +106,9 @@ class Get_script extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	public function delete_by_id($id)
+	public function delete_by_id($script_id)
 	{
-		$this->db->where('id', $id);
+		$this->db->where('script_id', $script_id);
 		$this->db->delete($this->table);
 	}
 

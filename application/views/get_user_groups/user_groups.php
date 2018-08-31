@@ -1,8 +1,18 @@
+<?php
+############################################################################################
+####  Name:             	user_group.php                                             	####
+####  Type:             	ci views - administrator                     				####
+####  Version:          	2.0.0                                                       ####
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
+?>
 <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/iCheck/all.css">
 <script src="<?php echo base_url()?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
-<script src="<?php echo base_url()?>assets/plugins/iCheck/icheck.min.js"></script>
 
 <!--======================================================================================================================-->
 <div class="row">
@@ -22,21 +32,10 @@
                         <th>Group Name</th>
                         <th>Forced Timelock</th>
                         <th width="10%">Action</th>
-                        <th width="5%"><input type="checkbox" class="minimal"></th>
+                        <th width="5%"><input type="checkbox" id="check-all"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Admin</td>
-                        <td>Administrator</td>
-                        <td>NO</td>
-                        <td>
-                            <a href="" title="Edit" data-toggle="modal" data-target="#edit-group" data-backdrop="static" data-keyboard="false"><i class="fa fa-edit text-yellow"></i></a>&ensp;
-                            <a href="" title="Delete" onclick="return confirm('Are you sure you want to delete this data ?');"><i class="fa fa-remove text-red"></i></a>&ensp;
-                            <a href="" title="Info"><i class="fa fa-info-circle text-info"></i></a>&ensp;
-                        </td>
-                        <td><input type="checkbox" class="minimal"></td>
-                    </tr>
                 </tbody>
             </table>
             </div>
@@ -403,16 +402,35 @@
 
 <!--======================================================================================================================-->
 <script>
-    $(function () {
-		$('#group').DataTable({
+	var save_method;
+	var table;
+
+	$(document).ready(function() {
+		table = $('#group').DataTable({ 
 			"ordering": false,
-			"autoWidth": false
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('user_groups/user_group_list')?>",
+				"type": "POST"
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+			],
+		});
+
+		$("#check-all").click(function () {
+			$(".data-check").prop('checked', $(this).prop('checked'));
 		});
 	});
-
-    $('input[type="checkbox"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue'
-    });
 
 	function nav_active(){
 		document.getElementById("set").className = "active";

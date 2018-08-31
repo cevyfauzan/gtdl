@@ -1,17 +1,292 @@
 <?php
 ############################################################################################
 ####  Name:             	campaigns.php                                             	####
-####  Type:             	ci view - administrator                     				####	
-####  Version:          	2.0.0                                                       ####	   
+####  Type:             	ci view - administrator                     				####
+####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
 ?>
+<script type="text/javascript">
+	var save_method;
+	var tableCamp;
+	var tableList;
+	var base_url = '<?php echo base_url();?>';
+
+	$(document).ready(function() {
+		tableCamp = $('#camp').DataTable({ 
+			"ordering": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('campaigns/campaign_list')?>",
+				"type": "POST"
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+			],
+		});
+		
+		var aaa = document.getElementById("campID").value;
+		tableList = $('#tblHopper').DataTable({ 
+			"ordering": false,
+			"searching": false,
+			"autoWidth": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('campaigns/list_camp/')?>" + aaa,
+				"type": "POST"
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+			],
+		});
+
+		$("input").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+		$("textarea").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+		$("select").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+
+		$("#check-all").click(function () {
+			$(".data-check").prop('checked', $(this).prop('checked'));
+		});
+	});
+
+	function add_camp()
+	{
+		save_method = 'add';
+		$('#form-camp')[0].reset();
+		$('.row').removeClass('has-error');
+		$('.help-block').empty();
+		$('#modal_form_camp').modal('show');
+		$('#list_camp').hide();
+		$('.modal-title').text('Add New Campaign');
+		$('[name="camp_id"]').attr('readonly',false);
+	}
+
+	function edit_camp(campaign_id)
+	{
+		save_method = 'update';
+		$('#form-camp')[0].reset();
+		$('.row').removeClass('has-error');
+		$('.help-block').empty();
+
+		$.ajax({
+			url : "<?php echo site_url('campaigns/ajax_edit')?>/" + campaign_id,
+			type: "GET",
+			dataType: "JSON",
+			success: function(data)
+			{
+				$('[name="camp_id"]').val(data.campaign_id);
+				$('[name="camp_name"]').val(data.campaign_name);
+				$('[name="camp_desc"]').val(data.campaign_description);
+				$('[name="camp_carrier"]').val(data.dial_prefix);
+				$('[name="active"]').val(data.active);
+				$('[name="dial_method"]').val(data.dial_method);
+				$('[name="auto_dial_level"]').val(data.auto_dial_level);
+				$('[name="camp_cid"]').val(data.campaign_cid);
+				$('[name="camp_rec"]').val(data.campaign_recording);
+				$('[name="amd"]').val(data.campaign_vdad_exten);
+				$('[name="camp_script"]').val(data.campaign_script);
+				$('[name="call_time"]').val(data.local_call_time);
+				$('[name="camp_id"]').attr('readonly',true);
+				$('[name="camp_name"]').attr('required',true);
+				$('#list_camp').show();
+				$('#modal_form_camp').modal('show');
+				$('.modal-title').text('Modify Campaign : ' + data.campaign_id + ' - ' + data.campaign_name);
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+				alert('Error get data from ajax');
+			}
+		});
+	}
+
+	function info_camp(campaign_id)
+	{
+		$('.row').removeClass('has-error');
+		$('.help-block').empty();
+		$.ajax({
+			url : "<?php echo site_url('campaigns/ajax_edit')?>/" + campaign_id,
+			type: "GET",
+			dataType: "JSON",
+			success: function(data)
+			{
+				$('[name="camp_id"]').val(data.campaign_id);
+				$('[name="camp_name"]').val(data.campaign_name);
+				$('[name="camp_desc"]').val(data.campaign_description);
+				$('[name="active"]').val(data.active);
+				$('[name="dial_method"]').val(data.dial_method);
+				$('[name="auto_dial_level"]').val(data.auto_dial_level);
+				$('[name="camp_cid"]').val(data.campaign_cid);
+				$('[name="camp_rec"]').val(data.campaign_recording);
+				$('[name="amd"]').val(data.campaign_vdad_exten);
+				$('[name="camp_script"]').val(data.campaign_script);
+				$('[name="call_time"]').val(data.local_call_time);
+				$('#info-camp').modal('show');
+				$('.modal-title').text('Info Campaign : ' + data.campaign_id + ' - ' + data.campaign_name);
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+				alert('Error get data from ajax');
+			}
+		});
+	}
+
+	function reload_table_camp()
+	{
+		tableCamp.ajax.reload();
+	}
+
+	function save()
+	{
+		$('#btnSave').text('SAVING...');
+		$('#btnSave').attr('disabled',true);
+		var url;
+
+		if(save_method == 'add') {
+			url = "<?php echo site_url('campaigns/ajax_add')?>";
+		} else {
+			url = "<?php echo site_url('campaigns/ajax_update')?>";
+		}
+
+		var formData = new FormData($('#form-camp')[0]);
+		$.ajax({
+			url : url,
+			type: "POST",
+			data: formData,
+			contentType: false,
+			processData: false,
+			dataType: "JSON",
+			success: function(data)
+			{
+				if(data.status)
+				{
+					$('#modal_form_camp').modal('hide');
+					reload_table_camp();
+				}
+				else
+				{
+					for (var i = 0; i < data.inputerror.length; i++) 
+					{
+						$('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error');
+						$('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+					}
+				}
+				$('#btnSave').text('SUBMIT');
+				$('#btnSave').attr('disabled',false);
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+				alert('Error adding / update data');
+				$('#btnSave').text('SUBMIT');
+				$('#btnSave').attr('disabled',false);
+			}
+		});
+	}
+
+	function delete_camp(campaign_id)
+	{
+		if(confirm('Are you sure you want to delete this campaign ?'))
+		{
+			$.ajax({
+				url : "<?php echo site_url('campaigns/ajax_delete')?>/"+campaign_id,
+				type: "POST",
+				dataType: "JSON",
+				success: function(data)
+				{
+					$('#modal_form_camp').modal('hide');
+					reload_table_camp();
+				},
+				error: function (jqXHR, textStatus, errorThrown)
+				{
+					alert('Error deleting data');
+				}
+			});
+
+		}
+	}
+
+	function bulk_delete()
+	{
+		var list_id = [];
+		$(".data-check:checked").each(function() {
+				list_id.push(this.value);
+		});
+		if(list_id.length > 0)
+		{
+			if(confirm('Are you sure delete campaign '+list_id+' ?'))
+			{
+				$.ajax({
+					type: "POST",
+					data: {camp_id:list_id},
+					url: "<?php echo site_url('campaigns/ajax_bulk_delete')?>",
+					dataType: "JSON",
+					success: function(data)
+					{
+						if(data.status)
+						{
+							reload_table_camp();
+						}
+						else
+						{
+							alert('Failed.');
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown)
+					{
+						alert('Error deleting data');
+					}
+				});
+			}
+		}
+		else
+		{
+			alert('No data selected');
+		}
+	}
+
+	function change(b){
+		var id = b.value;
+		if(id == 'Y' || id == 'MANUAL'){
+			$('#autoDial').hide();
+		}else{
+			$('#autoDial').show();
+		}
+	}
+</script>
+
+<!--======================================================================================================================-->
 <div class="pull-right">
     <button class="btn btn-success btn-sm" onclick="add_camp()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Campaign</button>
-    <a href="" class="btn btn-info btn-sm" onclick="reload_table()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
+    <a href="" class="btn btn-info btn-sm" onclick="reload_table_camp()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
     <a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 </div>
 <h4><b>Campaign</b></h4>
@@ -36,16 +311,16 @@
 </div>
 
 <!--======================================================================================================================-->
-<!-- Modal Add -->
-<div id="add-camp" class="modal fade" role="dialog">
+<!-- Modal Campaign -->
+<div id="modal_form_camp" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">ADD NEW CAMPAIGN</h4>
+				<h4 class="modal-title"></h4>
 			</div>
 			<div class="modal-body">
-				<form action="#" id="form-add">
+				<form action="#" id="form-camp">
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
@@ -53,10 +328,8 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="camp_id" id="camID" value="80247862" disabled="disabled">
-					</div>
-					<div class="col-sm-5">
-						<input type="checkbox" id="camE">&ensp;<font color="red">Check to edit campaign id and name</font>
+						<input type="text" class="form-control" name="camp_id" id="campID" maxlength="8">
+						<span class="help-block"></span>
 					</div>
 				</div>
                 <div class="row">
@@ -65,42 +338,33 @@
 							<label>Campaign Name :</label>
 						</div>
 					</div>
-					<div class="col-sm-5">
-						<input type="text" class="form-control" name="camp_name" id="camName" value="Outbound Campaign - 2018-04-10" disabled="disabled">
+					<div class="col-sm-4">
+						<input type="text" class="form-control" name="camp_name">
+						<span class="help-block"></span>
 					</div>
 				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>List ID :</label>
+							<label>Campaign Description :</label>
 						</div>
 					</div>
-					<div class="col-sm-3">
-						<input type="text" class="form-control" name="list_id" value="1030 >> ListID 1030" readonly>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" name="camp_desc">
 					</div>
 				</div>
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Country :</label>
+							<label>Active :</label>
 						</div>
 					</div>
-					<div class="col-sm-3">
-						<input type="text" class="form-control" name="country" value="62 >> getdial" readonly>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Check For Duplicate :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'NO DUPLICATE CHECK','N' => 'DUPLICATE FOR THIS CAMPAIGN');
+							$drop_down = array('Y' => 'Y','N' => 'N');
 						?>
-						<?= form_dropdown('check_dup', $drop_down, '', $attr) ?>
+						<?= form_dropdown('active', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -138,11 +402,20 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('N' => '2018 - 962 - getdial', 'y' => '2017 - 962 - getdial1');
+						<?php
+						//$dial_prefix["--CUSTOM--"] = "CUSTOM DIAL PREFIX";
+						$attr = 'class="form-control"';
+						$selected_prefix = "";
+						foreach ($carrier_info as $id => $carrier)
+						{
+							$prefix = str_replace("N","",str_replace("X","",$carrier['prefix']));
+							if (strlen($prefix) > 0)
+							{
+								$dial_prefix[$prefix] = "$id - $prefix - {$carrier['carrier_name']}";
+							}
+						}
 						?>
-						<?= form_dropdown('camp_carrier', $drop_down, '', $attr) ?>
+						<?= form_dropdown('camp_carrier', $dial_prefix,$selected_prefix, $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -156,6 +429,16 @@
 							$attr = 'class="form-control"';
 						?>
 						<?= form_dropdown('camp_script', $list_script, '', $attr) ?>
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-4" align="right">
+						<div class="form-group">
+							<label>Campaign Caller ID :</label>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" name="camp_cid" value="4048915588">
 					</div>
 				</div>
                 <div class="row">
@@ -200,21 +483,55 @@
 					</div>
                 </div>
 				<br>
-                <center><a href="" class="btn btn-success btn-md">SUBMIT</a></center>
+				<center>
+					<button id="btnSave" onclick="save()" class="btn btn-success btn-md">SUBMIT</button>&ensp;
+					<button class="btn btn-danger btn-md" data-dismiss="modal">CLOSE</button>
+				</center>
 				</form>
+				<div id="list_camp">
+					<br>
+					<legend></legend>
+					<center><h4>LISTS WITHIN THIS CAMPAIGN<h4></center>
+					<table class="table table-bordered table-striped table_responsive">
+						<thead>
+							<tr>
+								<th>List ID</th>
+								<th>List Name</th>
+								<th>Description</th>
+								<th>Leads Count</th>
+								<th>Active</th>
+								<th>Last Call Date</th>
+								<th>Edit</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1001</td>
+								<td>ListID 1001</td>
+								<td>Outbound ListID</td>
+								<td>4076</td>
+								<td style="color:green">YES&ensp;<input type="checkbox" class="minimal" checked></td>
+								<td>2018-04-08 21:09:43</td>
+								<td><a href="" title="Edit"><i class="fa fa-edit text-yellow"></i></a></td>
+							</tr>
+						</tbody>
+					</table>
+					<center><a href="" class="btn btn-success btn-sm">SAVE ACTIVE LIST CHANGE</a></center>
+					<br>
+				</div>
 			</div>
 		</div>			
 	</div>
 </div>
 
-<!-- Modal Edit -->
-<div id="edit-camp" class="modal fade" role="dialog">
+<!-- Modal Info -->
+<form action="#" id="form-info">
+<div id="info-camp" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:70%;">
 		<div class="modal-content">
-			<form action="#" id="form-edit">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">MODIFY CAMPAIGN : <label for="camp_id"></label> - <label for="camp_name"></label></h4>
+				<h4 class="modal-title"></label></h4>
 			</div>
 			<div class="modal-body">
                 <div class="row">
@@ -367,7 +684,6 @@
 						<?= form_dropdown('call_time', $list_call_time, '', $attr) ?>
 					</div>
                 </div>
-                <center><a href="" class="btn btn-success btn-md">SAVE SETTINGS</a></center>
 				<br>
 				<legend></legend>
                 <center><h4>LISTS WITHIN THIS CAMPAIGN<h4></center>
@@ -380,7 +696,6 @@
                             <th>Leads Count</th>
                             <th>Active</th>
                             <th>Last Call Date</th>
-                            <th>Edit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -389,19 +704,15 @@
                             <td>ListID 1001</td>
                             <td>Outbound ListID</td>
                             <td>4076</td>
-                            <td style="color:green">YES&ensp;<input type="checkbox" class="minimal" checked></td>
+                            <td style="color:green">YES</td>
                             <td>2018-04-08 21:09:43</td>
-                            <td><a href="" title="Edit"><i class="fa fa-edit text-yellow"></i></a></td>
                         </tr>
                     </tbody>
                 </table>
-                <center><a href="" class="btn btn-success btn-sm">SAVE ACTIVE LIST CHANGE</a></center>
-                <br>
                 <center>This campaign has 1 active lists and 0 inactive lists</center>
                 <center>This campaign has 1034 leads in the queue (dial hopper)</center>
                 <center><a href="" title="Edit" data-toggle="modal" data-target="#hopper">View leads in the hopper for this campaign</a></center>
 			</div>
-			</form>
 		</div>			
 	</div>
 </div>
@@ -412,7 +723,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">CURRENT HOPPER LIST : CAMPAIGN1 - CAMPAIGN 1</h4>
+				<h4 class="modal-title">CURRENT HOPPER LIST : <label for="camp_id"></label> - <label for="camp_name"></label></h4>
 			</div>
 			<div class="modal-body">
 				<table id="tblHopper" class="table table-bordered table-striped table_responsive">
@@ -456,264 +767,4 @@
 		</div>			
 	</div>
 </div>
-
-<!--======================================================================================================================-->
-<script>
-	var save_method;
-	var table;
-	var base_url = '<?php echo base_url();?>';
-	var camp_id = document.getElementsBy("campID").value;
-
-	$(document).ready(function() {
-		table = $('#camp').DataTable({ 
-			"ordering": false,
-			"processing": true,
-			"serverSide": true,
-			"order": [],
-			"ajax": {
-				"url": "<?php echo site_url('campaigns/campaign_list')?>",
-				"type": "POST"
-			},
-			"columnDefs": [
-				{ 
-					"targets": [ 0 ],
-					"orderable": false,
-				},
-				{ 
-					"targets": [ -1 ],
-					"orderable": false,
-				},
-
-			],
-
-		});
-
-		table = $('#tblHopper').DataTable({ 
-			"ordering": false,
-			"searching": false,
-			"autoWidth": false,
-			"processing": true,
-			"serverSide": true,
-			"order": [],
-			"ajax": {
-				"url": "<?php echo site_url('campaigns/list_camp/')?>" + camp_id,
-				"type": "POST"
-			},
-			"columnDefs": [
-				{ 
-					"targets": [ 0 ],
-					"orderable": false,
-				},
-				{ 
-					"targets": [ -1 ],
-					"orderable": false,
-				},
-
-			],
-
-		});
-
-		//set input/textarea/select event when change value, remove class error and remove text help block 
-		$("input").change(function(){
-			$(this).parent().parent().removeClass('has-error');
-			$(this).next().empty();
-		});
-		$("textarea").change(function(){
-			$(this).parent().parent().removeClass('has-error');
-			$(this).next().empty();
-		});
-		$("select").change(function(){
-			$(this).parent().parent().removeClass('has-error');
-			$(this).next().empty();
-		});
-
-		//check all
-		$("#check-all").click(function () {
-			$(".data-check").prop('checked', $(this).prop('checked'));
-		});
-
-	});
-
-	function add_camp()
-	{
-		save_method = 'add';
-		$('#form-add')[0].reset(); // reset form on modals
-		$('.form-group').removeClass('has-error'); // clear error class
-		$('.help-block').empty(); // clear error string
-		$('#add-camp').modal('show'); // show bootstrap modal
-		//$('.modal-title').text('Add Person'); // Set Title to Bootstrap modal title
-	}
-
-	function edit_camp(campaign_id)
-	{
-		save_method = 'update';
-		$('#form-edit')[0].reset(); // reset form on modals
-		$('.form-group').removeClass('has-error'); // clear error class
-		$('.help-block').empty(); // clear error string
-
-		//Ajax Load data from ajax
-		$.ajax({
-			url : "<?php echo site_url('campaigns/campaign_edit')?>/" + campaign_id,
-			type: "GET",
-			dataType: "JSON",
-			success: function(data)
-			{
-				$('label[for="camp_id"]').html(data.campaign_id);
-				$('label[for="camp_name"]').html(data.campaign_name);
-				$('[name="camp_id"]').val(data.campaign_id);
-				$('[name="camp_name"]').val(data.campaign_name);
-				$('[name="camp_desc"]').val(data.campaign_description);
-				$('[name="active"]').val(data.active);
-				$('[name="dial_method"]').val(data.dial_method);
-				$('[name="auto_dial_level"]').val(data.auto_dial_level);
-				$('[name="camp_cid"]').val(data.campaign_cid);
-				$('[name="camp_rec"]').val(data.campaign_recording);
-				$('[name="amd"]').val(data.campaign_vdad_exten);
-				$('[name="camp_script"]').val(data.campaign_script);
-				$('[name="call_time"]').val(data.local_call_time);
-				$('#edit-camp').modal('show');
-				//$('.modal-title').text('Edit Person'); // Set title to Bootstrap modal title
-			},
-			error: function (jqXHR, textStatus, errorThrown)
-			{
-				alert('Error get data from ajax');
-			}
-		});
-	}
-
-	function reload_table()
-	{
-		table.ajax.reload(null,false); //reload datatable ajax 
-	}
-
-	function save()
-	{
-		$('#btnSave').text('saving...'); //change button text
-		$('#btnSave').attr('disabled',true); //set button disable 
-		var url;
-
-		if(save_method == 'add') {
-			url = "<?php echo site_url('person/ajax_add')?>";
-		} else {
-			url = "<?php echo site_url('person/ajax_update')?>";
-		}
-
-		// ajax adding data to database
-		var formData = new FormData($('#form')[0]);
-		$.ajax({
-			url : url,
-			type: "POST",
-			data: formData,
-			contentType: false,
-			processData: false,
-			dataType: "JSON",
-			success: function(data)
-			{
-				if(data.status) //if success close modal and reload ajax table
-				{
-					$('#modal_form').modal('hide');
-					reload_table();
-				}
-				else
-				{
-					for (var i = 0; i < data.inputerror.length; i++) 
-					{
-						$('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error'); //select parent twice to select div form-group class and add has-error class
-						$('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-					}
-				}
-				$('#btnSave').text('save'); //change button text
-				$('#btnSave').attr('disabled',false); //set button enable 
-			},
-			error: function (jqXHR, textStatus, errorThrown)
-			{
-				alert('Error adding / update data');
-				$('#btnSave').text('save'); //change button text
-				$('#btnSave').attr('disabled',false); //set button enable 
-
-			}
-		});
-	}
-
-	function delete_person(id)
-	{
-		if(confirm('Are you sure delete this data?'))
-		{
-			// ajax delete data to database
-			$.ajax({
-				url : "<?php echo site_url('person/ajax_delete')?>/"+id,
-				type: "POST",
-				dataType: "JSON",
-				success: function(data)
-				{
-					//if success reload ajax table
-					$('#modal_form').modal('hide');
-					reload_table();
-				},
-				error: function (jqXHR, textStatus, errorThrown)
-				{
-					alert('Error deleting data');
-				}
-			});
-
-		}
-	}
-
-	function bulk_delete()
-	{
-		var list_id = [];
-		$(".data-check:checked").each(function() {
-				list_id.push(this.value);
-		});
-		if(list_id.length > 0)
-		{
-			if(confirm('Are you sure delete this '+list_id.length+' data?'))
-			{
-				$.ajax({
-					type: "POST",
-					data: {id:list_id},
-					url: "<?php echo site_url('person/ajax_bulk_delete')?>",
-					dataType: "JSON",
-					success: function(data)
-					{
-						if(data.status)
-						{
-							reload_table();
-						}
-						else
-						{
-							alert('Failed.');
-						}
-						
-					},
-					error: function (jqXHR, textStatus, errorThrown)
-					{
-						alert('Error deleting data');
-					}
-				});
-			}
-		}
-		else
-		{
-			alert('No data selected');
-		}
-	}
-
-	function change(b){
-		var id = b.value;
-		if(id == 'Y' || id == 'MANUAL'){
-			$('#autoDial').hide();
-		}else{
-			$('#autoDial').show();
-		}
-	}
-
-    $('input[type="checkbox"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue'
-    });
-
-	$('#camE').change(function() {
-		$('#camID').attr('disabled',!this.checked),
-		$('#camName').attr('disabled',!this.checked)
-	});
-</script>
+</form>

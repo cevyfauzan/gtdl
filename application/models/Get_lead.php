@@ -1,14 +1,14 @@
 <?php
 ############################################################################################
-####  Name:             	Get_list.php                                            	####
-####  Type:             	ci models - administrator                     				####
+####  Name:             	Get_lead.php                                            	####
+####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
-class Get_list extends CI_Model
+class Get_lead extends CI_Model
 {
     public function __construct()
     {
@@ -16,13 +16,41 @@ class Get_list extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_lists';
-	var $column_order = array(null,'list_id','list_name','active','list_lastcalldate','campaign_id',null);
-	var $column_search = array('list_id','list_name','active','list_lastcalldate','campaign_id');
-	var $order = array('list_id' => 'ASC');
+    var $table = 'vicidial_list';
+	var $column_order = array(null,'lead_id','list_id','phone_number','first_name','status','user',null);
+	var $column_search = array('lead_id','list_id','phone_number','first_name','status','user');
+	var $order = array('lead_id' => 'ASC');
     
-    private function _getListQuery()
+    private function _getLeadQuery()
 	{
+		if($this->input->post('phone_number'))
+        {
+            $this->db->like('phone_number', $this->input->post('phone_number'));
+        }
+		if($this->input->post('name'))
+        {
+            $this->db->like('first_name', $this->input->post('name'));
+        }
+        /*if($this->input->post('campaign_id'))
+        {
+            $this->db->like('campaign_id', $this->input->post('campaign_id'));
+        }*/
+        if($this->input->post('status'))
+        {
+            $this->db->like('status', $this->input->post('status'));
+        }
+        if($this->input->post('user'))
+        {
+            $this->db->like('user', $this->input->post('user'));
+        }
+		if($this->input->post('min_call_date'))
+        {
+            $this->db->where('modify_date >=', $this->input->post('min_call_date'));
+        }
+		if($this->input->post('max_call_date'))
+        {
+            $this->db->where('modify_date <=', $this->input->post('max_call_date'));
+        }
 		$this->db->from($this->table);
 		$i = 0;
 		foreach ($this->column_search as $item)
@@ -56,37 +84,28 @@ class Get_list extends CI_Model
 		}
 	}
 
-	function getList()
+	function getLead()
 	{
-		$this->_getListQuery();
+		$this->_getLeadQuery();
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function countFiltList()
+	function countFiltLead()
 	{
-		$this->_getListQuery();
+		$this->_getLeadQuery();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function countAllList()
+	public function countAllLead()
 	{
 		$this->db->from($this->table);
 		return $this->db->count_all_results();
 	}
-
-	public function get_list_id($list_id)
-	{
-		$this->db->from($this->table);
-		$this->db->where('list_id',$list_id);
-		$query = $this->db->get();
-
-		return $query->row();
-	}
-	
+    
     private function _getListCampQuery()
 	{
 		//$camp = 'testcamp';
@@ -133,40 +152,10 @@ class Get_list extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	public function delete_by_id($list_id)
+	public function delete_by_id($id)
 	{
-		$this->db->where('list_id', $list_id);
+		$this->db->where('id', $id);
 		$this->db->delete($this->table);
-	}
-
-	function systemsettingslookup()
-	{
-		$stmt = "SELECT use_non_latin,admin_web_directory,custom_fields_enabled FROM system_settings;";
-		$syslook = $this->asteriskDB->query($stmt);
-		$ctr = 0;
-		foreach($syslook->result() as $info){
-			$syslookup[$ctr] = $info;
-			$ctr++;
-		}
-		return $syslookup;
-	}
-
-	function listList()
-	{
-		$data = array();
-		$this->db->select('*');
-		$this->db->order_by('list_id', 'ASC');
-		$q = $this->db->get($this->table);
-		  $data[''] = '-- NONE --';
-		  if($q->num_rows() > 0)
-		  {
-			foreach ($q->result_array() as $row)
-			{
-				$data[$row['list_id']] = $row['list_id'].' - '.$row['list_name'];
-			}
-		  }
-		$q->free_result();
-		return $data;
 	}
 }
 ?>

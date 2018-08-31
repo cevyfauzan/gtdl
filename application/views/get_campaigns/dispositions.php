@@ -1,5 +1,7 @@
 <div class="pull-right">
-    <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#add-disp" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Status</a>
+    <button class="btn btn-success btn-sm" onclick="add_status()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Status</button>
+    <a href="" class="btn btn-info btn-sm" onclick="reload_table()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
+    <a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 </div>
 <h4><b>Disposition</b></h4>
 <br>
@@ -12,23 +14,10 @@
                     <th>Campaign Name</th>
                     <th>Custom Dispositions</th>
                     <th width="10%">Action</th>
-                    <th width="5%"><input type="checkbox" class="minimal"></th>
+                    <th width="5%"><input type="checkbox" id="check-all-dispo"></th>
                 </tr>
             </thead>
             <tbody>
-                <?php for($i=1;$i<15;$i++){ ?>
-                <tr>
-                    <td>CAMPAIGN<?= $i ?></td>
-                    <td>Campaign <?= $i ?></td>
-                    <td><del>NONE</del></td>
-                    <td>
-                        <a href="" title="Edit" data-toggle="modal" data-target="#edit"><i class="fa fa-edit text-yellow"></i></a>&ensp;
-                        <a href="" title="Delete" onclick="return confirm('Are you sure you want to delete this data ?');"><i class="fa fa-remove text-red"></i></a>&ensp;
-                        <a href="" title="Info"><i class="fa fa-info-circle text-info"></i></a>&ensp;
-                    </td>
-                    <td><input type="checkbox" class="minimal"></td>
-                </tr>
-                <?php } ?>
             </tbody>
         </table>
     </div>
@@ -121,28 +110,33 @@
 
 <!--======================================================================================================================-->
 <script>
-	function change(b){
-		var id = b.value;
-		if(id == 'Y' || id == 'P'){
-			$('#autoDial').hide();
-		}else{
-			$('#autoDial').show();
-		}
-	}
+	var save_method;
+	var table;
 
-    $(function () {
-		$('#disp').DataTable({
+	$(document).ready(function() {
+		table = $('#disp').DataTable({ 
 			"ordering": false,
-			"autoWidth": false
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('campaigns/dispo_list')?>",
+				"type": "POST"
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+			],
 		});
-	});
 
-    $('input[type="checkbox"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue'
-    });
-
-	$('#camE').change(function() {
-		$('#camIDs').attr('disabled',!this.checked),
-		$('#camNames').attr('disabled',!this.checked)
+		$("#check-all-recyc").click(function () {
+			$(".data-check").prop('checked', $(this).prop('checked'));
+		});
 	});
 </script>

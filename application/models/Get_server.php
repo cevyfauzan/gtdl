@@ -1,6 +1,6 @@
 <?php
 ############################################################################################
-####  Name:             	Get_call_time.php                                           ####
+####  Name:             	Get_server.php                                            	####
 ####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
 ####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
@@ -8,7 +8,7 @@
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
-class Get_call_time extends CI_Model
+class Get_server extends CI_Model
 {
     public function __construct()
     {
@@ -16,11 +16,12 @@ class Get_call_time extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_call_times';
-	var $column_order = array(null,'call_time_id','call_time_name','ct_default_start','ct_default_stop','active',null);
-	var $column_search = array('call_time_id','call_time_name','ct_default_start','ct_default_stop','active');
+    var $table = 'servers';
+	var $column_order = array(null,'server_id','server_description','server_ip','active','asterisk_version','local_gmt',null);
+	var $column_search = array('server_id','server_description','server_ip','active','asterisk_version','local_gmt');
+	var $order = array('server_id' => 'ASC');
     
-    private function _getCalltimeQuery()
+    private function _getServerQuery()
 	{
 		$this->db->from($this->table);
 		$i = 0;
@@ -55,45 +56,46 @@ class Get_call_time extends CI_Model
 		}
 	}
 
-	function getCalltime()
+	function getServer()
 	{
-		$this->_getCalltimeQuery();
+		$this->_getServerQuery();
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function countFiltCt()
+	function countFiltServer()
 	{
-		$this->_getCalltimeQuery();
+		$this->_getServerQuery();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function countAllCt()
+	public function countAllServer()
 	{
 		$this->db->from($this->table);
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($ct_id)
+	public function get_serv_id($server_id)
 	{
 		$this->db->from($this->table);
-		$this->db->where('call_time_id',$ct_id);
+		$this->db->where('server_id',$server_id);
 		$query = $this->db->get();
 
 		return $query->row();
 	}
 
-	public function get_dup_id($ct_id)
+	public function get_dup_id($server_id)
 	{
 		$this->db->from($this->table);
-		$this->db->where('call_time_id',$ct_id);
+		$this->db->where('server_id',$server_id);
 		$query = $this->db->get();
 
 		return $query->num_rows();
 	}
+	
 	public function save($data)
 	{
 		$this->db->insert($this->table, $data);
@@ -106,25 +108,27 @@ class Get_call_time extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-	public function delete_by_id($ct_id)
+	public function delete_by_id($server_id)
 	{
-		$this->db->where('call_time_id', $ct_id);
+		$this->db->where('server_id', $server_id);
 		$this->db->delete($this->table);
 	}
 
-	function listCalltime()
+	function listServer()
 	{
 		$data = array();
 		$this->db->select('*');
+		$this->db->order_by('server_ip', 'ASC');
 		$q = $this->db->get($this->table);
 		  if($q->num_rows() > 0)
 		  {
 			foreach ($q->result_array() as $row)
 			{
-				$data[$row['call_time_id']] = $row['call_time_id'].' - '.$row['call_time_name'];
+				$data[$row['server_ip']] = $row['server_ip'];
 			}
 		  }
 		$q->free_result();
 		return $data;
-	}}
+	}
+}
 ?>

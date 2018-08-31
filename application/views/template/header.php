@@ -38,7 +38,7 @@
     </style>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
     <div class="wrapper">
         <header class="main-header">
             <a href="<?= base_url()?>dash" class="logo">
@@ -89,19 +89,19 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="<?php echo base_url()?>assets/dist/img/avatar5.png" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Admin 001</span>
+                                <span class="hidden-xs">CEVY FAUZAN</span> <i class="fa fa-sort-down pull-right"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header">
                                     <img src="<?php echo base_url()?>assets/dist/img/avatar5.png" class="img-circle" alt="User Image">
                                     <p>
-                                        Admin 001 - Administrator
+                                        Cevy Fauzan - Administrator
                                         <small>Member since Nov. 2017</small>
                                     </p>
                                 </li>
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="<?= base_url() ?>login" class="btn btn-default">Logout</a>
+                                        <a href="<?= base_url() ?>login" class="btn btn-default">Sign Out</a>
                                     </div>
                                 </li>
                             </ul>

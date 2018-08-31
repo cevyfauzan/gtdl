@@ -1,3 +1,53 @@
+<script type="text/javascript">
+	var save_method;
+	var table;
+
+	$(document).ready(function() {
+		table = $('#search').DataTable({ 
+			"ordering": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('lists/lead_list')?>",
+				"type": "POST",
+				"data": function ( data ) {
+					data.phone_number = $('#phone_number').val();
+					data.name = $('#name').val();
+					data.min_call_date = $('#min_call_date').val();
+					data.max_call_date = $('#max_call_date').val();
+					//data.campaign_id = $('#campaign_id').val();
+					data.status = $('#status').val();
+					data.user = $('#user').val();
+				}
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+			],
+		});
+
+		$('#btn-filter').click(function(){ //button filter event click
+			table.ajax.reload();  //just reload table
+		});
+		$('#btn-reset').click(function(){ //button reset event click
+			$('#form-filter')[0].reset();
+			table.ajax.reload();  //just reload table
+		});
+
+		$("#check-all").click(function () {
+			$(".data-check").prop('checked', $(this).prop('checked'));
+		});
+	});
+</script>
+
+<!--======================================================================================================================-->
 <div class="pull-right">
     <a href="" class="btn btn-info btn-sm" data-toggle="modal" data-target="#add-search" data-backdrop="static" data-keyboard="false" title="Add"><i class="fa fa-search"></i>&ensp;Search Lead</a>
 </div>
@@ -20,23 +70,6 @@
                 </tr>
             </thead>
             <tbody>
-                <?php for($i=1;$i<15;$i++){ ?>
-                <tr>
-                    <td><?= $i ?></td>
-                    <td>101</td>
-                    <td>087725601381</td>
-                    <td>CEVY FAUZAN</td>
-                    <td>2018-04-20 10:01:53</td>
-                    <td>NEW</td>
-                    <td>agent001</td>
-                    <td>
-                        <a href="" title="Edit" data-toggle="modal" data-target="#edit-lead" data-backdrop="static" data-keyboard="false"><i class="fa fa-edit text-yellow"></i></a>&ensp;
-                        <a href="" title="Delete" onclick="return confirm('Are you sure you want to delete this data ?');"><i class="fa fa-remove text-red"></i></a>&ensp;
-                        <a href="" title="Info"><i class="fa fa-info-circle text-info"></i></a>&ensp;
-                    </td>
-                    <td><input type="checkbox" class="minimal"></td>
-                </tr>
-                <?php } ?>
             </tbody>
         </table>
     </div>
@@ -52,7 +85,7 @@
 				<h4 class="modal-title">LEAD SERACH OPTIONS</h4>
 			</div>
 			<div class="modal-body">
-				<form method="post" accept-charset="utf-8" role="form" id="form-filter" method="post" action="<?= base_url() ?>">
+				<form role="form" id="form-filter" method="post">
                 <div class="row">
 					<div class="col-sm-3" align="right">
 						<div class="form-group">
@@ -60,7 +93,17 @@
 						</div>
 					</div>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" name="" id="" value="">
+						<input type="text" class="form-control" id="phone_number" value="">
+					</div>
+				</div>
+                <div class="row">
+					<div class="col-sm-3" align="right">
+						<div class="form-group">
+							<label>Name :</label>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="name" value="">
 					</div>
 				</div>
                 <div class="row">
@@ -70,20 +113,10 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control date" name="" id="" value="">
+						<input type="text" class="form-control date" id="min_call_date" value="">
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control date" name="" id="" value="">
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-3" align="right">
-						<div class="form-group">
-							<label>Lead ID :</label>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<input type="text" class="form-control" name="" id="" value="">
+						<input type="text" class="form-control date" id="max_call_date" value="">
 					</div>
 				</div>
                 <div class="row">
@@ -94,10 +127,9 @@
 					</div>
 					<div class="col-sm-6">
 						<?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '-- ALL CAMPAIGN --','N' => 'CAMPAIGN1');
+							$attr = 'class="form-control" id="campaign_id"';
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_camp, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -108,10 +140,9 @@
 					</div>
 					<div class="col-sm-6">
 						<?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '-- ALL DISPO --','N' => 'NO ANSWER');
+							$attr = 'class="form-control" id="status"';
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_dispo, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -122,16 +153,17 @@
 					</div>
 					<div class="col-sm-6">
                         <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '-- ALL AGENT --','N' => 'AGENT001');
+							$attr = 'class="form-control" id="user"';
+							$drop_down = array('' => '-- ALL AGENT --','N' => 'AGENT001');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
 					</div>
 				</div>
 				<br>
                	<center>
-					<button type="button" id="btn-filter" class="btn btn-primary" title="Filter">SEARCH</button>
+					<button type="button" id="btn-filter" class="btn btn-primary" title="Filter" data-dismiss="modal">SEARCH</button>
 					<button type="button" id="btn-reset" class="btn btn-warning" title="Reset">RESET</button>
+					<button type="button" class="btn btn-danger" title="Close" data-dismiss="modal">CLOSE</button>
 				</center>
 				</form>
 			</div>
@@ -268,32 +300,3 @@
 		</div>			
 	</div>
 </div>
-
-<!--======================================================================================================================-->
-<script>
-	function change(b){
-		var id = b.value;
-		if(id == 'Y' || id == 'P'){
-			$('#autoDial').hide();
-		}else{
-			$('#autoDial').show();
-		}
-	}
-    $(function () {
-		$('#search').DataTable({
-			"ordering": false,
-			"autoWidth": false,
-			"searching": false
-		});
-		$(".date").datepicker();
-	});
-
-    $('input[type="checkbox"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue'
-    });
-
-	$('#camE').change(function() {
-		$('#camID').attr('disabled',!this.checked),
-		$('#camName').attr('disabled',!this.checked)
-	});
-</script>

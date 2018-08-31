@@ -1,3 +1,14 @@
+<?php
+############################################################################################
+####  Name:             	system_setting.php                                        	####
+####  Type:             	ci views - administrator                     				####	
+####  Version:          	2.0.0                                                       ####	   
+####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
+?>
 <div class="row">
     <div class="col-sm-12">
         <div class="box box-primary">
@@ -12,7 +23,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['version'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -22,7 +33,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['db_schema_version'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -32,7 +43,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['db_schema_update_date'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -42,7 +53,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['auto_user_add_value'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -52,7 +63,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['install_date'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -62,7 +73,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['timeclock_end_of_day'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -72,7 +83,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['timeclock_last_reset_date'];?>">
 					</div>
 				</div>
                 <div class="row">
@@ -126,9 +137,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_api = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_api, $list['vdc_agent_api_active'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -140,9 +151,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_callback = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_callback, $list['agentonly_callback_campaign_lock'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -154,9 +165,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_sound = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_sound,  $list['sounds_central_control_active'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -168,9 +179,8 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '192.168.1.1 - getdial server');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_server, $list['active_voicemail_server'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -182,9 +192,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '20');
+							$drop_down_auto_dial_limit = array('Y' => '20');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_auto_dial_limit, $list['auto_dial_limit'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -196,9 +206,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down, $list['outbound_autodial_active'], $attr) ?>
 					</div>
 				</div>
 				<div class="row">
@@ -208,7 +218,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['outbound_calls_per_second'];?>">
 					</div>
 				</div>
                 <div class="row">
@@ -220,9 +230,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_custom = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_custom, $list['allow_custom_dialplan'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -234,9 +244,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_cross = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_cross, $list['generate_cross_server_exten'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -248,9 +258,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_territories = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_territories, $list['user_territories_active'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -262,9 +272,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_webform = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_webform, $list['enable_second_webform'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -276,9 +286,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_tts = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_tts, $list['enable_tts_integration'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -290,9 +300,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_callcard = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_callcard, $list['callcard_enabled'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -304,9 +314,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_field = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_field, $list['custom_fields_enabled'], $attr) ?>
 					</div>
 				</div>
 				<div class="row">
@@ -316,7 +326,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['first_login_trigger'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -326,7 +336,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['default_phone_registration_password'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -336,7 +346,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['default_phone_login_password'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -346,7 +356,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['default_server_password'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -356,7 +366,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['slave_db_server'];?>">
 					</div>
 				</div>
                 <div class="row">
@@ -367,7 +377,7 @@
 					</div>
 					<div class="col-sm-6">
 						<div class="form-group">
-                       		<textarea class="form-control" name="" rows="5"></textarea>
+                       		<textarea class="form-control" name="" value="<?= $list['custom_dialplan_entry'];?>" rows="5"></textarea>
 					   	</div>
 					</div>
 				</div>
@@ -380,7 +390,7 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down = array('1' => 'YES','0' => 'NO');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
 					</div>
@@ -392,7 +402,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_first_name'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -402,7 +412,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_address1'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -412,7 +422,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_address2'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -422,7 +432,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_city'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -432,7 +442,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_province'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -442,7 +452,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_postal_code'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -452,7 +462,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_gender'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -462,7 +472,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_phone_number'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -472,7 +482,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_email'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -482,7 +492,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['label_comments'];?>">
 					</div>
 				</div>
                 <div class="row">
@@ -494,9 +504,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_qc_features = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_qc_features, $list['qc_features_active'], $attr) ?>
 					</div>
 				</div>
 				<div class="row">
@@ -506,7 +516,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['qc_last_pull_time'];?>">
 					</div>
 				</div>
                 <div class="row">
@@ -518,9 +528,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_webphone = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_webphone, $list['default_webphone'], $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -532,9 +542,9 @@
 					<div class="col-sm-2">
                         <?php 
 							$attr = 'class="form-control"';
-							$drop_down = array('Y' => 'YES','N' => 'NO');
+							$drop_down_ext_server = array('1' => 'YES','0' => 'NO');
 						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
+						<?= form_dropdown('', $drop_down_ext_server, $list['default_external_server_ip'], $attr) ?>
 					</div>
 				</div>
 				<div class="row">
@@ -544,7 +554,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['webphone_url'];?>">
 					</div>
 				</div>
 				<div class="row">
@@ -554,7 +564,7 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<input type="text" class="form-control" name="">
+						<input type="text" class="form-control" name="" value="<?= $list['webphone_systemkey'];?>">
 					</div>
 				</div>
 				<br>

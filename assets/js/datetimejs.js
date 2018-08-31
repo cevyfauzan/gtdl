@@ -11,7 +11,7 @@
             setTimeout("waktu()",1000);  
             document.getElementById("output").innerHTML = addZero(tanggal.getHours())+":"+addZero(tanggal.getMinutes());
         }
-            
+
         var tanggallengkap = new String();
         var namahari = ("Monday Sunday Tuesday Wednesday Thursday Friday Saturday");
         namahari = namahari.split(" ");

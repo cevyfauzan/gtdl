@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+@import url(font-face.css);
 /*!
  *   AdminLTE v2.3.12
  *   Author: Almsaeed Studio
@@ -100,9 +100,14 @@ body {
 }
 .main-footer {
   background: #fff;
-  padding: 15px;
+  padding: 8px;
   color: #444;
   border-top: 1px solid #d2d6de;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  z-index: 999;
 }
 /* Fixed layout */
 .fixed .main-header,
@@ -143,7 +148,7 @@ body.hold-transition .main-header .logo {
 /* Content */
 .content {
   min-height: 250px;
-  padding: 15px;
+  padding: 10px;
   margin-right: auto;
   margin-left: auto;
   padding-left: 15px;

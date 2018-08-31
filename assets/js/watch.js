@@ -12,6 +12,13 @@
 		document.getElementById("output").innerHTML = addZero(tanggal.getHours()) + ":" + addZero(tanggal.getMinutes()) + ":" + addZero(tanggal.getSeconds());
 	}
 
+	function waktu_maju()
+	{
+		var tanggal = new Date();
+		setTimeout("waktu_maju()",1000);
+		document.getElementById("output_maju").innerHTML = addZero(tanggal.getHours()) + ":" + addZero(tanggal.getMinutes()) + ":" + addZero(tanggal.getSeconds());
+	}
+
 	var tanggallengkap = new String();
 	var namahari = ("Sunday Monday Tuesday Wednesday Thursday Friday Saturday");
 	namahari = namahari.split(" ");
