@@ -16,14 +16,14 @@ class Get_agent extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_list';
+    var $table = 'get_list';
     
     private function _getLead()
 	{
 		$this->db->order_by('lead_id', 'ASC');
 		if($this->input->post('campaign_id'))
         {
-            $this->db->where('vicidial_lists.campaign_id', $this->input->post('campaign_id'));
+            $this->db->where('get_lists.campaign_id', $this->input->post('campaign_id'));
         }
 		if($this->input->post('dispo_id'))
         {
@@ -33,9 +33,9 @@ class Get_agent extends CI_Model
         {
             $this->db->like('first_name', $this->input->post('first_name'));
         }
-		//$this->db->limit('100');
+		//$this->db->where('user',$this->session->(user));
 		$this->db->from($this->table);
-        $this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
+        $this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
     }
 
     function getLead()
@@ -60,7 +60,7 @@ class Get_agent extends CI_Model
 		$this->db->order_by('lead_id', 'ASC');
 		if($camp)
         {
-            $this->db->where('vicidial_lists.campaign_id', $camp);
+            $this->db->where('get_lists.campaign_id', $camp);
         }
 		if($dispo)
         {
@@ -71,8 +71,9 @@ class Get_agent extends CI_Model
             $this->db->like('first_name', $first_name);
         }
 		$this->db->where('lead_id >',$lead_id);
+		//$this->db->where('user',$this->session->(user));
 		$this->db->from($this->table);
-        $this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
+        $this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
 		$query = $this->db->get();
 		return $query->row();
 	}
@@ -86,6 +87,7 @@ class Get_agent extends CI_Model
 	}
 
 	function search_by_name($name){
+		//$this->db->where('user',$this->session->(user));
         $this->db->order_by('first_name', 'ASC');
         $this->db->like('first_name', $name , 'both');
         $this->db->limit(10);
@@ -93,6 +95,7 @@ class Get_agent extends CI_Model
 	}
 
 	function search_by_number($number){
+		//$this->db->where('user',$this->session->(user));
         $this->db->order_by('phone_number', 'ASC');
         $this->db->like('phone_number', $number);
         $this->db->limit(10);

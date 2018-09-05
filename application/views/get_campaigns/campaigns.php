@@ -3,7 +3,7 @@
 ####  Name:             	campaigns.php                                             	####
 ####  Type:             	ci view - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -107,13 +107,8 @@
 				$('[name="camp_id"]').val(data.campaign_id);
 				$('[name="camp_name"]').val(data.campaign_name);
 				$('[name="camp_desc"]').val(data.campaign_description);
-				$('[name="camp_carrier"]').val(data.dial_prefix);
 				$('[name="active"]').val(data.active);
-				$('[name="dial_method"]').val(data.dial_method);
-				$('[name="auto_dial_level"]').val(data.auto_dial_level);
-				$('[name="camp_cid"]').val(data.campaign_cid);
 				$('[name="camp_rec"]').val(data.campaign_recording);
-				$('[name="amd"]').val(data.campaign_vdad_exten);
 				$('[name="camp_script"]').val(data.campaign_script);
 				$('[name="call_time"]').val(data.local_call_time);
 				$('[name="camp_id"]').attr('readonly',true);
@@ -143,11 +138,7 @@
 				$('[name="camp_name"]').val(data.campaign_name);
 				$('[name="camp_desc"]').val(data.campaign_description);
 				$('[name="active"]').val(data.active);
-				$('[name="dial_method"]').val(data.dial_method);
-				$('[name="auto_dial_level"]').val(data.auto_dial_level);
-				$('[name="camp_cid"]').val(data.campaign_cid);
 				$('[name="camp_rec"]').val(data.campaign_recording);
-				$('[name="amd"]').val(data.campaign_vdad_exten);
 				$('[name="camp_script"]').val(data.campaign_script);
 				$('[name="call_time"]').val(data.local_call_time);
 				$('#info-camp').modal('show');
@@ -272,15 +263,6 @@
 			alert('No data selected');
 		}
 	}
-
-	function change(b){
-		var id = b.value;
-		if(id == 'Y' || id == 'MANUAL'){
-			$('#autoDial').hide();
-		}else{
-			$('#autoDial').show();
-		}
-	}
 </script>
 
 <!--======================================================================================================================-->
@@ -298,7 +280,6 @@
                 <tr>
                     <th>Campaign ID</th>
                     <th>Campaign Name</th>
-                    <th>Dial Method</th>
                     <th>Status</th>
                     <th width="10%">Action</th>
                     <th width="5%"><input type="checkbox" id="check-all"></th>
@@ -367,35 +348,7 @@
 						<?= form_dropdown('active', $drop_down, '', $attr) ?>
 					</div>
 				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Dial Method :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-                        <?php 
-							$attr = 'class="form-control" onChange="change(this);"';
-							$drop_down = array('MANUAL' => 'MANUAL','RATIO' => 'AUTO_DIAL','ADAPT_AVERAGE' => 'PREDICTIVE');
-						?>
-						<?= form_dropdown('dial_method', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row" id="autoDial" style="display:none">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Auto Dial Level :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('0' => 'OFF','1.0' => 'SLOW','2.0' => 'NORMAL', '4.0' => 'HIGH','6.0' => 'MAX','ADVANCE' => 'ADVANCE');
-						?>
-						<?= form_dropdown('auto_dial_level', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
+                <!--<div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
 							<label>Carrier to this Campaign :</label>
@@ -417,7 +370,7 @@
 						?>
 						<?= form_dropdown('camp_carrier', $dial_prefix,$selected_prefix, $attr) ?>
 					</div>
-				</div>
+				</div>-->
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
@@ -434,16 +387,6 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Campaign Caller ID :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<input type="text" class="form-control" name="camp_cid" value="4048915588">
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
 							<label>Campaign Recording :</label>
 						</div>
 					</div>
@@ -453,20 +396,6 @@
 							$drop_down = array('ALLFORCE' => 'ON','NEVER' => 'OFF');
 						?>
 						<?= form_dropdown('camp_rec', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Answering Machine Detection :</label>
-						</div>
-					</div>
-					<div class="col-sm-2">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('8368' => 'OFF','8369' => 'ON');
-						?>
-						<?= form_dropdown('amd', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">
@@ -578,35 +507,7 @@
 						<?= form_dropdown('active', $drop_down, '', $attr) ?>
 					</div>
 				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Dial Method :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('MANUAL' => 'MANUAL','RATIO' => 'AUTO_DIAL','ADAPT_AVERAGE' => 'PREDICTIVE');
-						?>
-						<?= form_dropdown('dial_method', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Auto Dial Level :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('0' => 'OFF','1.0' => 'SLOW','2.0' => 'NORMAL', '4.0' => 'HIGH','6.0' => 'MAX','ADVANCE' => 'ADVANCE');
-						?>
-						<?= form_dropdown('auto_dial_level', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
+                <!--<div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
 							<label>Carrier to this Campaign :</label>
@@ -619,7 +520,7 @@
 						?>
 						<?= form_dropdown('camp_carrier', $drop_down, '', $attr) ?>
 					</div>
-				</div>
+				</div>-->
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
@@ -636,16 +537,6 @@
                 <div class="row">
 					<div class="col-sm-4" align="right">
 						<div class="form-group">
-							<label>Campaign Caller ID :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<input type="text" class="form-control" name="camp_cid">
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
 							<label>Campaign Recording :</label>
 						</div>
 					</div>
@@ -655,20 +546,6 @@
 							$drop_down = array('ALLFORCE' => 'ON','NEVER' => 'OFF');
 						?>
 						<?= form_dropdown('camp_rec', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-4" align="right">
-						<div class="form-group">
-							<label>Answering Machine Detection :</label>
-						</div>
-					</div>
-					<div class="col-sm-2">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('8368' => 'OFF','8369' => 'ON');
-						?>
-						<?= form_dropdown('amd', $drop_down, '', $attr) ?>
 					</div>
 				</div>
                 <div class="row">

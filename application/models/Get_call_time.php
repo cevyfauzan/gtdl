@@ -16,7 +16,7 @@ class Get_call_time extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_call_times';
+    var $table = 'get_call_times';
 	var $column_order = array(null,'call_time_id','call_time_name','ct_default_start','ct_default_stop','active',null);
 	var $column_search = array('call_time_id','call_time_name','ct_default_start','ct_default_stop','active');
     

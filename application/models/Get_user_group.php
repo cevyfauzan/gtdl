@@ -16,9 +16,9 @@ class Get_user_group extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_user_groups';
-	var $column_order = array(null,'user_group','group_name','forced_timeclock_login',null);
-	var $column_search = array('user_group','group_name','forced_timeclock_login');
+    var $table = 'get_user_groups';
+	var $column_order = array(null,'user_group','group_name','web_access',null);
+	var $column_search = array('user_group','group_name','web_access');
 	var $order = array('user_group' => 'ASC');
     
     private function _getUserGroupQuery()

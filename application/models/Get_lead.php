@@ -16,7 +16,7 @@ class Get_lead extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_list';
+    var $table = 'get_list';
 	var $column_order = array(null,'lead_id','list_id','phone_number','first_name','status','user',null);
 	var $column_search = array('lead_id','list_id','phone_number','first_name','status','user');
 	var $order = array('lead_id' => 'ASC');
@@ -37,7 +37,7 @@ class Get_lead extends CI_Model
         }*/
         if($this->input->post('status'))
         {
-            $this->db->like('status', $this->input->post('status'));
+            $this->db->where('status', $this->input->post('status'));
         }
         if($this->input->post('user'))
         {
@@ -109,18 +109,18 @@ class Get_lead extends CI_Model
     private function _getListCampQuery()
 	{
 		//$camp = 'testcamp';
-		//$this->db->where('vicidial_lists.campaign_id', $camp_id);
+		//$this->db->where('get_lists.campaign_id', $camp_id);
 		$this->db->select('*');
 		$this->db->from($this->table);
-		$this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
+		$this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
 	}
 
 	function getListCamp($camp_id)
 	{
-		$this->db->where('vicidial_lists.campaign_id', $camp_id);
+		$this->db->where('get_lists.campaign_id', $camp_id);
 		$this->db->select('*');
 		$this->db->from($this->table);
-		$this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
+		$this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();

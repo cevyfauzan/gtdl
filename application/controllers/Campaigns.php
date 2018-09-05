@@ -3,7 +3,7 @@
 ####  Name:             	Campaigns.php                                             	####
 ####  Type:             	ci controller - administrator                     			####	
 ####  Version:          	2.0.0                                                       ####	   
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -15,7 +15,7 @@ class Campaigns extends CI_Controller {
 	function __construct()
     {
 		parent::__construct();
-		$this->load->model(array('Get_campaign','Get_list','Get_lead','Get_lead_recycle','Get_script','Get_call_time','Get_carrier','Get_dispo'));
+		$this->load->model(array('Get_campaign','Get_list','Get_lead','Get_lead_recycle','Get_script','Get_call_time','Get_dispo'));
 		$this->load->database();
 	}
 	
@@ -31,7 +31,6 @@ class Campaigns extends CI_Controller {
 	{
 		$data['list_script'] = $this->Get_script->listScript();
 		$data['list_call_time'] = $this->Get_call_time->listCalltime();
-		$data['carrier_info'] = $this->Get_carrier->listCarriers();
 		$data['listid'] = $this->_get_list_id();
 		$this->load->vars($data);
 		$this->load->view('get_campaigns/campaigns');
@@ -60,17 +59,6 @@ class Campaigns extends CI_Controller {
 			$row = array();
 			$row[] = strtoupper($camp->campaign_id);
 			$row[] = strtoupper($camp->campaign_name);
-			switch($camp->dial_method){
-				case "MANUAL":
-				$row[] = 'MANUAL';
-				break;
-				case "RATIO":
-				$row[] = 'AUTO DIAL';
-				break;
-				case "ADAPT_AVERAGE":
-				$row[] = 'PREDICTIVE';
-				break;
-			}
 			switch($camp->active){
 				case "N":
 				$row[] = '<font color="red">INACTIVE<font>';
@@ -112,38 +100,22 @@ class Campaigns extends CI_Controller {
                 'campaign_name' => $this->input->post('camp_name'),
                 'campaign_description' => $this->input->post('camp_desc'),
                 'active' => $this->input->post('active'),
-                'dial_method' => $this->input->post('dial_method'),
-                'auto_dial_level' => $this->input->post('auto_dial_level'),
-                'dial_prefix' => $this->input->post('camp_carrier'),
+                //'dial_prefix' => $this->input->post('camp_carrier'),
                 'manual_dial_list_id' => $listID,
                 'campaign_script' => $this->input->post('camp_script'),
-                'campaign_cid' => $this->input->post('camp_cid'),
                 'campaign_recording' => $this->input->post('camp_rec'),
-                'campaign_vdad_exten' => $this->input->post('amd'),
                 'local_call_time' => $this->input->post('call_time'),
-                'lead_order' => 'DOWN',
-                'dial_statuses' => ' N NA A AA DROP B NEW -',
-                'dial_timeout' => '30',
-                'allow_closers' => 'Y',
                 'hopper_level' => '500',
-                'campaign_rec_filename' => 'FULLDATE_CUSTPHONE_CAMPAIGN_AGENT',
                 'scheduled_callbacks' => 'Y',
-                'use_internal_dnc' => 'Y',
-                'use_campaign_dnc' => 'Y',
-                'available_only_ratio_tally' => 'Y',
                 'campaign_changedate' => $SQLdate,
                 'campaign_logindate' => $SQLdate,
-                'no_hopper_leads_logins' => 'Y',
-                'agent_display_dialable_leads' => 'Y',
-                'agent_select_territories' => '',
-                'timer_action_seconds' => '1',
                 'campaign_calldate' => $SQLdate,
                 'scheduled_callbacks_alert' => 'BLINK_RED'
             );
 		// Create List ID
-		$query = $this->db->query("INSERT INTO vicidial_lists (list_id,list_name,campaign_id,active,list_description,list_changedate)values('$listID','$listName','$campaignID','Y','Outbound ListID $listID - $NOW','$SQLdate')");
+		$query = $this->db->query("INSERT INTO get_lists (list_id,list_name,campaign_id,active,list_description,list_changedate)values('$listID','$listName','$campaignID','Y','Outbound ListID $listID - $NOW','$SQLdate')");
 		// Create campaign stats
-		$query = $this->db->query("INSERT INTO vicidial_campaign_stats (campaign_id)values('$campaignID')");
+		$query = $this->db->query("INSERT INTO get_campaign_stats (campaign_id)values('$campaignID')");
 		// Insert Campaign
 		$insert = $this->Get_campaign->save($data);
         echo json_encode(array("status" => TRUE));
@@ -165,13 +137,9 @@ class Campaigns extends CI_Controller {
                 'campaign_name' => $this->input->post('camp_name'),
                 'campaign_description' => $this->input->post('camp_desc'),
                 'active' => $this->input->post('active'),
-                'dial_method' => $this->input->post('dial_method'),
-                'auto_dial_level' => $this->input->post('auto_dial_level'),
-                'dial_prefix' => $this->input->post('camp_carrier'),
+                //'dial_prefix' => $this->input->post('camp_carrier'),
                 'campaign_script' => $this->input->post('camp_script'),
-                'campaign_cid' => $this->input->post('camp_cid'),
                 'campaign_recording' => $this->input->post('camp_rec'),
-                'campaign_vdad_exten' => $this->input->post('amd'),
                 'local_call_time' => $this->input->post('call_time'),
                 'campaign_changedate' =>$SQLdate
             );
@@ -184,23 +152,12 @@ class Campaigns extends CI_Controller {
 		$data = $this->Get_campaign->get_camp_id($campaign_id);
 		// Delete campaign
         $this->Get_campaign->delete_by_id($campaign_id);
-		$query = $this->db->query("DELETE FROM vicidial_campaign_stats WHERE campaign_id='".$campaign_id."'");
-		$query = $this->db->query("DELETE FROM vicidial_list WHERE list_id='".$data->manual_dial_list_id."'");
-		$query = $this->db->query("DELETE FROM vicidial_lists WHERE list_id='".$data->manual_dial_list_id."'");
-		$query = $this->db->query("DELETE FROM vicidial_campaign_agents WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_remote_agents WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_live_agents WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_campaign_statuses WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_campaign_hotkeys WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_callbacks WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_lead_recycle WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_campaign_server_stats WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_server_trunks WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_pause_codes WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_campaigns_list_mix WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_xfer_presets WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_xfer_stats WHERE campaign_id IN ('$id')");
-		$query = $this->db->query("DELETE FROM vicidial_hopper WHERE campaign_id IN ('$id')");
+		$query = $this->db->query("DELETE FROM get_campaign_stats WHERE campaign_id='".$campaign_id."'");
+		$query = $this->db->query("DELETE FROM get_list WHERE list_id='".$data->manual_dial_list_id."'");
+		$query = $this->db->query("DELETE FROM get_lists WHERE list_id='".$data->manual_dial_list_id."'");
+		//$query = $this->db->query("DELETE FROM get_live_agents WHERE campaign_id IN ('$id')");
+		//$query = $this->db->query("DELETE FROM get_callbacks WHERE campaign_id IN ('$id')");
+		//$query = $this->db->query("DELETE FROM get_lead_recycle WHERE campaign_id IN ('$id')");
 
 		echo json_encode(array("status" => TRUE));
     }
@@ -211,23 +168,12 @@ class Campaigns extends CI_Controller {
         foreach ($camp_id as $id) {
 			$data = $this->Get_campaign->get_camp_id($id);
             $this->Get_campaign->delete_by_id($id);
-			$query = $this->db->query("DELETE FROM vicidial_campaign_stats WHERE campaign_id='".$id."'");
-			$query = $this->db->query("DELETE FROM vicidial_list WHERE list_id='".$data->manual_dial_list_id."'");
-			$query = $this->db->query("DELETE FROM vicidial_lists WHERE list_id='".$data->manual_dial_list_id."'");
-			$query = $this->db->query("DELETE FROM vicidial_campaign_agents WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_remote_agents WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_live_agents WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_campaign_statuses WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_campaign_hotkeys WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_callbacks WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_lead_recycle WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_campaign_server_stats WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_server_trunks WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_pause_codes WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_campaigns_list_mix WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_xfer_presets WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_xfer_stats WHERE campaign_id IN ('$id')");
-			$query = $this->db->query("DELETE FROM vicidial_hopper WHERE campaign_id IN ('$id')");
+			$query = $this->db->query("DELETE FROM get_campaign_stats WHERE campaign_id='".$id."'");
+			$query = $this->db->query("DELETE FROM get_list WHERE list_id='".$data->manual_dial_list_id."'");
+			$query = $this->db->query("DELETE FROM get_lists WHERE list_id='".$data->manual_dial_list_id."'");
+			$query = $this->db->query("DELETE FROM get_live_agents WHERE campaign_id IN ('$id')");
+			//$query = $this->db->query("DELETE FROM get_callbacks WHERE campaign_id IN ('$id')");
+			//$query = $this->db->query("DELETE FROM get_lead_recycle WHERE campaign_id IN ('$id')");
 		}
         echo json_encode(array("status" => TRUE));
     }
@@ -397,7 +343,7 @@ class Campaigns extends CI_Controller {
 	}
 
 	private function _get_list_id() { 
-		$query = $this->db->query('SELECT max(list_id) as kode FROM `vicidial_lists` order by list_id asc');
+		$query = $this->db->query('SELECT max(list_id) as kode FROM `get_lists` order by list_id asc');
 		$data = $query->row();
 		if($data->kode >= 1000){
 			$kode = intval($data->kode)+1;
@@ -410,7 +356,7 @@ class Campaigns extends CI_Controller {
 	
 	private function _get_lead_status() {
 		error_reporting(0);
-		$query = $this->db->query('SELECT recycle_id,vc.campaign_id,campaign_name,status,vlr.active,attempt_delay,attempt_maximum FROM vicidial_lead_recycle as vlr,vicidial_campaigns as vc WHERE vlr.campaign_id=vc.campaign_id ORDER BY recycle_id');
+		$query = $this->db->query('SELECT recycle_id,vc.campaign_id,campaign_name,status,vlr.active,attempt_delay,attempt_maximum FROM get_lead_recycle as vlr,get_campaigns as vc WHERE vlr.campaign_id=vc.campaign_id ORDER BY recycle_id');
 		$lead_status = array();
 		foreach ($query->result() as $list)
 		{

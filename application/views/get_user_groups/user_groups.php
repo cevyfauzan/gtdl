@@ -30,7 +30,7 @@
                     <tr>
                         <th>User Group</th>
                         <th>Group Name</th>
-                        <th>Forced Timelock</th>
+                        <th>Web Access</th>
                         <th width="10%">Action</th>
                         <th width="5%"><input type="checkbox" id="check-all"></th>
                     </tr>

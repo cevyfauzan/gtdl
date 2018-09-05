@@ -16,10 +16,10 @@ class Get_lead_recycle extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_lead_recycle';
+    var $table = 'get_lead_recycle';
 	var $column_order = array(null);
-	var $column_search = array('vicidial_lead_recycle.campaign_id','status');
-	var $order = array('vicidial_lead_recycle.campaign_id' => 'ASC');
+	var $column_search = array('get_lead_recycle.campaign_id','status');
+	var $order = array('get_lead_recycle.campaign_id' => 'ASC');
     
 	function getDetailRecycle($campaign_id)
 	{

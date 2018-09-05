@@ -3,7 +3,7 @@
 ####  Name:             	Get_campaign.php                                            ####
 ####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -16,9 +16,9 @@ class Get_campaign extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_campaigns';
-	var $column_order = array(null,'campaign_id','campaign_name','dial_method','active',null);
-	var $column_search = array('campaign_id','campaign_name','dial_method','active');
+    var $table = 'get_campaigns';
+	var $column_order = array(null,'campaign_id','campaign_name','active',null);
+	var $column_search = array('campaign_id','campaign_name','active');
 	var $order = array('campaign_id' => 'ASC');
     
     private function _getCampaignQuery()

@@ -16,7 +16,7 @@ class Get_script extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_scripts';
+    var $table = 'get_scripts';
 	var $column_order = array(null,'script_id','script_name','active',null);
 	var $column_search = array('script_id','script_name','active');
     

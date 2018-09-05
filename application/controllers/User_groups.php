@@ -36,7 +36,7 @@ class User_groups extends CI_Controller {
 			$row = array();
 			$row[] = strtoupper($grp->user_group);
 			$row[] = strtoupper($grp->group_name);
-			$row[] = strtoupper($grp->forced_timeclock_login);
+			$row[] = strtoupper($grp->web_access);
 
 			$row[] = '<a href="javascript:void(0)" title="Edit" onclick="edit_lead('."'".$grp->user_group."'".')"><i class="fa fa-edit text-yellow"></i></a>&ensp;
 					  <a href="javascript:void(0)" title="Delete" onclick="return confirm(\'Are you sure you want to delete this data ?\');"><i class="fa fa-remove text-red"></i></a>&ensp;

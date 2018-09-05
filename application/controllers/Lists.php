@@ -81,12 +81,12 @@ class Lists extends CI_Controller {
 		$owner_field = 				$this->input->post('owner_field');
 
 		if($leadsload=="ok") {
-			// Update time on vicidial_campaign
+			// Update time on get_campaign
 			$NOW=date("Y-m-d H:i:s");
 			$listID = $this->input->post('list_id_override');
-			$query = $this->db->query("SELECT campaign_id FROM vicidial_lists WHERE list_id='$listID'");
+			$query = $this->db->query("SELECT campaign_id FROM get_lists WHERE list_id='$listID'");
 			$campaign_id = $query->row()->campaign_id;
-			$query = $this->db->query("UPDATE vicidial_campaigns SET campaign_changedate='$NOW' WHERE campaign_id='$campaign_id'");
+			$query = $this->db->query("UPDATE get_campaigns SET campaign_changedate='$NOW' WHERE campaign_id='$campaign_id'");
 
 			$data['tabvalsel'] = "tabloadleads";
 			//extraction
@@ -183,19 +183,19 @@ class Lists extends CI_Controller {
 			$data['fieldrow'] = $row;
 
 			$standard_SQL = "list_id, phone_code, phone_number, first_name, middle_initial, last_name, address1, city, state, postal_code, alt_phone, email, comments";
-			$table_SQL = "vicidial_list";
+			$table_SQL = "get_list";
 
 			if ($custom_fields_enabled > 0)
 			{
 				$query = $this->asteriskDB->query("SHOW TABLES LIKE 'custom_".$list_id_override."'");
 				if ($query->num_rows() > 0)
 				{
-					$query = $this->asteriskDB->query("SELECT count(*) AS cnt FROM vicidial_lists_fields WHERE list_id='".$list_id_override."'");
+					$query = $this->asteriskDB->query("SELECT count(*) AS cnt FROM get_lists_fields WHERE list_id='".$list_id_override."'");
 					$fields_cnt = $query->row();
 					if ($fields_cnt->cnt > 0)
 					{
 						$custom_SQL='';
-						$query = $this->db->query("SELECT field_id,field_label,field_name,field_description,field_rank,field_help,field_type,field_options,field_size,field_max,field_default,field_cost,field_required,multi_position,name_position,field_order from vicidial_lists_fields where list_id='".$list_id_override."' order by field_rank,field_order,field_label");
+						$query = $this->db->query("SELECT field_id,field_label,field_name,field_description,field_rank,field_help,field_type,field_options,field_size,field_max,field_default,field_cost,field_required,multi_position,name_position,field_order from get_lists_fields where list_id='".$list_id_override."' order by field_rank,field_order,field_label");
 		
 						foreach ($query->result() as $i => $row)
 						{
@@ -211,7 +211,7 @@ class Lists extends CI_Controller {
 							}
 						}
 					}
-					$table_SQL = "vicidial_list, custom_".$list_id_override;
+					$table_SQL = "get_list, custom_".$list_id_override;
 				}
 			}
 			$query = $this->db->query("SELECT $standard_SQL $custom_SQL FROM $table_SQL limit 1");
@@ -281,8 +281,8 @@ class Lists extends CI_Controller {
                 'active' => $this->input->post('active'),
                 'list_changedate' => $SQLdate
             );
-		//$query = $this->db->query("INSERT INTO vicidial_lists (list_id,list_name,campaign_id,active,list_description,list_changedate)values('$listID','$listName','$campaignID','Y','Outbound ListID $listID - $NOW','$SQLdate')");
-		//$query = $this->db->query("INSERT INTO vicidial_campaign_stats (campaign_id)values('$campaignID')");
+		//$query = $this->db->query("INSERT INTO get_lists (list_id,list_name,campaign_id,active,list_description,list_changedate)values('$listID','$listName','$campaignID','Y','Outbound ListID $listID - $NOW','$SQLdate')");
+		//$query = $this->db->query("INSERT INTO get_campaign_stats (campaign_id)values('$campaignID')");
 		$insert = $this->Get_list->save($data);
         echo json_encode(array("status" => TRUE));
     }
@@ -312,7 +312,7 @@ class Lists extends CI_Controller {
 	public function ajax_delete($list_id)
     {
         $this->Get_list->delete_by_id($list_id);
-		$query = $this->db->query("DELETE FROM vicidial_list WHERE list_id='".$list_id."'");
+		$query = $this->db->query("DELETE FROM get_list WHERE list_id='".$list_id."'");
 
 		echo json_encode(array("status" => TRUE));
     }
@@ -322,7 +322,7 @@ class Lists extends CI_Controller {
         $list_id = $this->input->post('list_id');
         foreach ($list_id as $id) {
             $this->Get_list->delete_by_id($id);
-			$query = $this->db->query("DELETE FROM vicidial_list WHERE list_id='".$id."'");
+			$query = $this->db->query("DELETE FROM get_list WHERE list_id='".$id."'");
 		}
         echo json_encode(array("status" => TRUE));
     }
@@ -361,7 +361,7 @@ class Lists extends CI_Controller {
 	}
 
 	private function _get_list_id() { 
-		$query = $this->db->query('SELECT max(list_id) as kode FROM `vicidial_lists` order by list_id asc');
+		$query = $this->db->query('SELECT max(list_id) as kode FROM `get_lists` order by list_id asc');
 		$data = $query->row();
 		if($data->kode >= 1000){
 			$kode = intval($data->kode)+1;

@@ -16,7 +16,7 @@ class Get_dispo extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_statuses';
+    var $table = 'get_statuses';
 	var $column_order = array(null,'status','status_name',null);
 	var $column_search = array('status','status_name');
 	var $order = array('status' => 'ASC');

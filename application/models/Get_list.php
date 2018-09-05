@@ -16,7 +16,7 @@ class Get_list extends CI_Model
         $this->load->database();
     }
 
-    var $table = 'vicidial_lists';
+    var $table = 'get_lists';
 	var $column_order = array(null,'list_id','list_name','active','list_lastcalldate','campaign_id',null);
 	var $column_search = array('list_id','list_name','active','list_lastcalldate','campaign_id');
 	var $order = array('list_id' => 'ASC');
@@ -90,18 +90,18 @@ class Get_list extends CI_Model
     private function _getListCampQuery()
 	{
 		//$camp = 'testcamp';
-		//$this->db->where('vicidial_lists.campaign_id', $camp_id);
+		//$this->db->where('get_lists.campaign_id', $camp_id);
 		$this->db->select('*');
 		$this->db->from($this->table);
-		$this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
+		$this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
 	}
 
 	function getListCamp($camp_id)
 	{
-		$this->db->where('vicidial_lists.campaign_id', $camp_id);
+		$this->db->where('get_lists.campaign_id', $camp_id);
 		$this->db->select('*');
 		$this->db->from($this->table);
-		$this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
+		$this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();

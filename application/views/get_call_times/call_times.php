@@ -213,8 +213,8 @@
     }
 
 	function nav_active(){
-		document.getElementById("tele").className = "active";
-		document.getElementById("tele-call_times").className = "active";
+		document.getElementById("set").className = "active";
+		document.getElementById("set-call_times").className = "active";
 	}
 	$(document).ready(function() {
 		nav_active();
