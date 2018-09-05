@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/datepicker/datepicker3.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/select2/select2.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/jQueryUI/jquery-ui.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/dist/css/AdminLTE.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/dist/css/skins/_all-skins.min.css">
 
@@ -36,6 +37,7 @@
     <script src="<?php echo base_url() ?>assets/plugins/select2/select2.full.min.js"></script>
     <script src="<?php echo base_url() ?>assets/plugins/fastclick/fastclick.js"></script>
     <script src="<?php echo base_url() ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+    <script src="<?php echo base_url() ?>assets/plugins/jQueryUI/jquery-ui.min.js"></script>
     <script src="<?php echo base_url() ?>assets/dist/js/app.min.js"></script>
     <script src="<?php echo base_url() ?>assets/dist/js/demo.js"></script>
     <script src="<?php echo base_url() ?>assets/js/datetimejs.js"></script>
@@ -69,6 +71,7 @@
                     "data": function ( data ) {
                         data.campaign_id = $('#campaign_id').val();
                         data.dispo_id = $('#dispo_id').val();
+                        data.first_name = $('#first_name').val();
                     }
                 },
                 "fnDrawCallback": function() {
@@ -112,8 +115,16 @@
                 $('#live-chat').fadeOut(300);
             });
 
-             $(".datepicker").datepicker({
+            $('.datepicker').datepicker({
                 format: "dd/mm/yyyy"
+            });
+
+            $('#manual_name').autocomplete({
+                source: "<?php echo site_url('agent/get_by_name/?')?>"
+            });
+
+            $('#manual_number').autocomplete({
+                source: "<?php echo site_url('agent/get_by_number/?')?>"
             });
         });
 
@@ -153,8 +164,9 @@
             var campId = $('#campaign_id').val();
             var dispoId = $('#dispo_id').val();
             var lead_id = $('#lead_code_id').val();
+            var first_name = $('#first_name').val();
             $.ajax({
-                url : "<?php echo site_url('agent/next_lead')?>?camp="+campId+"&dispo="+dispoId+"&lead_id="+lead_id,
+                url : "<?php echo site_url('agent/next_lead')?>?camp="+campId+"&dispo="+dispoId+"&first_name="+first_name+"&lead_id="+lead_id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data)
@@ -296,6 +308,9 @@
 
     <style>
     @charset "utf-8";
+    .ui-autocomplete {
+        z-index: 215000000 !important;
+    }
     .loader {
             position: fixed;
             left: 0px;
@@ -488,9 +503,9 @@
                     <div class="row">
                         <div class="col-md-4" id="content-refresh">
                             <div class="box box-solid">
-                                <div class="box-header with-border">
+                                <!--<div class="box-header with-border">
                                     <h3 class="box-title"><i class="fa fa-list"></i> List Lead</h3>
-                                </div>
+                                </div>-->
 
                                 <div class="box-body">
                                     <form role="form" id="form-filter" method="post">
@@ -512,6 +527,16 @@
                                         </div>
                                         <div class="col-sm-8">
                                             <?= form_dropdown('', $list_dispo, 'NEW', 'class="form-control" id="dispo_id"') ?>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4" align="right">
+                                            <div class="form-group">
+                                                <label>Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="" id="first_name" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="pull-right">
@@ -717,27 +742,55 @@
             <form action="" method="post" name="callManual">
 			<div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-user"></i>
                                 </div>
-                                <input type="text" class="form-control" name="" id="" placeholder="Input Name" minlength="2" maxlength="50">
+                                <input type="text" class="form-control" name="" id="manual_name" placeholder="Input Name" minlength="2" maxlength="50">
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-phone"></i>
                                 </div>
-                                <input type="text" class="form-control" name="Input" id="" placeholder="Input Number" minlength="8" maxlength="13" onkeypress="return onlyNumb(event);">
+                                <input type="text" class="form-control" name="" id="manual_number" placeholder="Input Number" minlength="8" maxlength="13" onkeypress="return onlyNumb(event);">
                             </div>
                         </div>
+                    </div>
+                </div>
+                <legend></legend>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-striped">
+                            <tr>
+                                <td colspan="2"><b>Result :</b></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><b>Name</b></td>
+                                <td id=""></td>
+                            </tr>
+                            <tr>
+                                <td><b>Number</b></td>
+                                <td id=""></td>
+                            </tr>
+                            <tr>
+                                <td><b>Dispo</b></td>
+                                <td id=""></td>
+                            </tr>
+                            <tr>
+                                <td><b>Last Call</b></td>
+                                <td id=""></td>
+                            </tr>
+                            <tr>
+                                <td><b>Scheduling</b></td>
+                                <td id=""></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 			</div>

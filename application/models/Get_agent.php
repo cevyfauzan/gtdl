@@ -29,6 +29,10 @@ class Get_agent extends CI_Model
         {
             $this->db->where('status', $this->input->post('dispo_id'));
         }
+		if($this->input->post('first_name'))
+        {
+            $this->db->like('first_name', $this->input->post('first_name'));
+        }
 		//$this->db->limit('100');
 		$this->db->from($this->table);
         $this->db->join('vicidial_lists', 'vicidial_list.list_id = vicidial_lists.list_id', 'left');
@@ -50,7 +54,7 @@ class Get_agent extends CI_Model
 		return $query->num_rows();
 	}
 
-	public function getNextLead($camp,$dispo,$lead_id)
+	public function getNextLead($camp,$dispo,$lead_id,$first_name)
 	{
 		$this->db->limit('1');
 		$this->db->order_by('lead_id', 'ASC');
@@ -61,6 +65,10 @@ class Get_agent extends CI_Model
 		if($dispo)
         {
             $this->db->where('status', $dispo);
+        }
+		if($first_name)
+        {
+            $this->db->like('first_name', $first_name);
         }
 		$this->db->where('lead_id >',$lead_id);
 		$this->db->from($this->table);
@@ -75,6 +83,20 @@ class Get_agent extends CI_Model
 		$this->db->from($this->table);
 		$query = $this->db->get();
 		return $query->row();
+	}
+
+	function search_by_name($name){
+        $this->db->order_by('first_name', 'ASC');
+        $this->db->like('first_name', $name , 'both');
+        $this->db->limit(10);
+        return $this->db->get($this->table)->result();
+	}
+
+	function search_by_number($number){
+        $this->db->order_by('phone_number', 'ASC');
+        $this->db->like('phone_number', $number);
+        $this->db->limit(10);
+        return $this->db->get($this->table)->result();
 	}
 }
 ?>

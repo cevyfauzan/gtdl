@@ -50,8 +50,9 @@ class Agent extends CI_Controller {
 	{
 		$camp = $_GET['camp'];
 		$dispo = $_GET['dispo'];
+		$first_name = $_GET['first_name'];
 		$lead_id = $_GET['lead_id'];
-		$data = $this->Get_agent->getNextLead($camp,$dispo,$lead_id);
+		$data = $this->Get_agent->getNextLead($camp,$dispo,$lead_id,$first_name);
 		echo json_encode($data);
 	}
 
@@ -84,6 +85,7 @@ class Agent extends CI_Controller {
 	{
 		$data = array();
 		$this->db->order_by('status', 'ASC');
+		$this->db->where('sale !=', 'Y');
 		$this->db->select('status, status_name');
 		$q = $this->db->get('vicidial_statuses');
 		$data[''] = '-- ALL DISPO --';
@@ -116,4 +118,27 @@ class Agent extends CI_Controller {
 		$q->free_result();
 		return $data;
 	}
+
+	function get_by_name(){
+		if (isset($_GET['term'])) {
+				$result = $this->Get_agent->search_by_name($_GET['term']);
+				if (count($result) > 0) {
+				foreach ($result as $row)
+						$arr_result[] = $row->first_name;
+						echo json_encode($arr_result);
+				}
+		}
+	}
+
+	function get_by_number(){
+		if (isset($_GET['term'])) {
+				$result = $this->Get_agent->search_by_number($_GET['term']);
+				if (count($result) > 0) {
+				foreach ($result as $row)
+						$arr_result[] = $row->phone_number;
+						echo json_encode($arr_result);
+				}
+		}
+	}
 }
+
