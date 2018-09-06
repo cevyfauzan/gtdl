@@ -3,7 +3,7 @@
 ####  Name:             	Get_lead.php                                            	####
 ####  Type:             	ci model - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -17,7 +17,7 @@ class Get_lead extends CI_Model
     }
 
     var $table = 'get_list';
-	var $column_order = array(null,'lead_id','list_id','phone_number','first_name','status','user',null);
+	var $column_order = array(null,null,'phone_number','first_name','status','user',null);
 	var $column_search = array('lead_id','list_id','phone_number','first_name','status','user');
 	var $order = array('lead_id' => 'ASC');
     
@@ -31,10 +31,10 @@ class Get_lead extends CI_Model
         {
             $this->db->like('first_name', $this->input->post('name'));
         }
-        /*if($this->input->post('campaign_id'))
+        if($this->input->post('campaign_id'))
         {
-            $this->db->like('campaign_id', $this->input->post('campaign_id'));
-        }*/
+            $this->db->like('get_lists.campaign_id', $this->input->post('campaign_id'));
+        }
         if($this->input->post('status'))
         {
             $this->db->where('status', $this->input->post('status'));
@@ -52,6 +52,7 @@ class Get_lead extends CI_Model
             $this->db->where('modify_date <=', $this->input->post('max_call_date'));
         }
 		$this->db->from($this->table);
+		$this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
 		$i = 0;
 		foreach ($this->column_search as $item)
 		{
@@ -140,6 +141,25 @@ class Get_lead extends CI_Model
 		return $this->db->count_all_results();
 	}
 
+	public function get_lead_id($lead_id)
+	{
+		$this->db->where('lead_id',$lead_id);
+		$this->db->from($this->table);
+		$this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
+		$query = $this->db->get();
+
+		return $query->row();
+	}
+
+	public function get_dup_id($phone)
+	{
+		$this->db->from($this->table);
+		$this->db->where('phone_number',$phone);
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
+
 	public function save($data)
 	{
 		$this->db->insert($this->table, $data);
@@ -154,7 +174,7 @@ class Get_lead extends CI_Model
 
 	public function delete_by_id($id)
 	{
-		$this->db->where('id', $id);
+		$this->db->where('lead_id', $id);
 		$this->db->delete($this->table);
 	}
 }

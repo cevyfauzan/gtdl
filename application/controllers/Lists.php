@@ -3,7 +3,7 @@
 ####  Name:             	Lists.php                                             		####
 ####  Type:             	ci controllers - administrator                     			####
 ####  Version:          	2.0.0                                                       ####
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -15,7 +15,7 @@ class Lists extends CI_Controller {
 	function __construct()
     {
 		parent::__construct();
-		$this->load->model(array('Get_list','Get_lead','Get_lead','Get_campaign','Get_dispo'));
+		$this->load->model(array('Get_list','Get_lead','Get_lead','Get_campaign','Get_dispo','Get_user'));
 	}
 	
 	public function index()
@@ -51,7 +51,9 @@ class Lists extends CI_Controller {
 	public function get_lead_search()
 	{
 		$data['drop_down_camp'] = $this->Get_campaign->listCamp();
+		$data['drop_down_list'] = $this->Get_list->listList();
 		$data['drop_down_dispo'] = $this->Get_dispo->listDispo();
+		$data['drop_down_user'] = $this->Get_user->listUser();
 		$this->load->vars($data);
 		$this->load->view('get_lists/lead_search');
 	}
@@ -171,8 +173,7 @@ class Lists extends CI_Controller {
 			$row[] = strtoupper($lead->user);
 
 			$row[] = '<a href="javascript:void(0)" title="Edit" onclick="edit_lead('."'".$lead->lead_id."'".')"><i class="fa fa-edit text-yellow"></i></a>&ensp;
-					  <a href="javascript:void(0)" title="Delete" onclick="return confirm(\'Are you sure you want to delete this data ?\');"><i class="fa fa-remove text-red"></i></a>&ensp;
-					  <a href="javascript:void(0)" title="Info"><i class="fa fa-info-circle text-info"></i></a>&ensp;';
+					  <a href="javascript:void(0)" title="Delete" onclick="delete_lead('."'".$lead->lead_id."'".')"><i class="fa fa-remove text-red"></i></a>&ensp;';
 			$row[] = '<input type="checkbox" class="data-check" value="'.$lead->lead_id.'">';
 
 			$data[] = $row;
@@ -186,6 +187,78 @@ class Lists extends CI_Controller {
 				);
 		echo json_encode($output);
 	}
+
+    public function ajax_add_lead()
+    {
+        $ACT = 'add';
+        $this->_validate_lead($ACT);
+		$SQLdate = date("Y-m-d H:i:s");
+         
+        $data = array(
+                'list_id' => $this->input->post('list_id'),
+                'first_name' => strtoupper($this->input->post('first_name')),
+                'address1' => strtoupper($this->input->post('address1')),
+                'address2' => strtoupper($this->input->post('address2')),
+                'city' => strtoupper($this->input->post('city')),
+                'postal_code' => $this->input->post('zip'),
+                'date_of_birth' => $this->input->post('dob'),
+                'phone_number' => $this->input->post('phone_number'),
+                'email' => strtoupper($this->input->post('email')),
+                'notes' => $this->input->post('notes'),
+                'user' => $this->input->post('user'),
+                'status' => $this->input->post('dispo'),
+				'modify_date' => '0000-00-00 00:00:00',
+                'entry_date' => $SQLdate
+            );
+		$insert = $this->Get_lead->save($data);
+        echo json_encode(array("status" => TRUE));
+    }
+
+	public function ajax_edit_lead($lead_id)
+	{
+		$data = $this->Get_lead->get_lead_id($lead_id);
+		echo json_encode($data);
+	}
+
+    public function ajax_update_lead()
+    {
+        $ACT = 'update';
+        $this->_validate_lead($ACT);
+		$SQLdate = date("Y-m-d H:i:s");
+         
+        $data = array(
+			'first_name' => strtoupper($this->input->post('first_name')),
+			'address1' => strtoupper($this->input->post('address1')),
+			'address2' => strtoupper($this->input->post('address2')),
+			'city' => strtoupper($this->input->post('city')),
+			'postal_code' => $this->input->post('zip'),
+			'date_of_birth' => $this->input->post('dob'),
+			'phone_number' => $this->input->post('phone_number'),
+			'email' => strtoupper($this->input->post('email')),
+			'notes' => $this->input->post('notes'),
+			'user' => $this->input->post('user'),
+			'status' => $this->input->post('dispo'),
+			'modify_date' => $SQLdate
+		);
+        $this->Get_lead->update(array('lead_id' => $this->input->post('lead_id')), $data);
+        echo json_encode(array("status" => TRUE));
+    }
+
+	public function ajax_delete_lead($lead_id)
+    {
+        $this->Get_lead->delete_by_id($lead_id);
+
+		echo json_encode(array("status" => TRUE));
+    }
+
+    public function ajax_bulk_delete_lead()
+    {
+        $lead_id = $this->input->post('lead_id');
+        foreach ($lead_id as $id) {
+            $this->Get_lead->delete_by_id($id);
+		}
+        echo json_encode(array("status" => TRUE));
+    }
 
 	private function _get_list_id() { 
 		$query = $this->db->query('SELECT max(list_id) as kode FROM `get_lists` order by list_id asc');
@@ -219,6 +292,54 @@ class Lists extends CI_Controller {
             $data['error_string'][] = 'Campaign is required';
             $data['status'] = FALSE;
         }
+ 
+        if($data['status'] === FALSE)
+        {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+	private function _validate_lead($ACT)
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+ 
+        $action = $ACT;
+		$phone_number = $this->input->post('phone_number');
+		$count_row = $this->Get_lead->get_dup_id($phone_number);
+
+		if($this->input->post('first_name') == '')
+        {
+            $data['inputerror'][] = 'first_name';
+            $data['error_string'][] = 'Name is required';
+            $data['status'] = FALSE;
+		}
+		
+		if($this->input->post('phone_number') == '')
+        {
+            $data['inputerror'][] = 'phone_number';
+            $data['error_string'][] = 'Phone Number is required';
+            $data['status'] = FALSE;
+		}
+
+		if($action == 'add'){
+			if($count_row > 0)
+			{
+				$data['inputerror'][] = 'phone_number';
+				$data['error_string'][] = 'Phone Number '.$this->input->post('phone_number').' already exist';
+				$data['status'] = FALSE;
+			}
+
+			if($this->input->post('list_id') == '')
+			{
+				$data['inputerror'][] = 'list_id';
+				$data['error_string'][] = 'List ID is required';
+				$data['status'] = FALSE;
+			}
+		}
  
         if($data['status'] === FALSE)
         {

@@ -63,6 +63,9 @@
 
 	function edit_recyc(campaign_id)
 	{
+		$('.form-group').removeClass('has-error');
+		$('.help-block').empty();
+		
 		$.ajax({
 			url : "<?php echo site_url('campaigns/ajax_edit_recycle')?>/" + campaign_id,
 			type: "GET",

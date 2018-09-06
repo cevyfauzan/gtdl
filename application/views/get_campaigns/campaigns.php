@@ -153,7 +153,7 @@
 
 	function reload_table_camp()
 	{
-		tableCamp.ajax.reload();
+		tableCamp.ajax.reload(null,false);
 	}
 
 	function save()
