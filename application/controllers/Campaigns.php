@@ -22,7 +22,7 @@ class Campaigns extends CI_Controller {
 	public function index()
 	{
 		$data['title'] = 'getDIAL.tech Campaigns';
-		$data['main'] = 'campaigns';
+		$data['main'] = 'get_campaigns/index';
 		$this->load->vars($data);
 		$this->load->view('template');
 	}
@@ -34,11 +34,6 @@ class Campaigns extends CI_Controller {
 		$data['listid'] = $this->_get_list_id();
 		$this->load->vars($data);
 		$this->load->view('get_campaigns/campaigns');
-	}
-
-	public function get_dispositions()
-	{
-		$this->load->view('get_campaigns/dispositions');
 	}
 
 	public function get_lead_recycling()

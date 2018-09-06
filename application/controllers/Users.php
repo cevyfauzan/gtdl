@@ -27,7 +27,6 @@ class Users extends CI_Controller {
 			$row = array();
 			$row[] = $user->user;
 			$row[] = strtoupper($user->full_name);
-			$row[] = $user->user_level;
 			$row[] = strtoupper($user->user_group);
 			switch($user->active){
 				case "N":

@@ -47,8 +47,7 @@ class Dispo extends CI_Controller {
 			$row[] = $disp->completed;
 
 			$row[] = '<a href="javascript:void(0)" title="Edit" onclick="edit_dispo('."'".$disp->status."'".')"><i class="fa fa-edit text-yellow"></i></a>&ensp;
-					  <a href="javascript:void(0)" title="Delete" onclick="delete_dispo('."'".$disp->status."'".')"><i class="fa fa-remove text-red"></i></a>&ensp;
-					  <a href="javascript:void(0)" title="Info"><i class="fa fa-info-circle text-info"></i></a>&ensp;';
+					  <a href="javascript:void(0)" title="Delete" onclick="delete_dispo('."'".$disp->status."'".')"><i class="fa fa-remove text-red"></i></a>&ensp;';
 			$row[] = '<input type="checkbox" class="data-check" value="'.$disp->status.'">';
 
 			$data[] = $row;

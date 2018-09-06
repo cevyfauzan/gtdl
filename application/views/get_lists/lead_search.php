@@ -16,7 +16,7 @@
 					data.name = $('#name').val();
 					data.min_call_date = $('#min_call_date').val();
 					data.max_call_date = $('#max_call_date').val();
-					//data.campaign_id = $('#campaign_id').val();
+					data.campaign_id = $('#campaign_id').val();
 					data.status = $('#status').val();
 					data.user = $('#user').val();
 				}
@@ -49,7 +49,10 @@
 
 <!--======================================================================================================================-->
 <div class="pull-right">
-    <a href="" class="btn btn-info btn-sm" data-toggle="modal" data-target="#add-search" data-backdrop="static" data-keyboard="false" title="Add"><i class="fa fa-search"></i>&ensp;Search Lead</a>
+    <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-search" data-backdrop="static" data-keyboard="false" title="Add"><i class="fa fa-search"></i>&ensp;Search Lead</a>
+    <button class="btn btn-success btn-sm" onclick="add_camp()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Lead</button>
+    <a href="" class="btn btn-info btn-sm" onclick="reload_table_camp()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
+    <a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 </div>
 <h4><b>Show Leads</b></h4>
 <br>

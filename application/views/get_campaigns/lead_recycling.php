@@ -3,7 +3,7 @@
 ####  Name:             	lead_recycling.php                                         	####
 ####  Type:             	ci view - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -70,6 +70,19 @@
 			cache: false,
 			success: function(data)
 			{
+				table_detail(campaign_id);
+				$('#lead-recyc').modal('show');
+				$('.modal-title').text('Modify Lead Recycle Campaign : ' + campaign_id);
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+				alert('Error get data from ajax');
+			}
+		});
+	}
+
+	function table_detail(campaign_id)
+	{
 				$('#detail_recyc').DataTable({ 
 					"info": false,
 					"ordering": false,
@@ -83,14 +96,6 @@
 						"type": "POST"
 					},
 				});
-				$('#lead-recyc').modal('show');
-				$('.modal-title').text('Modify Lead Recycle Campaign : ' + campaign_id);
-			},
-			error: function (jqXHR, textStatus, errorThrown)
-			{
-				alert('Error get data from ajax');
-			}
-		});
 	}
 
 	function reload_table_recyc()

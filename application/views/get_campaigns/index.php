@@ -46,13 +46,11 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs" id="camTabs">
                 <li class="active"><a href="#tab_1" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_campaigns">Campaigns</a></li>
-                <li><a href="#tab_2" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_dispositions">Dispositions&ensp;<small class="label pull-right bg-green">New</small></a></li>
-                <li><a href="#tab_3" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_lead_recycling">Lead Recycling</a></li>
+                <li><a href="#tab_2" data-toggle="tab" data-url="<?= base_url() ?>campaigns/get_lead_recycling">Lead Recycling</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1"></div>
                 <div class="tab-pane" id="tab_2"></div>
-                <div class="tab-pane" id="tab_3"></div>
             </div>
         </div>
     </div>

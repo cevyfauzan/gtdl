@@ -17,8 +17,8 @@ class Get_user extends CI_Model
     }
 
     var $table = 'get_users';
-	var $column_order = array(null,'user','full_name','active','group','user_level',null);
-	var $column_search = array('user','full_name','active','group','user_level');
+	var $column_order = array(null,'user','full_name','active','group',null);
+	var $column_search = array('user','full_name','active','group');
 	var $order = array('user' => 'ASC');
     
     private function _getUserQuery()

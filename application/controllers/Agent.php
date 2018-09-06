@@ -68,7 +68,7 @@ class Agent extends CI_Controller {
 		$this->db->order_by('campaign_id', 'ASC');
 		$this->db->where('active', 'Y');
 		$this->db->select('campaign_id');
-		$q = $this->db->get('vicidial_campaigns');
+		$q = $this->db->get('get_campaigns');
 		  $data[''] = '-- ALL CAMPAIGN --';
 		  if($q->num_rows() > 0)
 		  {
@@ -87,7 +87,7 @@ class Agent extends CI_Controller {
 		$this->db->order_by('status', 'ASC');
 		$this->db->where('sale !=', 'Y');
 		$this->db->select('status, status_name');
-		$q = $this->db->get('vicidial_statuses');
+		$q = $this->db->get('get_statuses');
 		$data[''] = '-- ALL DISPO --';
 		$data['NEW'] = 'NEW LEADS';
 		  if($q->num_rows() > 0)
@@ -107,7 +107,7 @@ class Agent extends CI_Controller {
 		$this->db->order_by('status', 'ASC');
 		$this->db->where('selectable', 'Y');
 		$this->db->select('status, status_name');
-		$q = $this->db->get('vicidial_statuses');
+		$q = $this->db->get('get_statuses');
 		  if($q->num_rows() > 0)
 		  {
 			foreach ($q->result_array() as $row)

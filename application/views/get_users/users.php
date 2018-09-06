@@ -20,7 +20,6 @@
                     <tr>
                         <th>User ID</th>
                         <th>Name</th>
-                        <th>Level</th>
                         <th>Group</th>
                         <th>Status</th>
                         <th width="10%">Action</th>
@@ -105,20 +104,6 @@
                         <?php 
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'ADMINISTRATOR','N' => 'AGENTS');
-						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-3" align="right">
-						<div class="form-group">
-							<label>User Level :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '1','N' => '2');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
 					</div>
@@ -213,20 +198,6 @@
                         <?php 
 							$attr = 'class="form-control"';
 							$drop_down = array('Y' => 'ADMINISTRATOR','N' => 'AGENTS');
-						?>
-						<?= form_dropdown('', $drop_down, '', $attr) ?>
-					</div>
-				</div>
-                <div class="row">
-					<div class="col-sm-3" align="right">
-						<div class="form-group">
-							<label>User Level :</label>
-						</div>
-					</div>
-					<div class="col-sm-3">
-                        <?php 
-							$attr = 'class="form-control"';
-							$drop_down = array('Y' => '1','N' => '2');
 						?>
 						<?= form_dropdown('', $drop_down, '', $attr) ?>
 					</div>
