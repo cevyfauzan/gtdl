@@ -3,7 +3,7 @@
 ####  Name:             	Get_user_group.php                                         	####
 ####  Type:             	ci models - administrator                     				####
 ####  Version:          	2.0.0                                                       ####
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -76,6 +76,42 @@ class Get_user_group extends CI_Model
 	{
 		$this->db->from($this->table);
 		return $this->db->count_all_results();
+	}
+
+	public function get_by_id($user_group)
+	{
+		$this->db->from($this->table);
+		$this->db->where('user_group',$user_group);
+		$query = $this->db->get();
+
+		return $query->row();
+	}
+
+	public function get_dup_id($user_group)
+	{
+		$this->db->from($this->table);
+		$this->db->where('user_group',$user_group);
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
+
+	public function save($data)
+	{
+		$this->db->insert($this->table, $data);
+		return $this->db->insert_id();
+	}
+
+	public function update($where, $data)
+	{
+		$this->db->update($this->table, $data, $where);
+		return $this->db->affected_rows();
+	}
+
+	public function delete_by_id($user_group)
+	{
+		$this->db->where('user_group', $user_group);
+		$this->db->delete($this->table);
 	}
 
 	function listUserGroup()

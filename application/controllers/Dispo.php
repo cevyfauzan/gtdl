@@ -1,9 +1,9 @@
 <?php
 ############################################################################################
-####  Name:             	Dispo.php                                             	####
+####  Name:             	Dispo.php                                             	    ####
 ####  Type:             	ci controller - administrator                     			####	
 ####  Version:          	2.0.0                                                       ####	   
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####

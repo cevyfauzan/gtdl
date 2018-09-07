@@ -258,7 +258,7 @@
 				<br>
                	<center>
 					<button type="button" id="btn-filter" class="btn btn-primary" title="Filter" data-dismiss="modal">SEARCH</button>
-					<button type="button" id="btn-reset" class="btn btn-warning" title="Reset">RESET</button>
+					<button type="reset" id="btn-reset" class="btn btn-warning" title="Reset">RESET</button>
 					<button type="button" class="btn btn-danger" title="Close" data-dismiss="modal">CLOSE</button>
 				</center>
 				</form>

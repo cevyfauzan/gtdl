@@ -241,7 +241,7 @@
 <!--======================================================================================================================-->
 <div class="pull-right">
     <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-search" data-backdrop="static" data-keyboard="false" title="Search"><i class="fa fa-search"></i>&ensp;Search Lead</a>
-    <button class="btn btn-success btn-sm" onclick="add_lead()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Lead</button>
+    <button type="button" class="btn btn-success btn-sm" onclick="add_lead()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Lead</button>
     <a href="" class="btn btn-info btn-sm" onclick="reload_table_lead()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
     <a href="" class="btn btn-danger btn-sm" onclick="bulk_delete_lead()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 </div>
@@ -356,7 +356,7 @@
 				<br>
                	<center>
 					<button type="button" id="btn-filter" class="btn btn-primary" title="Filter" data-dismiss="modal">SEARCH</button>
-					<button type="button" id="btn-reset" class="btn btn-warning" title="Reset">RESET</button>
+					<button type="reset" id="btn-reset" class="btn btn-warning" title="Reset">RESET</button>
 					<button type="button" class="btn btn-danger" title="Close" data-dismiss="modal">CLOSE</button>
 				</center>
 				</form>
@@ -525,8 +525,8 @@
 				</div>
 				<br>
 				<center>
-					<button id="bntSaveLead" onclick="save_lead()" class="btn btn-success btn-md">SUBMIT</button>&ensp;
-					<button class="btn btn-danger btn-md" data-dismiss="modal">CLOSE</button>
+					<button type="button" id="bntSaveLead" onclick="save_lead()" class="btn btn-success btn-md">SUBMIT</button>&ensp;
+					<button type="button" class="btn btn-danger btn-md" data-dismiss="modal">CLOSE</button>
 				</center>
 				</form>
 			</div>

@@ -267,7 +267,7 @@
 
 <!--======================================================================================================================-->
 <div class="pull-right">
-    <button class="btn btn-success btn-sm" onclick="add_camp()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Campaign</button>
+    <button type="button" class="btn btn-success btn-sm" onclick="add_camp()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Campaign</button>
     <a href="" class="btn btn-info btn-sm" onclick="reload_table_camp()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
     <a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 </div>
@@ -413,8 +413,8 @@
                 </div>
 				<br>
 				<center>
-					<button id="btnSave" onclick="save()" class="btn btn-success btn-md">SUBMIT</button>&ensp;
-					<button class="btn btn-danger btn-md" data-dismiss="modal">CLOSE</button>
+					<button type="button" id="btnSave" onclick="save()" class="btn btn-success btn-md">SUBMIT</button>&ensp;
+					<button type="button" class="btn btn-danger btn-md" data-dismiss="modal">CLOSE</button>
 				</center>
 				</form>
 				<div id="list_camp">

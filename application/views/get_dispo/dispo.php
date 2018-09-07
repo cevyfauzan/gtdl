@@ -3,7 +3,7 @@
 ####  Name:             	dispo.php                                             		####
 ####  Type:             	ci view - administrator                     				####	
 ####  Version:          	2.0.0                                                       ####	   
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
@@ -12,8 +12,6 @@
 <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.css">
 <script src="<?php echo base_url()?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
-
-<!--======================================================================================================================-->
 <script type="text/javascript">
 	var save_method;
 	var table;
@@ -234,7 +232,7 @@
 			<div class="box-header">
                 <h2 class="box-title"><b>Dispo</b></h2>
 				<div class="pull-right">
-					<button class="btn btn-success btn-sm" onclick="add_dispo()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Dispo</button>
+					<button type="button" class="btn btn-success btn-sm" onclick="add_dispo()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Dispo</button>
 					<a href="" class="btn btn-info btn-sm" onclick="reload_table()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
 					<a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 				</div>
@@ -427,8 +425,8 @@
 				</div>
 				<br>
 				<center>
-					<button id="btnSave" onclick="save()" class="btn btn-success btn-md">SUBMIT</button>&ensp;
-					<button class="btn btn-danger btn-md" data-dismiss="modal">CLOSE</button>
+					<button type="button" id="btnSave" onclick="save()" class="btn btn-success btn-md">SUBMIT</button>&ensp;
+					<button type="button" class="btn btn-danger btn-md" data-dismiss="modal">CLOSE</button>
 				</center>
 				</form>
 			</div>
