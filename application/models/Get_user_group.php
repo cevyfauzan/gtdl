@@ -111,6 +111,7 @@ class Get_user_group extends CI_Model
 	public function delete_by_id($user_group)
 	{
 		$this->db->where('user_group', $user_group);
+		$this->db->where('user_group !=', 'ADMIN');
 		$this->db->delete($this->table);
 	}
 

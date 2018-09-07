@@ -62,7 +62,7 @@
 		$('[name="user_group"]').attr('readonly',false);
 	}
 
-	function edit_group(status)
+	function edit_group(user_group)
 	{
 		save_method = 'update';
 		$('#form-user_group')[0].reset();
@@ -70,25 +70,40 @@
 		$('.help-block').empty();
 
 		$.ajax({
-			url : "<?php echo site_url('user_groups/ajax_edit')?>/" + status,
+			url : "<?php echo site_url('user_groups/ajax_edit')?>/" + user_group,
 			type: "GET",
 			dataType: "JSON",
 			success: function(data)
 			{
-				$('[name="status"]').val(data.status);
-				$('[name="status_name"]').val(data.status_name);
+				if(data.user_type == 'ADMINISTRATORS'){
+					$('#hidden').show();
+				}else{
+					$('#hidden').hide();
+				}
+				var access = data.access;
+				$('[name="user_group"]').val(data.user_group).attr('readonly',true);
+				$('[name="group_name"]').val(data.group_name);
 				$('[name="select"]').val(data.selectable);
-				$('[name="ha"]').val(data.human_answered);
-				$('[name="sale"]').val(data.sale);
-				$('[name="dnc"]').val(data.dnc);
-				$('[name="cc"]').val(data.customer_contact);
-				$('[name="ni"]').val(data.not_interested);
-				$('[name="unwork"]').val(data.unworkable);
-				$('[name="callback"]').val(data.scheduled_callback);
-				$('[name="complete"]').val(data.completed);
-				$('[name="user_group"]').attr('readonly',true);
+				$('[name="user_type"]').val(data.user_type);
+				if(data.allow_add == 'Y'){ $('[name="a_add"]').attr('checked', true); }else{ $('[name="a_add"]').attr('checked', false); }
+				if(data.allow_modify == 'Y'){ $('[name="a_modify"]').attr('checked', true); }else{ $('[name="a_modify"]').attr('checked', false); }
+				if(data.allow_delete == 'Y'){ $('[name="a_delete"]').attr('checked', true); }else{ $('[name="a_delete"]').attr('checked', false); }
+				if(access.match(/campaigns/g)){ $('#campaigns').attr('checked', true); }else{ $('#campaigns').attr('checked', false); }
+				if(access.match(/dispo/g)){ $('#dispo').attr('checked', true); }else{ $('#dispo').attr('checked', false); }
+				if(access.match(/lists/g)){ $('#lists').attr('checked', true); }else{ $('#lists').attr('checked', false); }
+				if(access.match(/scripts/g)){ $('#scripts').attr('checked', true); }else{ $('#scripts').attr('checked', false); }
+				if(access.match(/call-times/g)){ $('#call-times').attr('checked', true); }else{ $('#call-times').attr('checked', false); }
+				if(access.match(/logs/g)){ $('#logs').attr('checked', true); }else{ $('#logs').attr('checked', false); }
+				if(access.match(/user-groups/g)){ $('#user-groups').attr('checked', true); }else{ $('#user-groups').attr('checked', false); }
+				if(access.match(/users/g)){ $('#users').attr('checked', true); }else{ $('#users').attr('checked', false); }
+				if(access.match(/recordings/g)){ $('#recordings').attr('checked', true); }else{ $('#recordings').attr('checked', false); }
+				if(access.match(/report-sys/g)){ $('#report-sys').attr('checked', true); }else{ $('#report-sys').attr('checked', false); }
+				if(access.match(/messages/g)){ $('#messages').attr('checked', true); }else{ $('#messages').attr('checked', false); }
+				if(access.match(/sales/g)){ $('#sales').attr('checked', true); }else{ $('#sales').attr('checked', false); }
+				if(access.match(/qc/g)){ $('#qc').attr('checked', true); }else{ $('#qc').attr('checked', false); }
+				if(access.match(/report-sales/g)){ $('#report-sales').attr('checked', true); }else{ $('#report-sales').attr('checked', false); }
 				$('#modal_form').modal('show');
-				$('.modal-title').text('Modify Dispo');
+				$('.modal-title').text('Modify User Group');
 			},
 			error: function (jqXHR, textStatus, errorThrown)
 			{
@@ -173,17 +188,17 @@
 
 	function bulk_delete()
 	{
-		var list_id = [];
+		var user_group = [];
 		$(".data-check:checked").each(function() {
-				list_id.push(this.value);
+				user_group.push(this.value);
 		});
-		if(list_id.length > 0)
+		if(user_group.length > 0)
 		{
-			if(confirm('Are you sure delete this status '+list_id+' ?'))
+			if(confirm('Are you sure delete this User group '+user_group+' ?'))
 			{
 				$.ajax({
 					type: "POST",
-					data: {status:list_id},
+					data: {user_group:user_group},
 					url: "<?php echo site_url('user_groups/ajax_bulk_delete')?>",
 					dataType: "JSON",
 					success: function(data)
@@ -309,14 +324,14 @@
 					<div class="row">
 						<div class="col-sm-3" align="right">
 							<div class="form-group">
-								<label>Permission :</label>
+								<label>Permissions :</label>
 							</div>
 						</div>
 						<div class="col-sm-9">
 							<label>
-								<input type="checkbox" name="a_add"> Allow Add&ensp;&ensp;
-								<input type="checkbox" name="a_modify"> Allow Modify&ensp;&ensp;
-								<input type="checkbox" name="a_delete"> Allow Delete
+								<input type="checkbox" name="a_add"  value="Y"> Allow Add&ensp;&ensp;
+								<input type="checkbox" name="a_modify"  value="Y"> Allow Modify&ensp;&ensp;
+								<input type="checkbox" name="a_delete"  value="Y"> Allow Delete
 							</label>
 						</div>
 					</div>
@@ -328,18 +343,18 @@
 						</div>
 						<div class="col-sm-3">
 							<label>Leads<br>
-								├──<input type="checkbox" name="access[]" value="campaigns"> Campaigns<br>
-								├──<input type="checkbox" name="access[]" value="dispo"> Dispo<br>
-								├──<input type="checkbox" name="access[]" value="lists"> Lists<br>
-								└──<input type="checkbox" name="access[]" value="scripts"> Scripts
+								├──<input type="checkbox" id="campaigns" name="access[]" value="campaigns"> Campaigns<br>
+								├──<input type="checkbox" id="dispo" name="access[]" value="dispo"> Dispo<br>
+								├──<input type="checkbox" id="lists" name="access[]" value="lists"> Lists<br>
+								└──<input type="checkbox" id="scripts" name="access[]" value="scripts"> Scripts
 							</label>
 						</div>
 						<div class="col-sm-3">
-							<label>Setting<br>
-								├──<input type="checkbox" name="access[]" value="call-times"> Call Times<br>
-								├──<input type="checkbox" name="access[]" value="logs"> Logs<br>
-								├──<input type="checkbox" name="access[]" value="user-groups"> User Groups<br>
-								└──<input type="checkbox" name="access[]" value="users"> Users
+							<label>Settings<br>
+								├──<input type="checkbox" id="call-times" name="access[]" value="call-times"> Call Times<br>
+								├──<input type="checkbox" id="logs" name="access[]" value="logs"> Logs<br>
+								├──<input type="checkbox" id="user-groups" name="access[]" value="user-groups"> User Groups<br>
+								└──<input type="checkbox" id="users" name="access[]" value="users"> Users
 							</label>
 						</div>
 					</div>
@@ -347,16 +362,16 @@
 						<div class="col-sm-3"></div>
 						<div class="col-sm-3">
 							<label>
-								<input type="checkbox" name="access[]" value="recordings"> Recordings<br>
-								<input type="checkbox" name="access[]" value="report"> Report<br>
-								<input type="checkbox" name="access[]" value="messages"> Messages<br>
+								<input type="checkbox" id="recordings" name="access[]" value="recordings"> Recordings<br>
+								<input type="checkbox" id="report-sys" name="access[]" value="report-sys"> Report<br>
+								<input type="checkbox" id="messages" name="access[]" value="messages"> Messages<br>
 							</label>
 						</div>
 						<div class="col-sm-3">
 							<label>After Sales<br>
-								├──<input type="checkbox" name="access[]" value="sales"> Sales<br>
-								├──<input type="checkbox" name="access[]" value="qc"> Quality Control<br>
-								└──<input type="checkbox" name="access[]" value="report-sales"> Report Sales<br>
+								├──<input type="checkbox" id="sales" name="access[]" value="sales"> Sales<br>
+								├──<input type="checkbox" id="qc" name="access[]" value="qc"> Quality Control<br>
+								└──<input type="checkbox" id="report-sales" name="access[]" value="report-sales"> Report Sales<br>
 							</label>
 						</div>
 					</div>

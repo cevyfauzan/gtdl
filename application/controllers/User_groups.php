@@ -89,29 +89,42 @@ class User_groups extends CI_Controller {
         echo json_encode(array("status" => TRUE));
     }
  
-    public function ajax_edit($status)
+    public function ajax_edit($user_group)
     {
-        $data = $this->Get_user_group->get_by_id($status);
+        $data = $this->Get_user_group->get_by_id($user_group);
         echo json_encode($data);
     }
  
     public function ajax_update()
     {
+		error_reporting(0);
         $ACT = 'update';
         $this->_validate($ACT);
-        $data = array(
-			'status_name' => $this->input->post('status_name'),
-			'selectable' => $this->input->post('select'),
-			'human_answered' => $this->input->post('ha'),
-			'sale' => $this->input->post('sale'),
-			'dnc' => $this->input->post('dnc'),
-			'customer_contact' => $this->input->post('cc'),
-			'not_interested' => $this->input->post('ni'),
-			'unworkable' => $this->input->post('unwork'),
-			'scheduled_callback' => $this->input->post('callback'),
-			'completed' => $this->input->post('complete')
-		);
-        $this->Get_user_group->update(array('user_group' => $this->input->post('user_group')), $data);
+		$type = $this->input->post('user_type');
+		if($type == 'ADMINISTRATORS'){
+			$a_add = $this->input->post('a_add');
+			$a_mod = $this->input->post('a_modify');
+			$a_del = $this->input->post('a_delete');
+			$access = implode('#', $this->input->post('access'));
+			$web_access = 'dash';
+		}else{
+			$a_add = 'N';
+			$a_mod = 'N';
+			$a_del = 'N';
+			$access = '';
+			$web_access = 'agent';
+		}
+		$data = array(
+                'group_name' => $this->input->post('group_name'),
+                'user_type' => $type,
+                'allow_add' => $a_add,
+                'allow_modify' => $a_mod,
+                'allow_delete' => $a_del,
+                'web_access' => $web_access,
+                'access' => $access
+            );
+
+		$this->Get_user_group->update(array('user_group' => $this->input->post('user_group')), $data);
         echo json_encode(array("status" => TRUE));
     }
  
