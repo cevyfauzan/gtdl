@@ -54,7 +54,13 @@
     areaChart.Line(areaChartData, areaChartOptions);
     });
 
-	function nav_active(){
+    window.setTimeout(function() {
+		$("#alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+		});
+	}, 3000);
+    
+    function nav_active(){
 		document.getElementById("dash").className = "active";
 	}
 	$(document).ready(function() {
@@ -63,6 +69,7 @@
 </script>
 
 <!--======================================================================================================================-->
+<div id="alert"><?= $this->session->flashdata('message') ?></div>
 <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">

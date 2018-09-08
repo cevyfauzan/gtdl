@@ -81,7 +81,7 @@
 					$('#hidden').hide();
 				}
 				var access = data.access;
-				$('[name="user_group"]').val(data.user_group).attr('readonly',true);
+				$('[name="user_group"]').val(data.group).attr('readonly',true);
 				$('[name="group_name"]').val(data.group_name);
 				$('[name="select"]').val(data.selectable);
 				$('[name="user_type"]').val(data.user_type);

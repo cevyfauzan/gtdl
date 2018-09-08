@@ -34,13 +34,13 @@ class User_groups extends CI_Controller {
 		foreach ($list as $grp) {
 			$no++;
 			$row = array();
-			$row[] = strtoupper($grp->user_group);
+			$row[] = strtoupper($grp->group);
 			$row[] = strtoupper($grp->group_name);
 			$row[] = strtoupper($grp->access);
 
-			$row[] = '<a href="javascript:void(0)" title="Edit" onclick="edit_group('."'".$grp->user_group."'".')"><i class="fa fa-edit text-yellow"></i></a>&ensp;
-					  <a href="javascript:void(0)" title="Delete" onclick="delete_group('."'".$grp->user_group."'".')"><i class="fa fa-remove text-red"></i></a>&ensp;';
-			$row[] = '<input type="checkbox" class="data-check" value="'.$grp->user_group.'">';
+			$row[] = '<a href="javascript:void(0)" title="Edit" onclick="edit_group('."'".$grp->group."'".')"><i class="fa fa-edit text-yellow"></i></a>&ensp;
+					  <a href="javascript:void(0)" title="Delete" onclick="delete_group('."'".$grp->group."'".')"><i class="fa fa-remove text-red"></i></a>&ensp;';
+			$row[] = '<input type="checkbox" class="data-check" value="'.$grp->group.'">';
 
 			$data[] = $row;
 		}
@@ -74,7 +74,7 @@ class User_groups extends CI_Controller {
 			$web_access = 'agent';
 		}
 		$data = array(
-                'user_group' => $this->input->post('user_group'),
+                'group' => $this->input->post('user_group'),
                 'group_name' => $this->input->post('group_name'),
                 'user_type' => $type,
                 'allow_add' => $a_add,
@@ -124,7 +124,7 @@ class User_groups extends CI_Controller {
                 'access' => $access
             );
 
-		$this->Get_user_group->update(array('user_group' => $this->input->post('user_group')), $data);
+		$this->Get_user_group->update(array('group' => $this->input->post('user_group')), $data);
         echo json_encode(array("status" => TRUE));
     }
  
@@ -164,7 +164,7 @@ class User_groups extends CI_Controller {
         if($this->input->post('group_name') == '')
         {
             $data['inputerror'][] = 'group_name';
-            $data['error_string'][] = 'Group Name Name is required';
+            $data['error_string'][] = 'Group Name is required';
             $data['status'] = FALSE;
         }
  

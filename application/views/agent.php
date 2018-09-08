@@ -291,7 +291,7 @@
             if(hgp != 'disabled'){
                 $('#modal-out').modal('show');
             }else{
-                window.location = '<?php echo site_url('agent/login')?>';
+                window.location = '<?php echo site_url('login/signout')?>';
             }
         }
 
@@ -469,15 +469,15 @@
 
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="<?php echo base_url() ?>assets/dist/img/avatar5.png" class="user-image" alt="User Image">
-                                    <span class="hidden-xs">Agent001</span> <i class="fa fa-sort-down pull-right"></i>
+                                    <img src="<?php echo base_url('assets/avatar/'.$this->session->userdata('avatar'))?>" class="user-image" alt="User Image">
+                                    <span class="hidden-xs"><?= $this->session->userdata('user'); ?></span> <i class="fa fa-sort-down pull-right"></i>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="user-header">
                                         <img src="<?php echo base_url() ?>assets/dist/img/avatar5.png" class="img-circle" alt="User Image">
                                         <p>
-                                            Agent001 - Agent
-                                            <small>Member since Agustus 2017</small>
+                                            <?= $this->session->userdata('full_name'); ?> - <?= $this->session->userdata('user_group'); ?>
+                                            <small>Member since <?= date('M. Y', strtotime($this->session->userdata('created_date'))); ?></small>
                                         </p>
                                     </li>
                                     <li class="user-footer">

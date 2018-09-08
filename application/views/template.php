@@ -21,7 +21,8 @@
     <script src="<?php echo base_url() ?>assets/plugins/jQueryUI/jquery-ui.min.js"></script>
     <script src="<?php echo base_url()?>assets/dist/js/app.min.js"></script>
     <script src="<?php echo base_url()?>assets/dist/js/demo.js"></script>
-    <script src="<?php echo base_url()?>assets/js/watch.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/datetimejs.js"></script>
+    <script src="<?php echo base_url()?>assets/js/datetimejs.js"></script>
     <script type="text/javascript">
         $(window).load(function() {
             $(".loader").fadeOut("slow");
@@ -92,20 +93,20 @@
 
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="<?php echo base_url()?>assets/dist/img/avatar5.png" class="user-image" alt="User Image">
-                                <span class="hidden-xs">CEVY FAUZAN</span> <i class="fa fa-sort-down pull-right"></i>
+                                <img src="<?php echo base_url('assets/avatar/'.$this->session->userdata('avatar'))?>" class="user-image" alt="User Image">
+                                <span class="hidden-xs"><?= $this->session->userdata('user'); ?></span> <i class="fa fa-sort-down pull-right"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header">
-                                    <img src="<?php echo base_url()?>assets/dist/img/avatar5.png" class="img-circle" alt="User Image">
+                                    <img src="<?php echo base_url('assets/avatar/'.$this->session->userdata('avatar'))?>" class="img-circle" alt="User Image">
                                     <p>
-                                        Cevy Fauzan - Administrator
-                                        <small>Member since Nov. 2017</small>
+                                        <?= $this->session->userdata('full_name'); ?> - <?= $this->session->userdata('user_group'); ?>
+                                        <small>Member since <?= date('M. Y', strtotime($this->session->userdata('created_date'))); ?></small>
                                     </p>
                                 </li>
                                 <li class="user-footer">
                                     <div class="pull-right">
-                                        <a href="<?= base_url() ?>login" class="btn btn-default">Sign Out</a>
+                                        <a href="<?= base_url() ?>login/signout" class="btn btn-default">Sign Out</a>
                                     </div>
                                 </li>
                             </ul>
@@ -117,15 +118,6 @@
 
         <aside class="main-sidebar">
             <section class="sidebar">
-                <div class="user-panel">
-                    <div class="pull-left image">
-                        <img src="<?php echo base_url()?>assets/dist/img/avatar5.png" class="img-circle" alt="User Image">
-                    </div>
-                    <div class="pull-left info">
-                        <p>Admin 001</p>
-                        <a href=""><i class="fa fa-circle text-success"></i> Online</a>
-                    </div>
-                </div>
                 <ul class="sidebar-menu">
                     <li class="header">MENU</li>
                     <li class="" id="dash">

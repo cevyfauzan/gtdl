@@ -1,3 +1,14 @@
+<?php
+############################################################################################
+####  Name:             	login.php                                                   ####
+####  Type:             	ci views - administrator                     				####	
+####  Version:          	2.0.0                                                       ####	   
+####  Copyright:        	getdial. (c) 2017-2018										####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +23,20 @@
 
         <script src="<?php echo base_url() ?>assets/plugins/jQuery/jquery-2.2.3.min.js"></script>
         <script src="<?php echo base_url() ?>assets/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			function post(a){
+				$('#message').hide();
+				$.ajax({
+					type: 'POST',
+					url: $(a).attr('action'),
+					data: $(a).serialize(),
+					success: function(data) {
+						$('#message').fadeIn('slow').html(data);
+					}
+				});
+				return false;
+			}
+		</script>
     </head>
 
     <body class="hold-transition login-page">
@@ -22,28 +47,23 @@
             </div>
             <div class="login-box-body">
                 <p class="login-box-msg">System access</p>
-                <form action="<?php echo base_url() ?>dash/" method="post">
+                <form role="login" accept-charset="utf-8" action="<?= base_url() ?>login/check/" onsubmit="return post(this);" method="post">
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" name="" id="" placeholder="Username" autocomplete="off" autofocus required>
+                    <input type="text" class="form-control" name="username" placeholder="Username" autocomplete="off" autofocus required>
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" class="form-control" name="" id="" placeholder="Password" required>
+                    <input type="password" class="form-control" name="password" placeholder="Password" required>
                     <span class="glyphicon glyphicon-eye-close form-control-feedback"></span>
                 </div>
                 <div class="row">
                     <div class="col-xs-4">
                         <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                     </div>
-                    <div class="col-xs-8" style="display:none">
-                        <strong style="color:#2ada13;">Success!</strong> Sign In.
-                    </div>
+                    <div class="col-xs-8" id="message"></div>
                 </div>
                 </form>
-                <div class="social-auth-links text-center">
-                    <p>- OR -</p>
-                    <a href="<?php echo base_url() ?>agent/login" class="btn btn-block btn-primary"><i class="fa fa-user"></i>&ensp;Sign in using Agent</a>
-                </div>
+                <br>
                 <center><strong>&copy; 2018 <a href="http://getdial.tech" target="blank">getDIAL.id</a></strong> v2.0.0</center>
                 <center><strong>&copy; Powered by <a href="http://getdial.tech" target="blank">Cicalung-solutions</a></strong></center>
             </div>

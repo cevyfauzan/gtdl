@@ -17,9 +17,9 @@ class Get_user_group extends CI_Model
     }
 
     var $table = 'get_user_groups';
-	var $column_order = array(null,'user_group','group_name','web_access',null);
-	var $column_search = array('user_group','group_name','web_access');
-	var $order = array('user_group' => 'ASC');
+	var $column_order = array(null,'group','group_name','web_access',null);
+	var $column_search = array('group','group_name','web_access');
+	var $order = array('group' => 'ASC');
     
     private function _getUserGroupQuery()
 	{
@@ -81,7 +81,7 @@ class Get_user_group extends CI_Model
 	public function get_by_id($user_group)
 	{
 		$this->db->from($this->table);
-		$this->db->where('user_group',$user_group);
+		$this->db->where('group',$user_group);
 		$query = $this->db->get();
 
 		return $query->row();
@@ -90,7 +90,7 @@ class Get_user_group extends CI_Model
 	public function get_dup_id($user_group)
 	{
 		$this->db->from($this->table);
-		$this->db->where('user_group',$user_group);
+		$this->db->where('group',$user_group);
 		$query = $this->db->get();
 
 		return $query->num_rows();
@@ -110,8 +110,8 @@ class Get_user_group extends CI_Model
 
 	public function delete_by_id($user_group)
 	{
-		$this->db->where('user_group', $user_group);
-		$this->db->where('user_group !=', 'ADMIN');
+		$this->db->where('group', $user_group);
+		$this->db->where('group !=', 'ADMIN');
 		$this->db->delete($this->table);
 	}
 
@@ -119,14 +119,14 @@ class Get_user_group extends CI_Model
 	{
 		$data = array();
 		$this->db->select('*');
-		$this->db->order_by('user_group', 'ASC');
+		$this->db->order_by('group', 'ASC');
 		$q = $this->db->get($this->table);
 		  $data[''] = '-- Select --';
 		  if($q->num_rows() > 0)
 		  {
 			foreach ($q->result_array() as $row)
 			{
-				$data[$row['user_group']] = $row['user_group'].' - '.$row['group_name'];
+				$data[$row['group']] = $row['group'].' - '.$row['group_name'];
 			}
 		  }
 		$q->free_result();

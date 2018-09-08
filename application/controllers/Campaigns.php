@@ -14,7 +14,18 @@ class Campaigns extends CI_Controller {
 
 	function __construct()
     {
-		parent::__construct();
+        parent::__construct();
+		$access = explode('#', $this->session->userdata('access'));
+		if(!$this->session->userdata('logged_in') or !in_array('campaigns', $access))
+		{ 
+			$this->session->set_flashdata('message', '<div class="bs-example">
+													<div class="alert alert-danger alert-dismissible">
+														<button class="close" data-dismiss="alert">&times;</button>
+														<strong>Error!</strong> You have no right to access Campaigns.
+													</div>
+												</div>');
+			redirect('dash'); 
+		}
 		$this->load->model(array('Get_campaign','Get_list','Get_lead','Get_lead_recycle','Get_script','Get_call_time','Get_dispo'));
 		$this->load->database();
 	}
