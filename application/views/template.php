@@ -150,7 +150,6 @@
                         </a>
                         <ul class="treeview-menu">
                             <li id="set-call_times"><a href="<?= base_url() ?>call_times"><i class="fa fa-clock-o"></i> Call Times&ensp;<small class="label pull-right bg-green">New</small></a></li>
-                            <li id="set-log"><a href="<?= base_url() ?>logs"><i class="fa fa-send"></i> Logs&ensp;<small class="label pull-right bg-green">New</small></a></li>
                             <li id="set-group"><a href="<?= base_url() ?>user_groups"><i class="fa fa-users"></i> User Groups</a></li>
                             <li id="set-user"><a href="<?= base_url() ?>Users"><i class="fa fa-user"></i> Users</a></li>
                         </ul>

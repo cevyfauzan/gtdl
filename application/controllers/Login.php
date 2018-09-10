@@ -21,8 +21,12 @@ class Login extends CI_Controller {
 	public function index()
 	{
 		if($this->session->userdata('logged_in'))
-		{ 
-			redirect('dash'); 
+		{
+			if($this->session->userdata('user_group') == 'ADMIN'){
+				redirect('dash');
+			}else{
+				redirect('agent');
+			}
 		}
 		else
 		{
@@ -32,27 +36,27 @@ class Login extends CI_Controller {
 
 	function check()
 	{
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|alpha_numeric|is_unique[get_session.user]', array('is_unique' => 'This username already sign in. Please choose another users.'));
-		$this->form_validation->set_rules('password', 'Password', 'trim|required');
+		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|alpha_numeric|is_unique[get_session.user]', array('is_unique' => 'This username already sign in. Please choose another users.'));
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 		if($this->form_validation->run() == TRUE)
 		{
 			$data = $this->Get_login->check();
 			if($data == TRUE)
 			{
-				//helper_log("login", "success login", "");
-				$list = $this->Get_user->get_by_id($this->input->post('username'));
+				$list = $this->Get_user->get_user_group($this->input->post('username'));
+				$ip = $_SERVER['REMOTE_ADDR'];
 				echo '<strong style="color:#00cc44;">Success!</strong> Sign In';
-				if($list->user_group == 'ADMIN'){
+				if($list->user_type == 'ADMINISTRATORS'){
 					echo '<script>function refresh(){window.location = "'.base_url().'dash/";}setTimeout("refresh()", 1500);</script>';
 				}else{
 					echo '<script>function refresh(){window.location = "'.base_url().'agent/";}setTimeout("refresh()", 1500);</script>';
 				}
-				$this->db->query("INSERT into get_session (user) values ('$list->user')");
+				$this->db->query("INSERT into get_session (user,ip_addr) values ('$list->user','$ip')");
+				user_log("SIGNIN");
 			}
 			else
 			{
 				echo '<strong style="color:#ff0000;">Error!</strong> Username or Password incorrect.';
-				//helper_log("login", "failed login"." (".$this->input->post('username').") (".$this->input->post('password').")", "");
 			}
 		}
 		else
@@ -65,7 +69,7 @@ class Login extends CI_Controller {
 	{
 		$user = $this->session->userdata('user');
 		$this->db->query("DELETE from get_session where user = '$user'");
-		//helper_log("logout", "success logout", "");
+		user_log("SIGNOUT");
 		$this->session->sess_destroy();
 		redirect('login');
 	}

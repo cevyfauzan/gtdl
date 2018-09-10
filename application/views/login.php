@@ -64,7 +64,7 @@
                 </div>
                 </form>
                 <br>
-                <center><strong>&copy; 2018 <a href="http://getdial.tech" target="blank">getDIAL.id</a></strong> v2.0.0</center>
+                <center><strong>&copy; 2018 <a href="http://getdial.tech" target="blank">getDIAL.id</a></strong> v 2.0.0</center>
                 <center><strong>&copy; Powered by <a href="http://getdial.tech" target="blank">Cicalung-solutions</a></strong></center>
             </div>
         </div>

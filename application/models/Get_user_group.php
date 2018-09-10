@@ -17,8 +17,8 @@ class Get_user_group extends CI_Model
     }
 
     var $table = 'get_user_groups';
-	var $column_order = array(null,'group','group_name','web_access',null);
-	var $column_search = array('group','group_name','web_access');
+	var $column_order = array(null,'group','group_name','access',null);
+	var $column_search = array('group','group_name','access');
 	var $order = array('group' => 'ASC');
     
     private function _getUserGroupQuery()

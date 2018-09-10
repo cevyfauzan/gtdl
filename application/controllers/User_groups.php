@@ -15,6 +15,17 @@ class User_groups extends CI_Controller {
 	function __construct()
     {
 		parent::__construct();
+		$access = explode('#', $this->session->userdata('access'));
+		if(!$this->session->userdata('logged_in') or !in_array('user-groups', $access))
+		{ 
+			$this->session->set_flashdata('message', '<div class="bs-example">
+													<div class="alert alert-danger alert-dismissible">
+														<button class="close" data-dismiss="alert">&times;</button>
+														<strong>Error!</strong> You have no right to access User groups.
+													</div>
+												</div>');
+			redirect('dash'); 
+		}
 		$this->load->model('Get_user_group');
 	}
 	
@@ -64,7 +75,7 @@ class User_groups extends CI_Controller {
 			$a_add = $this->input->post('a_add');
 			$a_mod = $this->input->post('a_modify');
 			$a_del = $this->input->post('a_delete');
-			$access = implode('#', $this->input->post('access'));
+			$access = implode('#', (array)$this->input->post('access'));
 			$web_access = 'dash';
 		}else{
 			$a_add = '';
@@ -80,7 +91,6 @@ class User_groups extends CI_Controller {
                 'allow_add' => $a_add,
                 'allow_modify' => $a_mod,
                 'allow_delete' => $a_del,
-                'web_access' => $web_access,
                 'access' => $access
             );
  
@@ -105,7 +115,7 @@ class User_groups extends CI_Controller {
 			$a_add = $this->input->post('a_add');
 			$a_mod = $this->input->post('a_modify');
 			$a_del = $this->input->post('a_delete');
-			$access = implode('#', $this->input->post('access'));
+			$access = implode('#', (array)$this->input->post('access'));
 			$web_access = 'dash';
 		}else{
 			$a_add = 'N';
@@ -120,7 +130,6 @@ class User_groups extends CI_Controller {
                 'allow_add' => $a_add,
                 'allow_modify' => $a_mod,
                 'allow_delete' => $a_del,
-                'web_access' => $web_access,
                 'access' => $access
             );
 

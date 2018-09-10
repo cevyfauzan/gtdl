@@ -116,6 +116,16 @@ class Get_user extends CI_Model
 		$this->db->delete($this->table);
 	}
 
+	public function get_user_group($user)
+	{
+		$this->db->where('user',$user);
+		$this->db->from($this->table);
+		$this->db->join('get_user_groups', 'get_users.user_group = get_user_groups.group');
+		$query = $this->db->get();
+
+		return $query->row();
+	}
+
 	function listUser()
 	{
 		$data = array();
