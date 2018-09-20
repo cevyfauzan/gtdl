@@ -54,12 +54,9 @@ class Agent extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	public function ajax_detail($camp_id)
+	public function ajax_detail($lead_id)
 	{
-		//$user = $this->session->userdata('user');
-		$data = $this->Get_agent->getLeadId($camp_id);
-		//$lead_id = $data->lead_id;
-		//$this->db->query("UPDATE get_list SET user = '$user' WHERE lead_id = '$lead_id'");
+		$data = $this->Get_agent->getLeadId($lead_id);
 		echo json_encode($data);
 	}
 
@@ -70,7 +67,7 @@ class Agent extends CI_Controller {
 		$this->db->where('active', 'Y');
 		$this->db->select('campaign_id');
 		$q = $this->db->get('get_campaigns');
-		  $data[''] = '-- SELECT CAMPAIGN --';
+		  $data[''] = '-- ALL CAMPAIGN --';
 		  if($q->num_rows() > 0)
 		  {
 			foreach ($q->result_array() as $row)

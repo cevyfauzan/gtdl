@@ -3,55 +3,82 @@
 ####  Name:             	dash.php                                                    ####
 ####  Type:             	ci views - administrator                     				####	
 ####  Version:          	2.0.0                                                       ####	   
-####  Copyright:        	GOAutoDial Inc. (c) 2011-2013								####
+####  Copyright:        	getdial. (c) 2017-2018										####
 ####  Written by:       	Cevy Fauzan					                              	####
 ####  Edited by:			Cevy Fauzan				   					 				####
 ####  License:          	                                                  			####
 ############################################################################################
 ?>
+<link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.css">
+<script src="<?php echo base_url()?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="<?php echo base_url()?>assets/plugins/chartjs/Chart.min.js"></script>
 <script>
-  $(function () {
-    var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
-    var areaChart = new Chart(areaChartCanvas);
+	var tableCamp;
+	var base_url = '<?php echo base_url();?>';
 
-    var areaChartData = {
-        labels: ["00-03", "03-06", "06-09", "09-12", "12-15", "15-18", "18-21", "21-24"],
-        datasets: [
-            {
-            label: "Sales",
-            fillColor: "rgba(60,141,188,0.9)",
-            strokeColor: "rgba(60,141,188,0.8)",
-            pointColor: "#00a65a",
-            pointStrokeColor: "rgba(60,141,188,1)",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(60,141,188,1)",
-            data: [0, 0, 2, 13, 14, 6, 0, 0]
-            }
-        ]
-    };
+	$(document).ready(function() {
+		tableCamp = $('#campaigns').DataTable({ 
+			"ordering": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				"url": "<?php echo site_url('dash/campaign_list')?>",
+				"type": "POST"
+			},
+			"columnDefs": [
+				{ 
+					"targets": [ 0 ],
+					"orderable": false,
+				},
+				{ 
+					"targets": [ -1 ],
+					"orderable": false,
+				},
+			],
+		});
 
-    var areaChartOptions = {
-        showScale: true,
-        scaleShowGridLines: true,
-        scaleGridLineColor: "rgba(0,0,0,.05)",
-        scaleGridLineWidth: 1,
-        scaleShowHorizontalLines: true,
-        scaleShowVerticalLines: true,
-        bezierCurve: false,
-        bezierCurveTension: 0.3,
-        pointDot: true,
-        pointDotRadius: 4,
-        pointDotStrokeWidth: 1,
-        pointHitDetectionRadius: 20,
-        datasetStroke: true,
-        datasetStrokeWidth: 2,
-        datasetFill: true,
-        legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-        maintainAspectRatio: true,
-        responsive: true
+        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
+        var areaChart = new Chart(areaChartCanvas);
+
+        var areaChartData = {
+            labels: ["00-03", "03-06", "06-09", "09-12", "12-15", "15-18", "18-21", "21-24"],
+            datasets: [
+                {
+                label: "Sales",
+                fillColor: "rgba(60,141,188,0.9)",
+                strokeColor: "rgba(60,141,188,0.8)",
+                pointColor: "#00a65a",
+                pointStrokeColor: "rgba(60,141,188,1)",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(60,141,188,1)",
+                data: [0, 0, 2, 13, 14, 6, 0, 0]
+                }
+            ]
         };
-    areaChart.Line(areaChartData, areaChartOptions);
+
+        var areaChartOptions = {
+            showScale: true,
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            scaleShowHorizontalLines: true,
+            scaleShowVerticalLines: true,
+            bezierCurve: false,
+            bezierCurveTension: 0.3,
+            pointDot: true,
+            pointDotRadius: 4,
+            pointDotStrokeWidth: 1,
+            pointHitDetectionRadius: 20,
+            datasetStroke: true,
+            datasetStrokeWidth: 2,
+            datasetFill: true,
+            legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+            maintainAspectRatio: true,
+            responsive: true
+            };
+        areaChart.Line(areaChartData, areaChartOptions);
     });
 
     window.setTimeout(function() {
@@ -115,6 +142,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Agents & Leads Status</h3>
                 <div class="box-tools pull-right">
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#a_status"><i class="fa fa-desktop"></i> Agent Status</button>
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#wall"><i class="fa fa-desktop"></i> Wallboard</button>
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -184,7 +212,7 @@
                             </div>
                             <?php } ?>
                         </div>
-                        <b><a href="" class="small-box-footer">View More Campaigns <i class="fa fa-arrow-circle-right"></i></a></b>
+                        <b><a href="" class="small-box-footer" data-toggle="modal" data-target="#more_camp">View More Campaigns <i class="fa fa-arrow-circle-right"></i></a></b>
                     </div>
                 </div>
             </div>
@@ -424,36 +452,173 @@
 <!--======================================================================================================================-->
 <!-- Modal Wallboard -->
 <div id="wall" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="width:97%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Agent Status Wallboard</h4>
+			</div>
+			<div class="modal-body" style="background: #e2e6e9">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><b>10</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent001 - 8001</span></center>
+                            <span class="info-box-number pull-right">campaign</span>
+                            <span class="info-box-number text-green"><i class="fa fa-circle"></i> Incall</span>
+                            <span class="info-box-number pull-right">572</span>
+                            <span class="info-box-number">00:12:51</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-orange"><b>10</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent001 - 8001</span></center>
+                            <span class="info-box-number pull-right">campaign</span>
+                            <span class="info-box-number text-orange"><i class="fa fa-circle"></i> Dispo</span>
+                            <span class="info-box-number pull-right">572</span>
+                            <span class="info-box-number">00:00:51</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-blue"><b>11</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent002 - 8002</span></center>
+                            <center><span class="info-box-number text-blue"><i class="fa fa-circle"></i> Ready</span></center>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-default"><b>0</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent002 - 8002</span></center>
+                            <center><span class="info-box-number"><i class="fa fa-circle"></i> Offline</span></center>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+                <center><button class="btn btn-default btn-md" data-dismiss="modal">CLOSE</button></center>
+			</div>
+		</div>			
+	</div>
+</div>
+
+<!-- Modal Agent Status -->
+<div id="a_status" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:90%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">AGENT WALLBOARD</h4>
+				<h4 class="modal-title">Agent Status Wallboard</h4>
+			</div>
+			<div class="modal-body" style="background: #e2e6e9">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><b>10</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent001 - 8001</span></center>
+                            <span class="info-box-number pull-right">campaign</span>
+                            <span class="info-box-number text-green"><i class="fa fa-circle"></i> Incall</span>
+                            <span class="info-box-number pull-right">572</span>
+                            <span class="info-box-number">00:12:51</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-orange"><b>10</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent001 - 8001</span></center>
+                            <span class="info-box-number pull-right">campaign</span>
+                            <span class="info-box-number text-orange"><i class="fa fa-circle"></i> Dispo</span>
+                            <span class="info-box-number pull-right">572</span>
+                            <span class="info-box-number">00:00:51</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-blue"><b>11</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent002 - 8002</span></center>
+                            <center><span class="info-box-number text-blue"><i class="fa fa-circle"></i> Ready</span></center>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-default"><b>0</b></span>
+
+                            <div class="info-box-content">
+                            <center><span class="info-box-number">Agent002 - 8002</span></center>
+                            <center><span class="info-box-number"><i class="fa fa-circle"></i> Offline</span></center>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+                <center><button class="btn btn-default btn-md" data-dismiss="modal">CLOSE</button></center>
+			</div>
+		</div>			
+	</div>
+</div>
+
+<!-- Modal Campaigns -->
+<div id="more_camp" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="width:70%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Campaings</h4>
 			</div>
 			<div class="modal-body">
-                <div class="row">
-                    <?php for($i=1;$i<21;$i++) {?>
-                    <div class="col-lg-3 col-xs-6">
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <h3>17</h3>
-                                <b>Agent<?= $i ?></b>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-user"></i>
-                            </div>
-                            <a class="small-box-footer">
-                                <div class="pull-right" style="padding-right:4px;">
-                                    <b>CAMPAIGN1</b><br>
-                                    <b>54</b>
-                                </div>
-                                <i class="fa fa-circle text-green"></i> <b>Incall</b><br>
-                                <b>00:04:54</b>
-                            </a>
-                        </div>
-                    </div>
-                    <?php } ?>
-                </div>
+                <table id="campaigns" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                        <th>Campaign ID</th>
+                        <th>Campaign Name</th>
+                        <th>Status</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
                 <center><button class="btn btn-default btn-md" data-dismiss="modal">CLOSE</button></center>
 			</div>
 		</div>			

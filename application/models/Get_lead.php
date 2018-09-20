@@ -177,5 +177,11 @@ class Get_lead extends CI_Model
 		$this->db->where('lead_id', $id);
 		$this->db->delete($this->table);
 	}
+
+	public function upload($data)
+	{
+		$this->db->insert($this->table, $data);
+		return $this->db->insert_id();
+	}
 }
 ?>

@@ -34,6 +34,11 @@ class Login extends CI_Controller {
 		}
 	}
 
+	public function relogin()
+	{
+		$this->load->view('relogin');
+	}
+
 	function check()
 	{
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|alpha_numeric|is_unique[get_session.user]', array('is_unique' => 'This username already sign in. Please choose another users.'));
@@ -71,7 +76,7 @@ class Login extends CI_Controller {
 		$this->db->query("DELETE from get_session where user = '$user'");
 		user_log("SIGNOUT");
 		$this->session->sess_destroy();
-		redirect('login');
+		redirect('login/relogin');
 	}
 }
 ?>

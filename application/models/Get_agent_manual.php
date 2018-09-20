@@ -78,28 +78,12 @@ class Get_agent extends CI_Model
 		return $query->row();
 	}
 
-	public function getLeadId($camp_id)
+	public function getLeadId($lead_id)
 	{
-		$this->db->limit('1');
-		$this->db->order_by('lead_id', 'ASC');
-		$this->db->where('get_list.user', '');
-		$this->db->where('get_lists.campaign_id',$camp_id);
-		$this->db->where('get_list.status', 'NEW');
+		$this->db->where('lead_id',$lead_id);
 		$this->db->from($this->table);
-        $this->db->join('get_lists', 'get_list.list_id = get_lists.list_id', 'left');
 		$query = $this->db->get();
-		$data = $query->row();
-		if($data != null){
-			if($data->user == ''){
-				$user = $this->session->userdata('user');
-				$this->db->query("UPDATE get_list SET user = '$user' WHERE lead_id = '$data->lead_id'");
-				return $data;
-			}else{
-				$this->getLeadId($camp_id);
-			}
-		}else{
-			return $data;
-		}
+		return $query->row();
 	}
 
 	function search_by_name($name){

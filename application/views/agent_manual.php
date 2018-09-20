@@ -43,7 +43,7 @@
 
     <script type="text/javascript">
     	var table;
-
+        
         $(window).load(function() {
             $('.chat').fadeToggle('fast');
             $('.chat-message-counter').fadeToggle('fast');
@@ -85,6 +85,19 @@
 
             $(".sortable").css('cursor', 'pointer');
 
+            $('#listlead tbody').on('click', 'tr', function () {
+                var data = $(this).find("a").attr("value");
+                detail_lead(data);
+            } );
+            
+            $('#btn-filter').click(function(){
+                table.ajax.reload();
+            });
+
+            $('#btn-refresh').click(function(){
+                table.ajax.reload();
+            });
+
             $('#modal-hospitals').DataTable({
                 "lengthChange": false,
                 "ordering": false,
@@ -114,11 +127,45 @@
             });
         });
 
-        function detail_lead()
+        function detail_lead(lead_id)
         {
-            var camp_id =  $('#campaign_id').val();
+            
             $.ajax({
-                url : "<?php echo site_url('agent/ajax_detail')?>/" + camp_id,
+                url : "<?php echo site_url('agent/ajax_detail')?>/" + lead_id,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data)
+                {
+                    $('#lead_code_id').val(data.lead_id);
+                    $('#lead_name').html(data.first_name);
+                    $('#lead_dob').html(data.date_of_birth);
+                    $('#lead_city').html(data.city);
+                    $('#lead_email').html(data.email);
+                    $('#lead_number_det').html(data.phone_number);
+                    $('#lead_number_soft').val(data.phone_number);
+                    $('#lead_dispo').html(data.status);
+                    $('#lead_last_call').html(data.modify_date);
+                    $('#lead_schedule').html(data.entry_date);
+                    $('#lead_notes').val(data.notes);
+                    $('#btn-dial-next').val(data.lead_id);
+                    $('#btn-call').attr('disabled', false);
+                    $('#btn-dial-next').attr('disabled', false);
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax');
+                }
+            });
+        }
+
+        function next_lead()
+        {
+            var campId = $('#campaign_id').val();
+            var dispoId = $('#dispo_id').val();
+            var lead_id = $('#lead_code_id').val();
+            var first_name = $('#first_name').val();
+            $.ajax({
+                url : "<?php echo site_url('agent/next_lead')?>?camp="+campId+"&dispo="+dispoId+"&first_name="+first_name+"&lead_id="+lead_id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data)
@@ -135,12 +182,9 @@
                         $('#lead_last_call').html(data.modify_date);
                         $('#lead_schedule').html(data.entry_date);
                         $('#lead_notes').val(data.notes);
+                        $('#btn-call').attr('disabled', false);
                     }else{
                         reset_lead();
-                        stop_timer();
-                        changeBtntoReady();
-                        $('#campaign_id').attr('disabled', false);
-                        $('#btn-hangup').attr('disabled', true);
                         $('#modal-no-lead').modal('show');
                     }
                 },
@@ -164,23 +208,14 @@
             $('#lead_last_call').html('');
             $('#lead_schedule').html('');
             $('#lead_notes').val('');
-        }
-
-        function select_camp() {
-            var camp =  $('#campaign_id').val();
-            if(camp == ''){
-                $('#btn-call').attr('disabled', true);
-            }else{
-                $('#btn-call').attr('disabled', false);
-            }
+            $('#btn-call').attr('disabled', true);
         }
 
         function changeBtntoCall(){
-            detail_lead();
-            $('#campaign_id').attr('disabled', true);
+            $('.sortable').css('pointer-events', 'none');
             $('#btn-call').attr('disabled', true);
             $('#btn-hangup').attr('disabled', false);
-            $('#btn-call-back').attr('disabled', true);
+            $('#btn-dial-next').attr('disabled', true);
             $('#btn-manual-call').attr('disabled', true);
             $('#btn-create-polis').attr('disabled', false);
             $('#status-lamp').attr('class','fa fa-circle text-success');
@@ -190,27 +225,28 @@
 
         function changeBtntoHangup(){
             stop_timer();
-            $('#status-lamp').attr('class','fa fa-circle text-danger');
-            $('#status-call').html('Hangup').attr('class','text-danger');
-            $('#campaign_id').attr('disabled', false);
             $('#btn-call').attr('disabled', false);
             $('#btn-hangup').attr('disabled', true);
-            $('#btn-call-back').attr('disabled', false);
+            $('#btn-dial-next').attr('disabled', false);
             $('#btn-manual-call').attr('disabled', false);
             $('#btn-create-polis').attr('disabled', true);
+            $('#status-lamp').attr('class','fa fa-circle text-danger');
+            $('#status-call').html('Hangup').attr('class','text-danger');
             $('#myModal-hangup').modal({backdrop: 'static', keyboard: false});
             $('#myModal-hangup').modal('show');
-            $('#status-lamp').attr('class','fa fa-circle text-warning');
-            $('#status-call').html('Dispo').attr('class','text-warning');
         }
 
         function changeBtntoReady(){
             reset_timer();
             $('#get-minutes').html('00');
             $('#get-seconds').html('00');
+            $('.sortable').css('pointer-events', 'auto');
+            $('#btn-call').attr('disabled', false);
+            $('#btn-dial-next').attr('disabled', false);
             $('#status-lamp').attr('class','fa fa-circle text-info');
             $('#status-call').html('ready').attr('class','text-info');
-            reset_lead();
+            table.ajax.reload();
+            next_lead();
         }
 
         function pad(val) {
@@ -466,9 +502,9 @@
                     <div class="row">
                         <div class="col-md-4" id="content-refresh">
                             <div class="box box-solid">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title"><i class="fa fa-list"></i> Campaigns</h3>
-                                </div>
+                                <!--<div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-list"></i> List Lead</h3>
+                                </div>-->
 
                                 <div class="box-body">
                                     <form role="form" id="form-filter" method="post">
@@ -479,52 +515,45 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-8">
-                    						<?= form_dropdown('', $list_camp, '', 'class="form-control" id="campaign_id" onChange="select_camp()"') ?>
+                    						<?= form_dropdown('', $list_camp, '', 'class="form-control" id="campaign_id"') ?>
                                         </div>
                                     </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="box box-solid">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title"><i class="fa fa-calculator"></i> Softphone</h3>
-                                    <div class="box-tools pull-right">
-                                        <i class="fa fa-circle text-info" id="status-lamp"></i>
-                                        <b><span class="text-info" id="status-call">Ready</span></b>
-                                    </div>
-                                </div>
-
-                                <form action="" method="post">
-                                <div class="box-body">
                                     <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-phone"></i>
-                                                </div>
-                                                <input type="text" class="form-control" name="" id="lead_number_soft" readonly>
+                                        <div class="col-sm-4" align="right">
+                                            <div class="form-group">
+                                                <label>Dispo</label>
                                             </div>
                                         </div>
+                                        <div class="col-sm-8">
+                                            <?= form_dropdown('', $list_dispo, 'NEW', 'class="form-control" id="dispo_id"') ?>
+                                        </div>
                                     </div>
-                                    <br>
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <button type="button" class="btn btn-block btn-danger" id="btn-hangup" onClick="changeBtntoHangup();" disabled>Hangup</button>
+                                        <div class="col-sm-4" align="right">
+                                            <div class="form-group">
+                                                <label>Name</label>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <button type="button" class="btn btn-block btn-success" id="btn-call" onClick="changeBtntoCall();" disabled>Call</button>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="" id="first_name" autocomplete="off">
                                         </div>
                                     </div>
-                                    <br>
-                                    <button type="button" class="btn btn-block btn-default" id="btn-manual-call" data-toggle="modal" data-target="#myModal-mCall">Manual Call</button>
-                                    <br>
-                                    <button type="button" class="btn btn-block btn-default" id="btn-call-back" data-toggle="modal" data-target="#myModal-callBack">Call Back</button>
-                                    <div class="row" align="center">
-                                        <br>
-                                        <span>Call Time</span>&ensp;<label id="get-minutes">00</label><span>:</span><label id="get-seconds">00</label>
+                                    <div class="pull-right">
+                                        <button type="button" id="btn-refresh" class="btn btn-success btn-sm" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</button>
+                                        <button type="button" id="btn-filter" class="btn btn-primary btn-sm" title="Filter"><i class="fa fa-filter"></i>&ensp;Filter</button>
                                     </div>
                                     </form>
+                                    <table id="listlead" class="table table-bordered table-hover sortable" disabled>
+                                        <thead>
+                                            <tr>
+                                                <th width="7%">No</th>
+                                                <th>Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <span class="pull-right" id="count_lead"></span>
                                 </div>
                             </div>
                         </div>
@@ -581,6 +610,48 @@
                         </div>
 
                         <div class="col-md-3">
+                            <div class="box box-solid">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-calculator"></i> Softphone</h3>
+                                    <div class="box-tools pull-right">
+                                        <i class="fa fa-circle text-info" id="status-lamp"></i>
+                                        <b><span class="text-info" id="status-call">Ready</span></b>
+                                    </div>
+                                </div>
+
+                                <form action="" method="post">
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-phone"></i>
+                                                </div>
+                                                <input type="text" class="form-control" name="" id="lead_number_soft" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button type="button" class="btn btn-block btn-default" id="btn-manual-call" data-toggle="modal" data-target="#myModal-mCall">Manual Call</button>
+                                    <br>
+                                    <button type="button" name="next" class="btn btn-block btn-primary" id="btn-dial-next" onClick="next_lead();" disabled>Dial Next</button>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-block btn-danger" id="btn-hangup" onClick="changeBtntoHangup();" disabled>Hangup</button>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button type="button" class="btn btn-block btn-success" id="btn-call" onClick="changeBtntoCall();" disabled>Call</button>
+                                        </div>
+                                    </div>
+                                    <div class="row" align="center">
+                                        <br>
+                                        <span>Call Time</span>&ensp;<label id="get-minutes">00</label><span>:</span><label id="get-seconds">00</label>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="box box-solid">
                                 <div class="box-header with-border">
                                     <h3 class="box-title"><i class="fa fa-wrench"></i> Tools</h3>

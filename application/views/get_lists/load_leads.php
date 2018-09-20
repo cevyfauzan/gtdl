@@ -1,6 +1,70 @@
+<?php
+############################################################################################
+####  Name:             	load_leads.php                                             	####
+####  Type:             	ci views - administrator                     				####
+####  Version:          	2.0.0                                                       ####
+####  Copyright:        	getdial. (c) 2017-2018										####
+####  Written by:       	Cevy Fauzan					                              	####
+####  Edited by:			Cevy Fauzan				   					 				####
+####  License:          	                                                  			####
+############################################################################################
+?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("input").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+		$("select").change(function(){
+			$(this).parent().parent().removeClass('has-error');
+			$(this).next().empty();
+		});
+	});
+
+	function upload()
+	{
+		$('#btnUpload').text('UPLOADING...');
+		$('#btnUpload').attr('disabled',true);
+
+		var formData = new FormData($('#form-load')[0]);
+		$.ajax({
+			url : "<?php echo site_url('lists/ajax_upload')?>",
+			type: "POST",
+			data: formData,
+			contentType: false,
+			processData: false,
+			dataType: "JSON",
+			success: function(data)
+			{
+				if(data.status)
+				{
+					alert('Success');
+				}
+				else
+				{
+					for (var i = 0; i < data.inputerror.length; i++) 
+					{
+						$('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error');
+						$('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+					}
+				}
+				$('#btnUpload').text('UPLOAD');
+				$('#btnUpload').attr('disabled',false);
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{
+				alert('Error upload data');
+				$('#btnUpload').text('UPLOAD');
+				$('#btnUpload').attr('disabled',false);
+			}
+		});
+	}
+</script>
+
+<!--======================================================================================================================-->
 <h4><b>Load Leads</b></h4>
 <br>
-<form action="#" name="" id="" method="post" onSubmit="" enctype="multipart/form-data">
+<form action="#" id="form-load">
 <div class="row">
 	<div class="col-sm-4" align="right">
 		<div class="form-group">
@@ -8,7 +72,8 @@
 		</div>
 	</div>
 	<div class="col-sm-4">
-		<input type="file" class="form-control" name="" id="">
+		<input type="file" class="form-control" name="lead_file">
+		<span class="help-block"></span>
 		<div class="progress progress-xs active">
             <div class="progress-bar progress-bar-success progress-bar-striped bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                 <span class="sr-only percent">20% Complete</span>
@@ -23,7 +88,8 @@
 		</div>
 	</div>
 	<div class="col-sm-3">
-		<?= form_dropdown('list_id_override', $list_list, '', 'class="form-control"') ?>
+		<?= form_dropdown('list_id', $list_list, '', 'class="form-control"') ?>
+		<span class="help-block"></span>
 	</div>
 </div>
 <div class="row">
@@ -39,5 +105,5 @@
 		<?= form_dropdown('dupcheck', $drop_down, '', 'class="form-control"') ?>
 	</div>
 </div>
-<center><button type="submit" class="btn btn-success btn-md" name="" id="" onclick="">UPLOAD</button></center>
+<center><button type="button" class="btn btn-success btn-md" id="btnUpload" onclick="upload()">UPLOAD</button></center>
 </form>

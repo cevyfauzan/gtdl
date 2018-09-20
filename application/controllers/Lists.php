@@ -27,6 +27,7 @@ class Lists extends CI_Controller {
 			redirect('dash'); 
 		}
 		$this->load->model(array('Get_list','Get_lead','Get_lead','Get_campaign','Get_dispo','Get_user'));
+		$this->load->library('PHPExcel');
 	}
 	
 	public function index()
@@ -121,8 +122,6 @@ class Lists extends CI_Controller {
                 'active' => $this->input->post('active'),
                 'list_changedate' => $SQLdate
             );
-		//$query = $this->db->query("INSERT INTO get_lists (list_id,list_name,campaign_id,active,list_description,list_changedate)values('$listID','$listName','$campaignID','Y','Outbound ListID $listID - $NOW','$SQLdate')");
-		//$query = $this->db->query("INSERT INTO get_campaign_stats (campaign_id)values('$campaignID')");
 		$insert = $this->Get_list->save($data);
         echo json_encode(array("status" => TRUE));
     }
@@ -164,6 +163,54 @@ class Lists extends CI_Controller {
             $this->Get_list->delete_by_id($id);
 			$query = $this->db->query("DELETE FROM get_list WHERE list_id='".$id."'");
 		}
+        echo json_encode(array("status" => TRUE));
+    }
+
+    public function ajax_upload()
+    {
+        $this->_validate_upload();
+		$SQLdate = date("Y-m-d H:i:s");
+         
+		//Path of files were you want to upload on localhost (C:/xampp/htdocs/ProjectName/uploads/excel/)	 
+		$configUpload['upload_path'] = FCPATH.'assets/excel/';
+		$configUpload['allowed_types'] = 'xls|xlsx|csv';
+		$configUpload['max_size'] = '5000';
+		$this->load->library('upload', $configUpload);
+		$this->upload->do_upload('lead_file');	
+		$upload_data = $this->upload->data(); //Returns array of containing all of the data related to the file you uploaded.
+		$file_name = $upload_data['file_name']; //uploded file name
+		$extension = $upload_data['file_ext'];    // uploded file extension
+
+		//$objReader =PHPExcel_IOFactory::createReader('Excel5');     //For excel 2003 
+		$objReader= PHPExcel_IOFactory::createReader('Excel2007');	// For excel 2007 	  
+		//Set to read only
+		$objReader->setReadDataOnly(true); 		  
+		//Load excel file
+		$objPHPExcel = $objReader->load(FCPATH.'assets/excel/'.$file_name);		 
+		$totalrows = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();   //Count Numbe of rows avalable in excel      	 
+		$objWorksheet = $objPHPExcel->setActiveSheetIndex(0);                
+		//loop from first data untill last data
+		for($i=1;$i<=$totalrows;$i++)
+		{
+			$data = array(
+                'entry_date' => $SQLdate,
+                'status' => 'NEW',
+                'list_id' => $this->input->post('list_id'),
+                'phone_number' => $objWorksheet->getCellByColumnAndRow(0,$i)->getValue(),
+                'first_name' => $objWorksheet->getCellByColumnAndRow(1,$i)->getValue(),
+                'address1' => $objWorksheet->getCellByColumnAndRow(2,$i)->getValue(),
+                'address2' => $objWorksheet->getCellByColumnAndRow(3,$i)->getValue(),
+                'city' => $objWorksheet->getCellByColumnAndRow(4,$i)->getValue(),
+                'province' => $objWorksheet->getCellByColumnAndRow(5,$i)->getValue(),
+                'postal_code' => $objWorksheet->getCellByColumnAndRow(6,$i)->getValue(),
+                'date_of_birth' => $objWorksheet->getCellByColumnAndRow(7,$i)->getValue(),
+                'email' => $objWorksheet->getCellByColumnAndRow(8,$i)->getValue()
+            );
+			$insert = $this->Get_lead->upload($data);
+		}
+		unlink(FCPATH.'assets/excel/'.$file_name); //File Deleted After uploading in database .			 
+		//redirect(base_url() . "put link were you want to redirect");
+	
         echo json_encode(array("status" => TRUE));
     }
 
@@ -351,6 +398,34 @@ class Lists extends CI_Controller {
 				$data['status'] = FALSE;
 			}
 		}
+ 
+        if($data['status'] === FALSE)
+        {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+	private function _validate_upload()
+    {
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+ 
+		if($this->input->post('lead_file') == '')
+        {
+            $data['inputerror'][] = 'lead_file';
+            $data['error_string'][] = 'Lead File is required';
+            $data['status'] = FALSE;
+        }
+ 
+		if($this->input->post('list_id') == '')
+        {
+            $data['inputerror'][] = 'list_id';
+            $data['error_string'][] = 'List ID is required';
+            $data['status'] = FALSE;
+        }
  
         if($data['status'] === FALSE)
         {
