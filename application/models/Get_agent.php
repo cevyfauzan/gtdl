@@ -92,7 +92,9 @@ class Get_agent extends CI_Model
 		if($data != null){
 			if($data->user == ''){
 				$user = $this->session->userdata('user');
+				$SQLdate = date("Y-m-d H:i:s");
 				$this->db->query("UPDATE get_list SET user = '$user' WHERE lead_id = '$data->lead_id'");
+				$this->db->query("UPDATE get_live_agents SET status = 'INCALL', lead_id = '$data->lead_id', campaign_id = '$data->campaign_id', last_call_time = '$SQLdate'  WHERE user = '$user'");
 				return $data;
 			}else{
 				$this->getLeadId($camp_id);
@@ -116,6 +118,12 @@ class Get_agent extends CI_Model
         $this->db->like('phone_number', $number);
         $this->db->limit(10);
         return $this->db->get($this->table)->result();
+	}
+
+	public function save_agent_log($data)
+	{
+		$this->db->insert('get_agent_log', $data);
+		return $this->db->insert_id();
 	}
 }
 ?>

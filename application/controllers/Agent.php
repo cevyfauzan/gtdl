@@ -63,6 +63,55 @@ class Agent extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function ajax_hangup_call()
+	{
+		$SQLdate = date("Y-m-d H:i:s");
+		$user = $this->session->userdata('user');
+		$this->db->query("UPDATE get_live_agents SET status = 'DISPO', last_call_finish = '$SQLdate' WHERE user = '$user'");
+	}
+
+	public function ajax_ready_call()
+	{
+		$user = $this->session->userdata('user');
+		$this->db->query("UPDATE get_live_agents SET status = 'PAUSED', lead_id = '', campaign_id = '' WHERE user = '$user'");
+	}
+
+    public function ajax_agent_log()
+    {
+		$SQLdate = date("Y-m-d H:i:s");
+         
+        $data = array(
+                'user' => $this->session->userdata('user'),
+                'server_ip' => $_SERVER['REMOTE_ADDR'],
+                'event_time' => $SQLdate,
+                'lead_id' => strtoupper($this->input->post('address2')),
+                'campaign_id' => strtoupper($this->input->post('city')),
+                'pause_sec' => $this->input->post('zip'),
+                'talk_sec' => $this->input->post('dob'),
+                'dispo_sec' => $this->input->post('phone_number'),
+                'status' => $this->input->post('email')
+            );
+		$insert = $this->Get_agent->save_agent_log($data);
+    }
+
+	public function ajax_personal_notes()
+	{
+		$user = $this->session->userdata('user');
+		$this->db->where('user',$user);
+		$this->db->from('get_personal_notes');
+		$query = $this->db->get();
+		$data = $query->row();
+		echo json_encode($data);
+	}
+
+	public function ajax_save_notes()
+	{
+		$user = $this->session->userdata('user');
+		$notes = $this->input->post('p_notes');
+		$this->db->query("UPDATE get_personal_notes SET notes = '$notes' WHERE user = '$user'");
+		echo json_encode(array("status" => TRUE));
+	}
+
 	private function listCamp()
 	{
 		$data = array();

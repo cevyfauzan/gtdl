@@ -21,8 +21,7 @@
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/datepicker/datepicker3.css">
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/select2/select2.min.css">
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <!--<link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/select2/select2.min.css">-->
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/jQueryUI/jquery-ui.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/dist/css/AdminLTE.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/dist/css/skins/_all-skins.min.css">
@@ -33,9 +32,8 @@
     <script src="<?php echo base_url() ?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script src="<?php echo base_url() ?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
     <script src="<?php echo base_url() ?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/plugins/select2/select2.full.min.js"></script>
+    <!--<script src="<?php echo base_url() ?>assets/plugins/select2/select2.full.min.js"></script>-->
     <script src="<?php echo base_url() ?>assets/plugins/fastclick/fastclick.js"></script>
-    <script src="<?php echo base_url() ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
     <script src="<?php echo base_url() ?>assets/plugins/jQueryUI/jquery-ui.min.js"></script>
     <script src="<?php echo base_url() ?>assets/dist/js/app.min.js"></script>
     <script src="<?php echo base_url() ?>assets/dist/js/demo.js"></script>
@@ -48,11 +46,11 @@
             $('.chat').fadeToggle('fast');
             $('.chat-message-counter').fadeToggle('fast');
             $(".loader").fadeOut("slow");
+            pause_sec();
         });
 
         $(document).ready(function() {
-            $(".select2").select2();
-            $(".textarea").wysihtml5();
+            //$(".select2").select2();
 
             table = $('#listlead').DataTable({
                 "searching": false,
@@ -151,6 +149,46 @@
             });
         }
 
+        function save_agent_log()
+        {
+            $('#btnSave').text('SAVING...');
+            $('#btnSave').attr('disabled',true);
+            var url;
+
+            var formData = new FormData($('#form-data-call')[0]);
+            $.ajax({
+                url : "<?php echo site_url('agents/ajax_agent_log')?>",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "JSON",
+                success: function(data)
+                {
+                    if(data.status)
+                    {
+                        $('#myModal-hangup').modal('hide');
+                    }
+                    else
+                    {
+                        for (var i = 0; i < data.inputerror.length; i++) 
+                        {
+                            $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error');
+                            $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+                        }
+                    }
+                    $('#btnSave').text('SUBMIT');
+                    $('#btnSave').attr('disabled',false);
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error adding / update data');
+                    $('#btnSave').text('SUBMIT');
+                    $('#btnSave').attr('disabled',false);
+                }
+            });
+        }
+
         function reset_lead()
         {
             $('#lead_code_id').val('');
@@ -186,10 +224,16 @@
             $('#status-lamp').attr('class','fa fa-circle text-success');
             $('#status-call').html('In Call').attr('class','text-success');
             set_timer();
+            stop_pause_sec();
+            talk_sec();
         }
 
         function changeBtntoHangup(){
             stop_timer();
+            $.ajax({
+                url : "<?php echo site_url('agent/ajax_hangup_call')?>",
+                type: "POST"
+            });
             $('#status-lamp').attr('class','fa fa-circle text-danger');
             $('#status-call').html('Hangup').attr('class','text-danger');
             $('#campaign_id').attr('disabled', false);
@@ -202,10 +246,19 @@
             $('#myModal-hangup').modal('show');
             $('#status-lamp').attr('class','fa fa-circle text-warning');
             $('#status-call').html('Dispo').attr('class','text-warning');
+            stop_talk_sec();
+            dispo_sec();
         }
 
         function changeBtntoReady(){
+            //save_agent_log();
+            $.ajax({
+                url : "<?php echo site_url('agent/ajax_ready_call')?>",
+                type: "POST"
+            });
             reset_timer();
+            stop_dispo_sec();
+            pause_sec();
             $('#get-minutes').html('00');
             $('#get-seconds').html('00');
             $('#status-lamp').attr('class','fa fa-circle text-info');
@@ -243,6 +296,36 @@
             totalSeconds = 0;
         }
 
+        function pause_sec() {
+            var psec = 0;
+            ps = setInterval( function(){ $("#pause_sec").val(++psec); }, 1000);        
+        }
+
+        function stop_pause_sec() {
+            clearInterval(ps);
+            var psec = 0;
+        }
+
+        function talk_sec() {
+            var tsec = 0;
+            ts = setInterval( function(){ $("#talk_sec").val(++tsec); }, 1000);        
+        }
+
+        function stop_talk_sec() {
+            clearInterval(ts);
+            var tsec = 0;
+        }
+
+        function dispo_sec() {
+            var dsec = 0;
+            ds = setInterval( function(){ $("#dispo_sec").val(++dsec); }, 1000);        
+        }
+
+        function stop_dispo_sec() {
+            clearInterval(ds);
+            var dsec = 0;
+        }
+
         function onlyNumb(evt) {
 		    var charCode = (evt.which) ? evt.which : event.keyCode
 		    if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -266,6 +349,56 @@
             }else{
                 $('#select-callback').hide();
             }
+        }
+
+        function personal_notes()
+        {
+            $.ajax({
+                url : "<?php echo site_url('agent/ajax_personal_notes')?>",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data)
+                {
+                    $('[name="p_notes"]').val(data.notes);
+                    $('#myModal-notes').modal('show');
+                    $('.modal-title').text('Personal Notes : ' + data.user);
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error get data from ajax');
+                }
+            });
+        }
+
+        function save_notes()
+        {
+            $('#btn_save_notes').text('Saving...');
+            $('#btn_save_notes').attr('disabled',true);
+
+            var formData = new FormData($('#form-personal_notes')[0]);
+            $.ajax({
+                url : "<?php echo site_url('agent/ajax_save_notes')?>",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "JSON",
+                success: function(data)
+                {
+                    if(data.status)
+                    {
+                        $('#myModal-notes').modal('hide');
+                    }
+                    $('#btn_save_notes').text('Save');
+                    $('#btn_save_notes').attr('disabled',false);
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    alert('Error update data');
+                    $('#btn_save_notes').text('Save');
+                    $('#btn_save_notes').attr('disabled',false);
+                }
+            });
         }
     </script>
 
@@ -471,7 +604,6 @@
                                 </div>
 
                                 <div class="box-body">
-                                    <form role="form" id="form-filter" method="post">
                                     <div class="row">
                                         <div class="col-sm-4" align="right">
                                             <div class="form-group">
@@ -482,7 +614,6 @@
                     						<?= form_dropdown('', $list_camp, '', 'class="form-control" id="campaign_id" onChange="select_camp()"') ?>
                                         </div>
                                     </div>
-                                    </form>
                                 </div>
                             </div>
 
@@ -495,7 +626,6 @@
                                     </div>
                                 </div>
 
-                                <form action="" method="post">
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -524,7 +654,9 @@
                                         <br>
                                         <span>Call Time</span>&ensp;<label id="get-minutes">00</label><span>:</span><label id="get-seconds">00</label>
                                     </div>
-                                    </form>
+                                    <input type="text" name="pause_sec" id="pause_sec">
+                                    <input type="text" name="talk_sec" id="talk_sec">
+                                    <input type="text" name="dispo_sec" id="dispo_sec">
                                 </div>
                             </div>
                         </div>
@@ -592,7 +724,7 @@
                                     <button type="button" class="btn btn-block btn-default" data-toggle="modal" data-target="#myModal-4">BMI Calc</button>
                                     <button type="button" class="btn btn-block btn-default" data-toggle="modal" data-target="#myModal-5">Age Calc</button>-->
                                     <button type="button" class="btn btn-block btn-default" id="btn-create-polis" data-toggle="modal" data-target="#myModal-1" disabled>Create Polis</button>
-                                    <button type="button" class="btn btn-block btn-default" data-toggle="modal" data-target="#myModal-7" data-backdrop="static" data-keyboard="false">Personal Notes</button>
+                                    <button type="button" class="btn btn-block btn-default" onClick="personal_notes()">Personal Notes</button>
                                 </div>
                             </div>
                         </div>
@@ -657,6 +789,52 @@
             </div>
         </footer>
     </div>
+
+<!-- Modal Hangup -->
+<div id="myModal-hangup" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="width:50%;">
+		<div class="modal-content">
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label">Dispo</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <?= form_dropdown('dispo_id', $list_dispo_hgp, '', 'class="form-control" onChange="viewSch(this);"') ?>
+                    </div>
+                </div>
+                <div class="row" id="select-callback" style="display:none;">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label">Scheduling</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control datepicker" name="" id="">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control timepicker" name="" id="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label">Note</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                    <textarea class="form-control" rows="3" name="" id=""></textarea>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" onClick="changeBtntoReady();"><i class="fa fa-save"></i>&ensp;Submit</button>
+            </div>
+		</div>			
+	</div>
+</div>
 
 <!-- Modal Manual Call -->
 <div id="myModal-mCall" class="modal fade" role="dialog">
@@ -726,54 +904,6 @@
                 <button type="button" id="" class="btn btn-success btn-sm" title="Submit" data-dismiss="modal"><i class="fa fa-send"></i>&ensp;Submit</button>
                 <button type="reset" id="" class="btn btn-primary btn-sm" title="Clear Form"><i class="fa fa-trash"></i>&ensp;Clear</button>
                 <button type="button" id="" class="btn btn-default btn-sm" title="Refresh" data-dismiss="modal"><i class="fa fa-close"></i>&ensp;Close</button>
-            </div>
-            </form>
-		</div>			
-	</div>
-</div>
-
-<!-- Modal Hangup -->
-<div id="myModal-hangup" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:50%;">
-		<div class="modal-content">
-            <form role="form" id="form-dispo" method="post">
-			<div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="control-label">Dispo</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <?= form_dropdown('dispo_id', $list_dispo_hgp, '', 'class="form-control" onChange="viewSch(this);"') ?>
-                    </div>
-                </div>
-                <div class="row" id="select-callback" style="display:none;">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="control-label">Scheduling</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <input type="text" class="form-control datepicker" name="" id="">
-                    </div>
-                    <div class="col-sm-3">
-                        <input type="text" class="form-control timepicker" name="" id="">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <label class="control-label">Note</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
-                    <textarea class="form-control" rows="3" name="" id=""></textarea>
-                    </div>
-                </div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-success" data-dismiss="modal" onClick="changeBtntoReady();"><i class="fa fa-save"></i>&ensp;Submit</button>
             </div>
             </form>
 		</div>			
@@ -934,22 +1064,22 @@
 </div>
 
 <!-- Modal Notes Agent -->
-<div id="myModal-7" class="modal fade" role="dialog">
+<div id="myModal-notes" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:75%;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Personal notes</h4>
+				<h4 class="modal-title"></h4>
 			</div>
-			<div class="modal-body pad">
-                <form>
-                <textarea class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                </form>
+            <form action="#" id="form-personal_notes">
+			<div class="modal-body pad" style="background: #e2e6e9">
+                <textarea class="form-control" name="p_notes" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
 			</div>
 			<div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-save"></i>&ensp;Save</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btn_save_notes" onClick="save_notes()"><i class="fa fa-save"></i>&ensp;Save</button>
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fa fa-close"></i>&ensp;Close</button>
 			</div>
+            </form>
 		</div>			
 	</div>
 </div>

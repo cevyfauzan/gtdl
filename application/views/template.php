@@ -10,18 +10,17 @@
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/skins/_all-skins.min.css">
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/jQueryUI/jquery-ui.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/jQueryUI/jquery-ui.min.css">
 
     <script src="<?php echo base_url()?>assets/plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="<?php echo base_url()?>assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url()?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="<?php echo base_url()?>assets/plugins/fastclick/fastclick.js"></script>
-    <script src="<?php echo base_url() ?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-    <script src="<?php echo base_url() ?>assets/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <script src="<?php echo base_url()?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+    <script src="<?php echo base_url()?>assets/plugins/jQueryUI/jquery-ui.min.js"></script>
     <script src="<?php echo base_url()?>assets/dist/js/app.min.js"></script>
     <script src="<?php echo base_url()?>assets/dist/js/demo.js"></script>
-    <script src="<?php echo base_url() ?>assets/js/datetimejs.js"></script>
     <script src="<?php echo base_url()?>assets/js/datetimejs.js"></script>
     <script type="text/javascript">
         $(window).load(function() {
@@ -165,7 +164,7 @@
                         </a>
                     </li>
                     <li class="" id="mes">
-                        <a href="">
+                        <a href="<?= base_url() ?>messages">
                             <i class="fa fa-envelope-o "></i> <span>Messages</span>
                             <span class="pull-right-container">
                                 <small class="label pull-right bg-yellow">1 New</small>

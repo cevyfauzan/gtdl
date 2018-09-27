@@ -1,42 +1,19 @@
+<link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/datepicker/datepicker3.css">
+<script src="<?php echo base_url()?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url()?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="<?php echo base_url()?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
 <script>
 	$(function () {
+		/*$('#table').DataTable({
+			"ordering": false,
+			"autoWidth": false,
+			"searching": false
+		});*/
 		$(".date").datepicker({
 			format: "dd/mm/yyyy"
 		});
 	});
-
-    function show_report() {
-        var repType =  $('[name="rep_type"]').val();
-        if(repType == 'rep_dash'){
-			var url = "<?= base_url('report/rep_dash') ?>";
-			$('#boxReport').show();
-            $('#showReport').load(url);
-        }else if(repType == 'rep_atd'){
-			$('#boxReport').show();
-            $('#showReport').html('Agent Time Detail');
-        }else if(repType == 'rep_apd'){
-			var url = "<?= base_url('report/rep_apd') ?>";
-			$('#boxReport').show();
-            $('#showReport').load(url);
-        }else if(repType == 'rep_dss'){
-			$('#boxReport').show();
-            $('#showReport').html('Dial Statuses Summary');
-        }else if(repType == 'rep_ecr'){
-			$('#boxReport').show();
-            $('#showReport').html('Export Call Report');
-        }else if(repType == 'rep_spa'){
-			$('#boxReport').show();
-            $('#showReport').html('Sales per Agent');
-        }else if(repType == 'rep_st'){
-			$('#boxReport').show();
-            $('#showReport').html('Sales Tracker');
-        }else{
-			$('#boxReport').hide();
-            $('#showReport').html('');
-        }
-    }
 
 	function nav_active(){
 		document.getElementById("rep").className = "active";
@@ -67,13 +44,13 @@
 						<?= form_dropdown('rep_camp', $list_camp, '', $attr) ?>
 					</div>
 					<div class="col-sm-2">
-						<input type="text" class="form-control date" name="rep_start_date" placeholder="start date" value="<?php echo date('Y-m-d') ?>">
+						<input type="text" class="form-control date" name="rep_start_date" placeholder="start date">
 					</div>
 					<div class="col-sm-2">
-						<input type="text" class="form-control date" name="rep_end_date" placeholder="end date" value="<?php echo date('Y-m-d') ?>">
+						<input type="text" class="form-control date" name="rep_end_date" placeholder="end date">
 					</div>
 					<div class="col-sm-2">
-						<button type="button" class="btn btn-success btn-block" onClick="show_report()">Show</button>
+						<button type="button" class="btn btn-success btn-block" onClick="">Show</button>
 					</div>
 				</div>
             </div>
@@ -81,12 +58,4 @@
     </div>
 </div>
 
-<div class="row" id="boxReport" style="display:none">
-    <div class="col-sm-12">
-        <div class="box box-solid">
-            <div class="box-body" id="showReport">
-            </div>
-        </div>
-    </div>
-</div>
 <!--======================================================================================================================-->

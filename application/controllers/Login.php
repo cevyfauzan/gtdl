@@ -54,6 +54,7 @@ class Login extends CI_Controller {
 				if($list->user_type == 'ADMINISTRATORS'){
 					echo '<script>function refresh(){window.location = "'.base_url().'dash/";}setTimeout("refresh()", 1500);</script>';
 				}else{
+					$this->db->query("INSERT into get_live_agents (user,server_ip,status) values ('$list->user','$ip','PAUSED')");
 					echo '<script>function refresh(){window.location = "'.base_url().'agent/";}setTimeout("refresh()", 1500);</script>';
 				}
 				$this->db->query("INSERT into get_session (user,ip_addr) values ('$list->user','$ip')");
@@ -74,6 +75,7 @@ class Login extends CI_Controller {
 	{
 		$user = $this->session->userdata('user');
 		$this->db->query("DELETE from get_session where user = '$user'");
+		$this->db->query("DELETE from get_live_agents where user = '$user'");
 		user_log("SIGNOUT");
 		$this->session->sess_destroy();
 		redirect('login/relogin');

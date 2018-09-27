@@ -31,7 +31,7 @@
 					url: $(a).attr('action'),
 					data: $(a).serialize(),
 					success: function(data) {
-						$('#message').fadeIn('slow').html(data);
+						$('#message').fadeIn('fast').html(data);
 					}
 				});
 				return false;
