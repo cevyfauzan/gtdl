@@ -6,18 +6,16 @@
     <title><?= $title ?></title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="icon" href="<?php echo base_url()?>assets/dist/img/getdial-icon.png" type="image/x-icon" />
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>assets/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/skins/_all-skins.min.css">
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/AdminLTE.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/skins/_all-skins.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/jQueryUI/jquery-ui.min.css">
 
     <script src="<?php echo base_url()?>assets/plugins/jQuery/jquery-2.2.3.min.js"></script>
-    <script src="<?php echo base_url()?>assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url()?>assets/bootstrap/js/bootstrap.js"></script>
     <script src="<?php echo base_url()?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="<?php echo base_url()?>assets/plugins/fastclick/fastclick.js"></script>
-    <script src="<?php echo base_url()?>assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
     <script src="<?php echo base_url()?>assets/plugins/jQueryUI/jquery-ui.min.js"></script>
     <script src="<?php echo base_url()?>assets/dist/js/app.min.js"></script>
     <script src="<?php echo base_url()?>assets/dist/js/demo.js"></script>
@@ -121,7 +119,7 @@
                     <li class="header">MENU</li>
                     <li class="" id="dash">
                         <a href="<?= base_url()?>dash">
-                            <i class="fa fa-dashboard"></i> <span>Dashboard</span>&ensp;<small class="label pull-right bg-green">New</small>
+                            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="treeview" id="data">

@@ -4,48 +4,6 @@
 <script src="<?php echo base_url()?>assets/plugins/chartjs/Chart.min.js"></script>
 <script>
 	$(document).ready(function() {
-        var areaChartCanvas = $("#areaChart").get(0).getContext("2d");
-        var areaChart = new Chart(areaChartCanvas);
-
-        var areaChartData = {
-            labels: ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "23:59"],
-            datasets: [
-                {
-                label: "Sales",
-                fillColor: "rgba(60,141,188,0.9)",
-                strokeColor: "rgba(60,141,188,0.8)",
-                pointColor: "#00a65a",
-                pointStrokeColor: "rgba(60,141,188,1)",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(60,141,188,1)",
-                data: [0, 0, 2, 13, 14, 6, 0, 0, 0, 2, 13, 14, 6, 0, 0, 0, 2, 13, 14, 6, 0, 0, 0, 2, 13]
-                }
-            ]
-        };
-
-        var areaChartOptions = {
-            showScale: true,
-            scaleShowGridLines: true,
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            scaleGridLineWidth: 1,
-            scaleShowHorizontalLines: true,
-            scaleShowVerticalLines: true,
-            bezierCurve: false,
-            bezierCurveTension: 0.3,
-            pointDot: true,
-            pointDotRadius: 4,
-            pointDotStrokeWidth: 1,
-            pointHitDetectionRadius: 20,
-            datasetStroke: true,
-            datasetStrokeWidth: 2,
-            datasetFill: true,
-            legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-            maintainAspectRatio: true,
-            responsive: true
-            };
-        areaChart.Line(areaChartData, areaChartOptions);
-
-
     var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
     var pieChart = new Chart(pieChartCanvas);
     var PieData = [
@@ -87,27 +45,16 @@
       }
     ];
     var pieOptions = {
-      //Boolean - Whether we should show a stroke on each segment
-      segmentShowStroke: true,
-      //String - The colour of each segment stroke
+        segmentShowStroke: true,
       segmentStrokeColor: "#fff",
-      //Number - The width of each segment stroke
       segmentStrokeWidth: 2,
-      //Number - The percentage of the chart that we cut out of the middle
-      percentageInnerCutout: 50, // This is 0 for Pie charts
-      //Number - Amount of animation steps
+      percentageInnerCutout: 0,
       animationSteps: 100,
-      //String - Animation easing effect
       animationEasing: "easeOutBounce",
-      //Boolean - Whether we animate the rotation of the Doughnut
       animateRotate: true,
-      //Boolean - Whether we animate scaling the Doughnut from the centre
-      animateScale: false,
-      //Boolean - whether to make the chart responsive to window resizing
+      animateScale: true,
       responsive: true,
-      // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
       maintainAspectRatio: true,
-      //String - A legend template
       legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
     };
     //Create pie or douhnut chart
@@ -124,35 +71,98 @@
 </script>
 
 <!--======================================================================================================================-->
+<b>Dashboard</b>
 <div class="row">
     <div class="col-sm-12">
-		<b>Call Day per Hours</b>
-		<div class="chart">
-            <canvas id="areaChart" style="height:200px"></canvas>
-        </div>
+        <b>Dispo Call Detail</b>
+		<table id="apd1" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fullname</th>
+                    <?php foreach($list_dispo as $row1){ ?>
+                    <th width="7%"><?= $row1->status; ?></th>
+                    <?php } ?>
+                </tr>
+            </thead>
+            <tbody>
+				<?php foreach($list_apd1 as $row2){ ?>
+				<tr>
+                    <td><?= $row2->full_name; ?></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>1</td>
+                    <td>2</td>
+				</tr>
+				<?php } ?>
+			</body>
+            <tfoot>
+				<tr>
+                    <th>TOTAL</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+				</tr>
+            </tfoot>
+        </table>
     </div>
 </div>
 <legend></legend>
 <div class="row">
     <div class="col-sm-12">
-        <b>Call Statistics</b>
+        <b>Contact Rate</b>
         <div class="row">
             <div class="col-sm-4 col-xs-6">
                 <div class="description-block border-right">
-                    <h3 class="description-header">5</h3>
+                    <h3 class="description-header">39.61 %</h3>
+                    <span class="description-text">Contact Rate</span>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-6">
+                <div class="description-block border-right">
+                    <h3 class="description-header">1201</h3>
                     <span class="description-text">Total Calls</span>
                 </div>
             </div>
             <div class="col-sm-4 col-xs-6">
                 <div class="description-block border-right">
-                    <h3 class="description-header">1</h3>
-                    <span class="description-text">Total Agents</span>
+                    <h3 class="description-header">501</h3>
+                    <span class="description-text">Total Contacts</span>
+                </div>
+            </div>
+        </div>
+        <br>
+        <legend></legend>
+        <b>Sales Rate</b>
+        <div class="row">
+            <div class="col-sm-4 col-xs-6">
+                <div class="description-block border-right">
+                    <h3 class="description-header">19.61 %</h3>
+                    <span class="description-text">Sales Rate</span>
                 </div>
             </div>
             <div class="col-sm-4 col-xs-6">
                 <div class="description-block border-right">
-                    <h3 class="description-header">1</h3>
-                    <span class="description-text">Leads Count</span>
+                    <h3 class="description-header">66</h3>
+                    <span class="description-text">Total Sales</span>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-6">
+                <div class="description-block border-right">
+                    <h3 class="description-header">5.61</h3>
+                    <span class="description-text">Sales per Hours</span>
                 </div>
             </div>
         </div>
@@ -163,20 +173,28 @@
 			<div class="col-sm-6 table-responsive">
 				<table class="table table-striped">
 					<thead>
-					<tr>
-                        <th>Percent</th>
-                        <th>Dipsositions</th>
-                        <th>Total Calls</th>
-                    </tr>
-                </thead>
-                <tbody>
-					<?php for($i=1; $i<11; $i++){ ?>
+                        <tr>
+                            <th>Dispo</th>
+                            <th>Dispo Desc</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($list_dispo as $row3){ ?>
+                        <tr>
+                            <td><i class="fa fa-stop" style="color:#00c0ef"></i> <?= $row3->status ?></td>
+                            <td><?= $row3->status_name ?></td>
+                            <td>10</td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                    <tfoot>
                     <tr>
-                        <td>4.61 %</td>
-                        <td><i class="fa fa-stop" style="color:#00c0ef"></i> Dispo <?= $i ?> (Dispo)</td>
-                        <td>175 Calls</td>
-					</tr>
-					<?php } ?>
+                        <th>TOTAL</th>
+                        <th></th>
+                        <th>100</th>
+                    </tr>
+                </tfoot>
 				</table>
 			</div>
 			<div class="col-sm-6">
