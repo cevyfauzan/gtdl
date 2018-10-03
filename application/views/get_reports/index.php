@@ -12,9 +12,9 @@
 <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/datepicker/datepicker3.css">
 <script src="<?php echo base_url()?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
 <script>
-	$(function () {
+	$(document).ready(function() {
 		$(".date").datepicker({
-			format: "dd/mm/yyyy"
+			format: "dd/mm/yy"
 		});
 	});
 
@@ -26,6 +26,10 @@
             $('#showReport').load(url);
         }else if(repType == 'rep_atd'){
 			var url = "<?= base_url('report/rep_atd') ?>";
+			$('#boxReport').show();
+            $('#showReport').load(url);
+        }else if(repType == 'rep_cp'){
+			var url = "<?= base_url('report/rep_cp') ?>";
 			$('#boxReport').show();
             $('#showReport').load(url);
         }else if(repType == 'rep_dash'){
@@ -75,7 +79,7 @@
 					<div class="col-sm-3">
                         <?php 
 							$attr = 'class="form-control" onChange="show_report()"';
-							$drop_down = array('' => '-- Select Report --', 'rep_apd' => 'Agent Performance Detail', 'rep_atd' => 'Agent Time Detail', 'rep_dash' => 'Dashboard', 'rep_dss' => 'Dial Statuses Summary', 'rep_ecr' => 'Export Call Report', 'rep_spa' => 'Sales per Agent', 'rep_st' => 'Sales Tracker', 'rep_sr' => 'Statistical Report');
+							$drop_down = array('' => '-- Select Report --', 'rep_apd' => 'Agent Performance Detail', 'rep_atd' => 'Agent Time Detail', 'rep_cp' => 'Cost Provider', 'rep_dash' => 'Dashboard', 'rep_dss' => 'Dial Statuses Summary', 'rep_ecr' => 'Export Call Report', 'rep_spa' => 'Sales per Agent', 'rep_st' => 'Sales Tracker', 'rep_sr' => 'Statistical Report');
 						?>
 						<?= form_dropdown('rep_type', $drop_down, '', $attr) ?>
 					</div>

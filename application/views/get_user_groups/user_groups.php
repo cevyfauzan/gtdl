@@ -93,6 +93,7 @@
 				if(access.match(/lists/g)){ $('#lists').attr('checked', true); }else{ $('#lists').attr('checked', false); }
 				if(access.match(/scripts/g)){ $('#scripts').attr('checked', true); }else{ $('#scripts').attr('checked', false); }
 				if(access.match(/call-times/g)){ $('#call-times').attr('checked', true); }else{ $('#call-times').attr('checked', false); }
+				if(access.match(/cost-provider/g)){ $('#cost-provider').attr('checked', true); }else{ $('#cost-provider').attr('checked', false); }
 				if(access.match(/logs/g)){ $('#logs').attr('checked', true); }else{ $('#logs').attr('checked', false); }
 				if(access.match(/user-groups/g)){ $('#user-groups').attr('checked', true); }else{ $('#user-groups').attr('checked', false); }
 				if(access.match(/users/g)){ $('#users').attr('checked', true); }else{ $('#users').attr('checked', false); }
@@ -249,9 +250,13 @@
 			<div class="box-header">
                 <h2 class="box-title"><b>User Groups</b></h2>
 				<div class="pull-right">
+					<?php if($this->session->userdata('allow_add') == 'Y'){?>
 					<button type="button" class="btn btn-success btn-sm" onclick="add_group()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New User Group</button>
+					<?php } ?>
 					<a href="" class="btn btn-info btn-sm" onclick="reload_table()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
+					<?php if($this->session->userdata('allow_delete') == 'Y'){?>
 					<a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
+					<?php } ?>
 				</div>
             </div>
             <div class="box-body">
@@ -352,7 +357,7 @@
 						<div class="col-sm-3">
 							<label>Settings<br>
 								├──<input type="checkbox" id="call-times" name="access[]" value="call-times"> Call Times<br>
-								├──<input type="checkbox" id="logs" name="access[]" value="logs"> Logs<br>
+								├──<input type="checkbox" id="cost-provider" name="access[]" value="cost-provider"> Cost Provider<br>
 								├──<input type="checkbox" id="user-groups" name="access[]" value="user-groups"> User Groups<br>
 								└──<input type="checkbox" id="users" name="access[]" value="users"> Users
 							</label>

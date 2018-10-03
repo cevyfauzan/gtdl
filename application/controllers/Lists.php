@@ -27,7 +27,6 @@ class Lists extends CI_Controller {
 			redirect('dash'); 
 		}
 		$this->load->model(array('Get_list','Get_lead','Get_lead','Get_campaign','Get_dispo','Get_user'));
-		$this->load->library('PHPExcel');
 	}
 	
 	public function index()
@@ -53,11 +52,6 @@ class Lists extends CI_Controller {
 		$data['list_list'] = $this->Get_list->listList();
 		$this->load->vars($data);
 		$this->load->view('get_lists/load_leads');
-	}
-
-	public function get_upload_leads()
-	{
-		
 	}
 
 	public function get_lead_search()
@@ -168,50 +162,49 @@ class Lists extends CI_Controller {
 
     public function ajax_upload()
     {
-        $this->_validate_upload();
+		$this->load->library('excel');
+        //$this->_validate_upload();
 		$SQLdate = date("Y-m-d H:i:s");
          
-		//Path of files were you want to upload on localhost (C:/xampp/htdocs/ProjectName/uploads/excel/)	 
 		$configUpload['upload_path'] = FCPATH.'assets/excel/';
-		$configUpload['allowed_types'] = 'xls|xlsx|csv';
+		$configUpload['allowed_types'] = 'xls|xlsx';
 		$configUpload['max_size'] = '5000';
 		$this->load->library('upload', $configUpload);
 		$this->upload->do_upload('lead_file');	
-		$upload_data = $this->upload->data(); //Returns array of containing all of the data related to the file you uploaded.
-		$file_name = $upload_data['file_name']; //uploded file name
-		$extension = $upload_data['file_ext'];    // uploded file extension
+		$upload_data = $this->upload->data();
+		$file_name = $upload_data['file_name'];
 
-		//$objReader =PHPExcel_IOFactory::createReader('Excel5');     //For excel 2003 
-		$objReader= PHPExcel_IOFactory::createReader('Excel2007');	// For excel 2007 	  
-		//Set to read only
+		//$objReader =PHPExcel_IOFactory::createReader('Excel5');
+		$objReader= PHPExcel_IOFactory::createReader('Excel2007');
 		$objReader->setReadDataOnly(true); 		  
-		//Load excel file
 		$objPHPExcel = $objReader->load(FCPATH.'assets/excel/'.$file_name);		 
-		$totalrows = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();   //Count Numbe of rows avalable in excel      	 
+		$totalrows = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
 		$objWorksheet = $objPHPExcel->setActiveSheetIndex(0);                
-		//loop from first data untill last data
 		for($i=1;$i<=$totalrows;$i++)
 		{
-			$data = array(
-                'entry_date' => $SQLdate,
-                'status' => 'NEW',
-                'list_id' => $this->input->post('list_id'),
-                'phone_number' => $objWorksheet->getCellByColumnAndRow(0,$i)->getValue(),
-                'first_name' => $objWorksheet->getCellByColumnAndRow(1,$i)->getValue(),
-                'address1' => $objWorksheet->getCellByColumnAndRow(2,$i)->getValue(),
-                'address2' => $objWorksheet->getCellByColumnAndRow(3,$i)->getValue(),
-                'city' => $objWorksheet->getCellByColumnAndRow(4,$i)->getValue(),
-                'province' => $objWorksheet->getCellByColumnAndRow(5,$i)->getValue(),
-                'postal_code' => $objWorksheet->getCellByColumnAndRow(6,$i)->getValue(),
-                'date_of_birth' => $objWorksheet->getCellByColumnAndRow(7,$i)->getValue(),
-                'email' => $objWorksheet->getCellByColumnAndRow(8,$i)->getValue()
-            );
-			$insert = $this->Get_lead->upload($data);
+			$count_row = $this->Get_lead->get_dup_id($objWorksheet->getCellByColumnAndRow(0,$i)->getValue());
+			if($count_row = 0){
+				$data = array(
+					'entry_date' => $SQLdate,
+					'modify_date' => '0000-00-00 00:00:00',
+					'status' => 'NEW',
+					'list_id' => $this->input->post('list_id'),
+					'phone_number' => $objWorksheet->getCellByColumnAndRow(0,$i)->getValue(),
+					'first_name' => $objWorksheet->getCellByColumnAndRow(1,$i)->getValue(),
+					'address1' => $objWorksheet->getCellByColumnAndRow(2,$i)->getValue(),
+					'address2' => $objWorksheet->getCellByColumnAndRow(3,$i)->getValue(),
+					'city' => $objWorksheet->getCellByColumnAndRow(4,$i)->getValue(),
+					'province' => $objWorksheet->getCellByColumnAndRow(5,$i)->getValue(),
+					'postal_code' => $objWorksheet->getCellByColumnAndRow(6,$i)->getValue(),
+					'date_of_birth' => $objWorksheet->getCellByColumnAndRow(7,$i)->getValue(),
+					'email' => $objWorksheet->getCellByColumnAndRow(8,$i)->getValue()
+				);
+				$insert = $this->Get_lead->upload($data);
+			}
 		}
-		unlink(FCPATH.'assets/excel/'.$file_name); //File Deleted After uploading in database .			 
-		//redirect(base_url() . "put link were you want to redirect");
+		unlink(FCPATH.'assets/excel/'.$file_name); 
 	
-        echo json_encode(array("status" => TRUE));
+        echo json_encode(array("status" => TRUE, "totalRows" => $totalrows, "totalSuccess" => $i));
     }
 
 	public function lead_list()

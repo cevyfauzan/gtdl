@@ -35,6 +35,9 @@ class Get_login extends CI_Model
 					'created_date' => $result['created_date'],
 					'avatar' => $result['avatar'],
 					'access' => $result['access'],
+					'allow_add' => $result['allow_add'],
+					'allow_modify' => $result['allow_modify'],
+					'allow_delete' => $result['allow_delete'],
 					'logged_in' => TRUE
 					);
 			$this->session->set_userdata($data);

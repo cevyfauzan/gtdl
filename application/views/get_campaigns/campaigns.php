@@ -267,9 +267,13 @@
 
 <!--======================================================================================================================-->
 <div class="pull-right">
+	<?php if($this->session->userdata('allow_add') == 'Y'){?>
     <button type="button" class="btn btn-success btn-sm" onclick="add_camp()" title="Add"><i class="fa fa-plus"></i>&ensp;Add New Campaign</button>
+	<?php } ?>
     <a href="" class="btn btn-info btn-sm" onclick="reload_table_camp()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
+	<?php if($this->session->userdata('allow_delete') == 'Y'){?>
     <a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
+	<?php } ?>
 </div>
 <h4><b>Campaign</b></h4>
 <br>

@@ -66,68 +66,6 @@
 		table.ajax.reload(null,false);
 	}
 
-	function delete_rec(recording_id)
-	{
-		if(confirm('Are you sure you want to delete this data ?'))
-		{
-			$.ajax({
-				url : "<?php echo site_url('recordings/ajax_delete')?>/"+recording_id,
-				type: "POST",
-				dataType: "JSON",
-				success: function(data)
-				{
-					reload_table();
-					$('#modal_form').modal('hide');
-				},
-				error: function (jqXHR, textStatus, errorThrown)
-				{
-					alert('Error deleting data');
-				}
-			});
-
-		}
-	}
-
-	function bulk_delete()
-	{
-		var list_id = [];
-		$(".data-check:checked").each(function() {
-				list_id.push(this.value);
-		});
-		if(list_id.length > 0)
-		{
-			if(confirm('Are you sure delete '+list_id.length+' recordings?'))
-			{
-				$.ajax({
-					type: "POST",
-					data: {recording_id:list_id},
-					url: "<?php echo site_url('recordings/ajax_bulk_delete')?>",
-					dataType: "JSON",
-					success: function(data)
-					{
-						if(data.status)
-						{
-							reload_table();
-						}
-						else
-						{
-							alert('Failed.');
-						}
-					},
-					error: function (jqXHR, textStatus, errorThrown)
-					{
-						alert('Error deleting data');
-					}
-				});
-			}
-		}
-		else
-		{
-			alert('No data selected');
-		}
-	}
-	
-
 	function nav_active(){
 		document.getElementById("rec").className = "active";
 	}
@@ -145,7 +83,6 @@
 				<div class="pull-right">
                     <a href="" class="btn btn-success btn-sm" data-toggle="modal" data-target="#filter" title="Add"><i class="fa fa-search"></i>&ensp;Filter Recording</a>
 					<a href="" class="btn btn-info btn-sm" onclick="reload_table()" title="Refresh"><i class="fa fa-refresh"></i>&ensp;Refresh</a>
-					<a href="" class="btn btn-danger btn-sm" onclick="bulk_delete()" title="Delete Selected"><i class="fa fa-remove"></i>&ensp;Delete Selected</a>
 				</div>
             </div>
             <div class="box-body">

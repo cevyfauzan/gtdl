@@ -53,6 +53,14 @@ class Report extends CI_Controller {
 		$this->load->view('get_reports/rep_atd');
 	}
 
+	public function rep_cp()
+	{
+		$data['list_apd1'] = $this->listUser();
+		$data['list_camp_id'] = $this->listCampID();
+		$this->load->vars($data);
+		$this->load->view('get_reports/rep_cp');
+	}
+
 	public function rep_dash()
 	{
 		$data['list_apd1'] = $this->listUser();
@@ -134,6 +142,32 @@ class Report extends CI_Controller {
 		return $data;
 	}
 
+	private function listDispoEcr()
+	{
+		$data = array();
+		$this->db->select('status');
+		$this->db->order_by('status', 'ASC');
+		$q = $this->db->get('get_statuses');
+		  $data[''] = '-- ALL DISPO --';
+		  if($q->num_rows() > 0)
+		  {
+			foreach ($q->result_array() as $row)
+			{
+				$data[$row['status']] = $row['status'];
+			}
+		  }
+		$q->free_result();
+		return $data;
+	}
+
+	private function listCampID()
+	{
+		$this->db->order_by('campaign_id', 'ASC');
+		$this->db->from('get_campaigns');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	private function listUser()
 	{
 		$this->db->order_by('user', 'ASC');
@@ -160,23 +194,4 @@ class Report extends CI_Controller {
 		$query = $this->db->get();
 		return $query->result();
 	}
-
-	private function listDispoEcr()
-	{
-		$data = array();
-		$this->db->select('status');
-		$this->db->order_by('status', 'ASC');
-		$q = $this->db->get('get_statuses');
-		  $data[''] = '-- ALL DISPO --';
-		  if($q->num_rows() > 0)
-		  {
-			foreach ($q->result_array() as $row)
-			{
-				$data[$row['status']] = $row['status'];
-			}
-		  }
-		$q->free_result();
-		return $data;
-	}
-
 }

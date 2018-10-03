@@ -8,7 +8,7 @@
     <link rel="icon" href="<?php echo base_url()?>assets/dist/img/getdial-icon.png" type="image/x-icon" />
     <link rel="stylesheet" href="<?php echo base_url()?>assets/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/AdminLTE.css">
+    <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/dist/css/skins/_all-skins.css">
     <link rel="stylesheet" href="<?php echo base_url()?>assets/plugins/jQueryUI/jquery-ui.min.css">
 
@@ -147,6 +147,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li id="set-call_times"><a href="<?= base_url() ?>call_times"><i class="fa fa-clock-o"></i> Call Times&ensp;<small class="label pull-right bg-green">New</small></a></li>
+                            <li id="set-cost_provider"><a href="<?= base_url() ?>cost_provider"><i class="fa fa-money"></i> Cost Provider&ensp;<small class="label pull-right bg-green">New</small></a></li>
                             <li id="set-group"><a href="<?= base_url() ?>user_groups"><i class="fa fa-users"></i> User Groups</a></li>
                             <li id="set-user"><a href="<?= base_url() ?>Users"><i class="fa fa-user"></i> Users</a></li>
                         </ul>

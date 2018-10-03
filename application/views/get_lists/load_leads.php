@@ -38,7 +38,8 @@
 			{
 				if(data.status)
 				{
-					alert('Success');
+					$('#form-load')[0].reset();
+					alert('Success upload ' + data.totalRows + ' lead.');
 				}
 				else
 				{
@@ -64,7 +65,7 @@
 <!--======================================================================================================================-->
 <h4><b>Load Leads</b></h4>
 <br>
-<form action="#" id="form-load">
+<form action="#" id="form-load" enctype="multipart/form-data">
 <div class="row">
 	<div class="col-sm-4" align="right">
 		<div class="form-group">
@@ -74,11 +75,6 @@
 	<div class="col-sm-4">
 		<input type="file" class="form-control" name="lead_file">
 		<span class="help-block"></span>
-		<div class="progress progress-xs active">
-            <div class="progress-bar progress-bar-success progress-bar-striped bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                <span class="sr-only percent">20% Complete</span>
-            </div>
-        </div>
 	</div>
 </div>
 <div class="row">
